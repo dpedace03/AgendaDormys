@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuestas de Eventos - Dormys</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#1e2d24',      // Verde oliva profundo
+              primary: '#2d4a3e',   // Verde Dormys
+              light: '#4a6b5b',     // Verde suave
+              accent: '#8c6d46',    // Tono madera/cálido
+              accentHover: '#735735',
+              bgLight: '#f7f6f2',   // Beige/Gris cálido tenue
+              cardBg: '#ffffff',
+              borderInput: '#2d4a3e'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos personalizados para entradas rectangulares y legibilidad */
+    .strict-input {
+      border: 2px solid #2d4a3e;
+      border-radius: 0px !important;
+      background-color: #ffffff;
+      transition: all 0.2s ease-in-out;
+    }
+    .strict-input:focus {
+      outline: none;
+      border-color: #8c6d46;
+      box-shadow: 0 0 0 3px rgba(140, 109, 70, 0.25);
+    }
+    .strict-btn {
+      border-radius: 0px !important;
+      font-weight: 600;
+      letter-spacing: 0.025em;
+      transition: all 0.2s ease;
+    }
+    /* Scrollbar estética */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f7f6f2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2d4a3e;
+    }
+  </style>
+</head>
+<body class="bg-brand-bgLight text-stone-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- ENCABEZADO -->
+  <header class="bg-brand-dark text-white border-b-4 border-brand-accent shadow-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-accent flex items-center justify-center font-serif text-white font-bold text-xl shadow">
+          D
+        </div>
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">Dormys</h1>
+          <p class="text-xs text-stone-300 font-light uppercase tracking-wider">Ciclo de Eventos y Actividades Diarias</p>
+        </div>
+      </div>
+      
+      <!-- Acciones globales (Importar/Exportar) -->
+      <div class="flex items-center gap-2 text-xs">
+        <button onclick="exportarJSON()" title="Exportar copia de respaldo" class="strict-btn bg-stone-700 hover:bg-stone-600 text-white px-3 py-2 flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Exportar
+        </button>
+        <label title="Importar propuestas JSON" class="strict-btn bg-stone-700 hover:bg-stone-600 text-white px-3 py-2 cursor-pointer flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+          Importar
+          <input type="file" id="importInput" accept=".json" class="hidden" onchange="importarJSON(event)">
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- MENSAJE INFORMATIVO / BANNER -->
+    <div class="bg-white border-l-4 border-brand-accent p-6 shadow-sm mb-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-serif font-bold text-brand-dark mb-1">¡Construyamos la agenda de Dormys juntos!</h2>
+          <p class="text-sm text-stone-600">
+            Proponé una actividad de un día (charlita, taller, torneo o encuentro recreativo) indicando tu número de Dormy (1 al 99).
+          </p>
+        </div>
+        <button onclick="scrollAlFormulario()" class="strict-btn bg-brand-primary hover:bg-brand-light text-white px-5 py-3 whitespace-nowrap shadow self-start md:self-auto flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Proponer Evento
+        </button>
+      </div>
+    </div>
+
+    <!-- GRID CONTENEDORA: FORMULARIO Y LISTADO -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- COLUMNA 1: FORMULARIO ABM (4 cols en lg) -->
+      <section id="seccionFormulario" class="lg:col-span-5 xl:col-span-4">
+        <div class="bg-white p-6 shadow-md border border-stone-200 sticky top-24">
+          
+          <div class="flex items-center justify-between border-b pb-3 mb-5 border-stone-200">
+            <h3 id="formTitulo" class="text-lg font-serif font-bold text-brand-dark uppercase tracking-wide">
+              Proponer Evento
+            </h3>
+            <span id="badgeEdicion" class="hidden text-xs bg-amber-100 text-amber-800 font-bold px-2 py-1 uppercase border border-amber-300">
+              Modificando
+            </span>
+          </div>
+
+          <form id="eventoForm" onsubmit="guardarEvento(event)" class="space-y-5">
+            <input type="hidden" id="eventoId" value="">
+
+            <!-- Nro Dormy -->
+            <div>
+              <label for="dormy" class="block text-xs font-bold text-stone-700 uppercase mb-1">
+                Nro. de Dormy (1 al 99) <span class="text-red-600">*</span>
+              </label>
+              <input 
+                type="number" 
+                id="dormy" 
+                min="1" 
+                max="99" 
+                required 
+                placeholder="Ej. 14"
+                class="w-full p-2.5 text-sm strict-input font-bold text-brand-dark"
+              >
+              <p class="text-xs text-stone-500 mt-1">Identificador del vecino proponente.</p>
+            </div>
+
+            <!-- Nombre del Evento -->
+            <div>
+              <label for="nombre" class="block text-xs font-bold text-stone-700 uppercase mb-1">
+                Nombre de la Actividad <span class="text-red-600">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="nombre" 
+                maxlength="80" 
+                required 
+                placeholder="Ej. Torneo de Ajedrez Relámpago"
+                class="w-full p-2.5 text-sm strict-input"
+              >
+            </div>
+
+            <!-- Categoría -->
+            <div>
+              <label for="categoria" class="block text-xs font-bold text-stone-700 uppercase mb-1">
+                Categoría <span class="text-red-600">*</span>
+              </label>
+              <select id="categoria" required class="w-full p-2.5 text-sm strict-input">
+                <option value="">Seleccionar categoría...</option>
+                <option value="Informativa">Informativa</option>
+                <option value="Cultural">Cultural</option>
+                <option value="Niños">Niños</option>
+                <option value="Esparcimiento">Esparcimiento</option>
+                <option value="Culinaria">Culinaria</option>
+                <option value="Jardinería">Jardinería</option>
+                <option value="Educación">Educación</option>
+              </select>
+            </div>
+
+            <!-- Horario sugerido / Época -->
+            <div>
+              <label for="horario" class="block text-xs font-bold text-stone-700 uppercase mb-1">
+                Horario o Momento Sugerido
+              </label>
+              <input 
+                type="text" 
+                id="horario" 
+                placeholder="Ej. Sábado por la tarde (16 hs)"
+                class="w-full p-2.5 text-sm strict-input"
+              >
+            </div>
+
+            <!-- Descripción -->
+            <div>
+              <label for="descripcion" class="block text-xs font-bold text-stone-700 uppercase mb-1">
+                Descripción del Evento <span class="text-red-600">*</span>
+              </label>
+              <textarea 
+                id="descripcion" 
+                rows="4" 
+                required 
+                placeholder="Detalla de qué trata la actividad, si hace falta traer materiales, a quién va dirigida, etc."
+                class="w-full p-2.5 text-sm strict-input"
+              ></textarea>
+            </div>
+
+            <!-- Botones de Acción Formulario -->
+            <div class="pt-2 flex flex-col gap-2">
+              <button 
+                type="submit" 
+                id="btnGuardar"
+                class="w-full strict-btn bg-brand-primary hover:bg-brand-dark text-white py-3 shadow uppercase text-xs tracking-wider"
+              >
+                Guardar Propuesta
+              </button>
+              
+              <button 
+                type="button" 
+                id="btnCancelar" 
+                onclick="resetearFormulario()" 
+                class="hidden w-full strict-btn bg-stone-200 hover:bg-stone-300 text-stone-800 py-2 uppercase text-xs tracking-wider"
+              >
+                Cancelar Edición
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </section>
+
+      <!-- COLUMNA 2: LISTADO Y CONSULTA (8 cols en lg) -->
+      <section class="lg:col-span-7 xl:col-span-8">
+        
+        <!-- PANEL DE BÚSQUEDA Y FILTROS -->
+        <div class="bg-white p-4 shadow-md border border-stone-200 mb-6 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <!-- Buscar texto -->
+            <div class="sm:col-span-6">
+              <label for="buscarTexto" class="block text-xs font-bold text-stone-700 uppercase mb-1">Buscar por palabra</label>
+              <input 
+                type="text" 
+                id="buscarTexto" 
+                oninput="aplicarFiltros()"
+                placeholder="Buscar nombre o descripción..." 
+                class="w-full p-2.5 text-sm strict-input"
+              >
+            </div>
+
+            <!-- Filtro por Categoría -->
+            <div class="sm:col-span-3">
+              <label for="filterCategoria" class="block text-xs font-bold text-stone-700 uppercase mb-1">Categoría</label>
+              <select id="filterCategoria" onchange="aplicarFiltros()" class="w-full p-2.5 text-sm strict-input">
+                <option value="">Todas</option>
+                <option value="Informativa">Informativa</option>
+                <option value="Cultural">Cultural</option>
+                <option value="Niños">Niños</option>
+                <option value="Esparcimiento">Esparcimiento</option>
+                <option value="Culinaria">Culinaria</option>
+                <option value="Jardinería">Jardinería</option>
+                <option value="Educación">Educación</option>
+              </select>
+            </div>
+
+            <!-- Filtro por Dormy -->
+            <div class="sm:col-span-3">
+              <label for="filterDormy" class="block text-xs font-bold text-stone-700 uppercase mb-1">Filtrar Dormy</label>
+              <input 
+                type="number" 
+                id="filterDormy" 
+                min="1" 
+                max="99" 
+                oninput="aplicarFiltros()"
+                placeholder="1-99" 
+                class="w-full p-2.5 text-sm strict-input"
+              >
+            </div>
+          </div>
+
+          <!-- Contador de resultados -->
+          <div class="flex justify-between items-center pt-2 border-t border-stone-100 text-xs text-stone-500">
+            <span>Resultados encontrados: <strong id="cantEventos" class="text-brand-dark">0</strong></span>
+            <button onclick="limpiarFiltros()" class="text-brand-accent hover:underline font-semibold">
+              Limpiar Filtros
+            </button>
+          </div>
+        </div>
+
+        <!-- LISTA DE EVENTOS -->
+        <div id="contenedorEventos" class="grid grid-cols-1 gap-4">
+          <!-- Las tarjetas de eventos se generan dinámicamente con JavaScript -->
+        </div>
+
+        <!-- ESTADO VACÍO (Si no hay eventos) -->
+        <div id="estadoVacio" class="hidden bg-white p-12 text-center border border-dashed border-stone-300">
+          <svg class="w-12 h-12 mx-auto text-stone-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <h4 class="text-lg font-serif font-bold text-stone-700 mb-1">No se encontraron eventos</h4>
+          <p class="text-xs text-stone-500 max-w-sm mx-auto">
+            No hay propuestas registradas que coincidan con los filtros seleccionados. Proponé una actividad usando el formulario.
+          </p>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="bg-brand-dark text-stone-300 border-t border-brand-accent mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs">
+      <p class="font-serif text-sm text-white mb-1">Comunidad de Dormys &copy; <span id="yearSpan"></span></p>
+      <p>Espacio colaborativo de integración y organización de eventos entre vecinos.</p>
+    </div>
+  </footer>
+
+  <!-- NOTIFICACIÓN TOAST -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-stone-900 text-white px-5 py-3 shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50 text-sm flex items-center gap-2 border-l-4 border-brand-accent">
+    <span id="toastMsg">Mensaje de confirmación</span>
+  </div>
+
+  <!-- JAVASCRIPT DE LA APLICACIÓN -->
+  <script>
+    // --- DATOS INICIALES DE PRUEBA ---
+    const DATOS_INICIALES = [
+      {
+        id: "evt-101",
+        dormy: 12,
+        nombre: "Taller de Cocina Italiana y Pasta Casera",
+        descripcion: "Aprendemos a preparar masa fresca de pasta y salsas clásicas. Traer delantal. ¡Al finalizar degustamos entre todos los participantes!",
+        categoria: "Culinaria",
+        horario: "Sábado próximo - 12:30 hs",
+        votos: 18,
+        votoUsuario: false,
+        fechaCreacion: new Date(Date.now() - 86400000 * 2).toISOString()
+      },
+      {
+        id: "evt-102",
+        dormy: 45,
+        nombre: "Taller de Huerta Orgánica y Plantas de Estación",
+        descripcion: "Charla teórica y práctica sobre siembra, compostaje casero y preparado de suelo para jardines de Dormys.",
+        categoria: "Jardinería",
+        horario: "Domingo 11:00 hs en la pérgola central",
+        votos: 12,
+        votoUsuario: false,
+        fechaCreacion: new Date(Date.now() - 86400000 * 1).toISOString()
+      },
+      {
+        id: "evt-103",
+        dormy: 7,
+        nombre: "Cine Bajo las Estrellas y Juegos",
+        descripcion: "Proyección al aire libre de una película infantil con pochoclos y actividades recreativas para los más chicos del sector.",
+        categoria: "Niños",
+        horario: "Viernes 20:00 hs",
+        votos: 25,
+        votoUsuario: false,
+        fechaCreacion: new Date().toISOString()
+      },
+      {
+        id: "evt-104",
+        dormy: 22,
+        nombre: "Reunión Informativa: Seguridad y Uso de Espacios Comunes",
+        descripcion: "Encuentro informativo para revisar normativas de convivencia, mejoras en accesos y responder dudas de los vecinos.",
+        categoria: "Informativa",
+        horario: "Jueves 19:00 hs",
+        votos: 15,
+        votoUsuario: false,
+        fechaCreacion: new Date(Date.now() - 86400000 * 3).toISOString()
+      }
+    ];
+
+    // --- ESTADO GLOBAL ---
+    let eventos = [];
+
+    // --- INICIALIZACIÓN ---
+    window.onload = function() {
+      document.getElementById('yearSpan').textContent = new Date().getFullYear();
+      cargarEventos();
+      aplicarFiltros();
+    };
+
+    // --- MANEJO DE LOCALSTORAGE ---
+    function cargarEventos() {
+      const stored = localStorage.getItem('dormys_eventos');
+      if (stored) {
+        try {
+          eventos = JSON.parse(stored);
+        } catch(e) {
+          console.error("Error al leer LocalStorage:", e);
+          eventos = [...DATOS_INICIALES];
+        }
+      } else {
+        eventos = [...DATOS_INICIALES];
+        guardarEnLocalStorage();
+      }
+    }
+
+    function guardarEnLocalStorage() {
+      localStorage.setItem('dormys_eventos', JSON.stringify(eventos));
+    }
+
+    // --- ALTA / MODIFICACIÓN (ABM) ---
+    function guardarEvento(e) {
+      e.preventDefault();
+
+      const id = document.getElementById('eventoId').value;
+      const dormyVal = parseInt(document.getElementById('dormy').value, 10);
+      const nombreVal = document.getElementById('nombre').value.trim();
+      const categoriaVal = document.getElementById('categoria').value;
+      const horarioVal = document.getElementById('horario').value.trim();
+      const descripcionVal = document.getElementById('descripcion').value.trim();
+
+      // Validación estricta número de Dormy (1 al 99)
+      if (isNaN(dormyVal) || dormyVal < 1 || dormyVal > 99) {
+        mostrarToast("⚠️ El nro. de Dormy debe ser un número entre 1 y 99");
+        return;
+      }
+
+      if (!nombreVal || !descripcionVal || !categoriaVal) {
+        mostrarToast("⚠️ Por favor completa los campos obligatorios");
+        return;
+      }
+
+      if (id) {
+        // MODIFICACIÓN
+        const index = eventos.findIndex(evt => evt.id === id);
+        if (index !== -1) {
+          eventos[index].dormy = dormyVal;
+          eventos[index].nombre = nombreVal;
+          eventos[index].categoria = categoriaVal;
+          eventos[index].horario = horarioVal;
+          eventos[index].descripcion = descripcionVal;
+          mostrarToast("Propuesta actualizada correctamente");
+        }
+      } else {
+        // ALTA
+        const nuevoEvento = {
+          id: 'evt-' + Date.now(),
+          dormy: dormyVal,
+          nombre: nombreVal,
+          categoria: categoriaVal,
+          horario: horarioVal,
+          descripcion: descripcionVal,
+          votos: 1, // El creador se suma automáticamente
+          votoUsuario: true,
+          fechaCreacion: new Date().toISOString()
+        };
+        eventos.unshift(nuevoEvento);
+        mostrarToast("¡Propuesta agregada exitosamente!");
+      }
+
+      guardarEnLocalStorage();
+      resetearFormulario();
+      aplicarFiltros();
+    }
+
+    // --- BAJA (ABM) ---
+    function eliminarEvento(id) {
+      const evt = eventos.find(e => e.id === id);
+      if (!evt) return;
+
+      const confirmacion = confirm(`¿Estás seguro de eliminar la propuesta "${evt.nombre}" del Dormy ${evt.dormy}?`);
+      if (confirmacion) {
+        eventos = eventos.filter(e => e.id !== id);
+        guardarEnLocalStorage();
+        aplicarFiltros();
+        mostrarToast("Propuesta eliminada");
+        
+        // Si estábamos editando este mismo evento, reseteamos el form
+        if (document.getElementById('eventoId').value === id) {
+          resetearFormulario();
+        }
+      }
+    }
+
+    // --- CARGAR DATOS PARA EDICIÓN (ABM) ---
+    function editarEvento(id) {
+      const evt = eventos.find(e => e.id === id);
+      if (!evt) return;
+
+      document.getElementById('eventoId').value = evt.id;
+      document.getElementById('dormy').value = evt.dormy;
+      document.getElementById('nombre').value = evt.nombre;
+      document.getElementById('categoria').value = evt.categoria;
+      document.getElementById('horario').value = evt.horario || '';
+      document.getElementById('descripcion').value = evt.descripcion;
+
+      // Actualizar UI del formulario
+      document.getElementById('formTitulo').textContent = "Editar Propuesta";
+      document.getElementById('badgeEdicion').classList.remove('hidden');
+      document.getElementById('btnGuardar').textContent = "Guardar Cambios";
+      document.getElementById('btnCancelar').classList.remove('hidden');
+
+      scrollAlFormulario();
+    }
+
+    function resetearFormulario() {
+      document.getElementById('eventoForm').reset();
+      document.getElementById('eventoId').value = '';
+      
+      document.getElementById('formTitulo').textContent = "Proponer Evento";
+      document.getElementById('badgeEdicion').classList.add('hidden');
+      document.getElementById('btnGuardar').textContent = "Guardar Propuesta";
+      document.getElementById('btnCancelar').classList.add('hidden');
+    }
+
+    // --- INTERACCIÓN DE INTERÉS / VOTOS ---
+    function meInteresa(id) {
+      const index = eventos.findIndex(e => e.id === id);
+      if (index !== -1) {
+        if (eventos[index].votoUsuario) {
+          eventos[index].votos = Math.max(0, eventos[index].votos - 1);
+          eventos[index].votoUsuario = false;
+        } else {
+          eventos[index].votos += 1;
+          eventos[index].votoUsuario = true;
+        }
+        guardarEnLocalStorage();
+        aplicarFiltros();
+      }
+    }
+
+    // --- CONSULTA & RENDERIZADO CON FILTROS ---
+    function aplicarFiltros() {
+      const texto = document.getElementById('buscarTexto').value.toLowerCase().trim();
+      const cat = document.getElementById('filterCategoria').value;
+      const dormyNum = parseInt(document.getElementById('filterDormy').value, 10);
+
+      const filtrados = eventos.filter(evt => {
+        const coincideTexto = !texto || 
+          evt.nombre.toLowerCase().includes(texto) || 
+          evt.descripcion.toLowerCase().includes(texto);
+          
+        const coincideCat = !cat || evt.categoria === cat;
+        const coincideDormy = isNaN(dormyNum) || evt.dormy === dormyNum;
+
+        return coincideTexto && coincideCat && coincideDormy;
+      });
+
+      renderizarLista(filtrados);
+    }
+
+    function limpiarFiltros() {
+      document.getElementById('buscarTexto').value = '';
+      document.getElementById('filterCategoria').value = '';
+      document.getElementById('filterDormy').value = '';
+      aplicarFiltros();
+    }
+
+    function renderizarLista(lista) {
+      const contenedor = document.getElementById('contenedorEventos');
+      const estadoVacio = document.getElementById('estadoVacio');
+      const cantSpan = document.getElementById('cantEventos');
+
+      cantSpan.textContent = lista.length;
+      contenedor.innerHTML = '';
+
+      if (lista.length === 0) {
+        estadoVacio.classList.remove('hidden');
+        return;
+      } else {
+        estadoVacio.classList.add('hidden');
+      }
+
+      lista.forEach(evt => {
+        // Colores distintivos según categoría
+        let badgeColor = 'bg-stone-100 text-stone-800 border-stone-300';
+        if (evt.categoria === 'Informativa') badgeColor = 'bg-slate-100 text-slate-800 border-slate-300';
+        if (evt.categoria === 'Cultural') badgeColor = 'bg-purple-100 text-purple-900 border-purple-300';
+        if (evt.categoria === 'Niños') badgeColor = 'bg-pink-100 text-pink-900 border-pink-300';
+        if (evt.categoria === 'Esparcimiento') badgeColor = 'bg-sky-100 text-sky-900 border-sky-300';
+        if (evt.categoria === 'Culinaria') badgeColor = 'bg-amber-100 text-amber-900 border-amber-300';
+        if (evt.categoria === 'Jardinería') badgeColor = 'bg-emerald-100 text-emerald-900 border-emerald-300';
+        if (evt.categoria === 'Educación') badgeColor = 'bg-indigo-100 text-indigo-900 border-indigo-300';
+
+        const btnVotoClass = evt.votoUsuario 
+          ? 'bg-brand-primary text-white border-brand-primary' 
+          : 'bg-white text-stone-700 border-stone-300 hover:border-brand-primary';
+
+        const card = document.createElement('article');
+        card.id = `card-${evt.id}`;
+        card.className = "bg-white p-6 shadow-md hover:shadow-xl transition-shadow border-l-4 border-brand-primary flex flex-col justify-between relative overflow-hidden";
+
+        card.innerHTML = `
+          <div>
+            <!-- Header de la tarjeta -->
+            <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="bg-brand-dark text-white font-mono text-xs font-bold px-2 py-1 shadow-sm">
+                  DORMY #${evt.dormy}
+                </span>
+                <span class="text-xs px-2 py-0.5 border font-semibold ${badgeColor}">
+                  ${evt.categoria}
+                </span>
+              </div>
+              <span class="text-xs text-stone-400 italic">
+                ${evt.horario || 'Horario a confirmar'}
+              </span>
+            </div>
+
+            <!-- Título -->
+            <h3 class="text-xl font-serif font-bold text-stone-800 mb-2 leading-tight">
+              ${escapeHtml(evt.nombre)}
+            </h3>
+
+            <!-- Descripción -->
+            <p class="text-stone-600 text-sm leading-relaxed mb-4 whitespace-pre-line">
+              ${escapeHtml(evt.descripcion)}
+            </p>
+          </div>
+
+          <!-- Footer de la tarjeta con acciones -->
+          <div class="pt-4 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Botón de adición/interés -->
+            <button 
+              onclick="meInteresa('${evt.id}')"
+              class="strict-btn px-3 py-1.5 border text-xs flex items-center gap-2 ${btnVotoClass}"
+              title="Sumar mi interés a esta propuesta"
+            >
+              <svg class="w-4 h-4" fill="${evt.votoUsuario ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              </svg>
+              <span>Me interesa (${evt.votos || 0})</span>
+            </button>
+
+            <!-- Acciones Edición / Borrado -->
+            <div class="flex items-center gap-1">
+              <button 
+                onclick="editarEvento('${evt.id}')" 
+                class="strict-btn bg-stone-100 hover:bg-stone-200 text-stone-700 px-2.5 py-1.5 text-xs flex items-center gap-1"
+                title="Editar propuesta"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                Editar
+              </button>
+              
+              <button 
+                onclick="eliminarEvento('${evt.id}')" 
+                class="strict-btn bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-2.5 py-1.5 text-xs flex items-center gap-1"
+                title="Eliminar propuesta"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                Borrar
+              </button>
+            </div>
+
+          </div>
+        `;
+
+        contenedor.appendChild(card);
+      });
+    }
+
+    // --- RESPALDO: EXPORTAR E IMPORTAR JSON ---
+    function exportarJSON() {
+      const fecha = new Date().toISOString().slice(0,10);
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(eventos, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "propuestas_dormys_" + fecha + ".json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      mostrarToast("Archivo JSON exportado");
+    }
+
+    function importarJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const importados = JSON.parse(event.target.result);
+          if (Array.isArray(importados)) {
+            eventos = importados;
+            guardarEnLocalStorage();
+            aplicarFiltros();
+            mostrarToast("Datos importados con éxito");
+          } else {
+            mostrarToast("El archivo no posee un formato de lista válido");
+          }
+        } catch (err) {
+          mostrarToast("Error al leer el archivo JSON");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // --- AYUDANTES Y UTILIDADES ---
+    function scrollAlFormulario() {
+      document.getElementById('seccionFormulario').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function mostrarToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,227 +1,386 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-stone-900">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Dormys - Eventos y Actividades</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DORMYS - Ciclo de Eventos</title>
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            brand: {
-              emerald: '#059669',
-              emeraldDark: '#047857',
-              yellow: '#facc15',
-              yellowHover: '#eab308',
-              lightGreen: '#a7f3d0',
-              black: '#111827',
-              darkCard: '#1f2937'
-            }
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
           }
         }
       }
     }
   </script>
 
-  <!-- Fuentes -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
-
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #111827;
-      color: #111827;
-    }
-    h1, h2, h3, .font-serif-custom {
-      font-family: 'Playfair Display', serif;
-    }
-    .strict-btn {
-      border-radius: 0px !important;
-      transition: all 0.15s ease-in-out;
-    }
-    .strict-input {
-      border-radius: 0px !important;
-    }
+    /* BORDES Y ESTILOS RECTANGULARES CON EFECTO 3D TÁCTIL */
     .strict-card {
       border-radius: 0px !important;
     }
-    /* Estilos de scrollbar discreto */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    
+    .strict-input {
+      border-radius: 0px !important;
+      border-width: 2px !important;
+      border-color: #1c1917 !important; /* stone-900 */
+      background-color: #ffffff !important;
+      color: #1c1917 !important;
+      font-weight: 600 !important;
     }
-    ::-webkit-scrollbar-track {
-      background: #1f2937;
+    
+    .strict-input:focus {
+      outline: none !important;
+      border-color: #059669 !important; /* emerald-600 */
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.25) !important;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #059669;
+
+    /* BOTONES CON RELIEVE 3D */
+    .strict-btn {
+      border-radius: 0px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      transition: all 0.1s ease-in-out !important;
+      cursor: pointer !important;
+      user-select: none !important;
+    }
+
+    .btn-3d-emerald {
+      background-color: #059669 !important;
+      color: #ffffff !important;
+      border: 2px solid #064e3b !important;
+      border-bottom-width: 5px !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+    .btn-3d-emerald:active {
+      transform: translateY(2px) !important;
+      border-bottom-width: 3px !important;
+      box-shadow: none !important;
+    }
+
+    .btn-3d-yellow {
+      background-color: #eab308 !important;
+      color: #000000 !important;
+      border: 2px solid #854d0e !important;
+      border-bottom-width: 5px !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+    .btn-3d-yellow:active {
+      transform: translateY(2px) !important;
+      border-bottom-width: 3px !important;
+      box-shadow: none !important;
+    }
+
+    .btn-3d-dark {
+      background-color: #1c1917 !important;
+      color: #ffffff !important;
+      border: 2px solid #000000 !important;
+      border-bottom-width: 5px !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+    .btn-3d-dark:active {
+      transform: translateY(2px) !important;
+      border-bottom-width: 3px !important;
+      box-shadow: none !important;
+    }
+
+    .btn-3d-stone {
+      background-color: #e7e5e4 !important;
+      color: #1c1917 !important;
+      border: 2px solid #78716c !important;
+      border-bottom-width: 5px !important;
+    }
+    .btn-3d-stone:active {
+      transform: translateY(2px) !important;
+      border-bottom-width: 3px !important;
+    }
+
+    .btn-3d-red {
+      background-color: #dc2626 !important;
+      color: #ffffff !important;
+      border: 2px solid #7f1d1d !important;
+      border-bottom-width: 5px !important;
+    }
+    .btn-3d-red:active {
+      transform: translateY(2px) !important;
+      border-bottom-width: 3px !important;
+    }
+
+    /* TRANSICIONES SUTILES */
+    .view-panel {
+      transition: opacity 0.2s ease-in-out;
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col text-stone-900 bg-stone-950">
+<body class="bg-stone-200 text-stone-900 font-sans min-h-screen flex flex-col antialiased selection:bg-yellow-400 selection:text-black">
 
-  <!-- ENCABEZADO SUPERIOR -->
-  <header class="bg-stone-900 border-b-4 border-emerald-600 text-white sticky top-0 z-40 shadow-xl">
-    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-      <button onclick="navegarA('inicio')" class="flex items-center gap-2 group text-left">
-        <div class="bg-emerald-600 text-stone-950 p-2 font-black text-xl tracking-wider">DORMYS</div>
+  <!-- ENCABEZADO PRINCIPAL -->
+  <header class="bg-emerald-900 text-white border-b-4 border-emerald-950 sticky top-0 z-50 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      
+      <!-- LOGO / INICIO -->
+      <button onclick="navegarA('vistaInicio')" class="flex items-center gap-2 text-left group focus:outline-none">
+        <div class="bg-yellow-400 text-black font-black p-2 border-2 border-black text-xl leading-none font-serif">
+          D
+        </div>
         <div>
-          <span class="block text-xs uppercase tracking-widest text-emerald-400 font-bold">Agenda & Propuestas</span>
-          <span class="text-sm font-semibold text-stone-300">Club de Campo</span>
+          <span class="block text-2xl font-black font-serif tracking-tight text-white group-hover:text-yellow-400 transition-colors">
+            DORMYS
+          </span>
+          <span class="block text-[10px] uppercase font-bold tracking-widest text-emerald-300 -mt-1">
+            Ciclo de Eventos
+          </span>
         </div>
       </button>
 
+      <!-- BOTONES SUPERIORES Y MENÚ CONFIGURACIÓN -->
       <div class="flex items-center gap-2">
         <button 
-          onclick="navegarA('inicio')" 
-          id="navBtnInicio"
-          class="hidden strict-btn bg-stone-800 hover:bg-stone-700 text-emerald-400 font-bold text-xs px-3 py-2 border border-emerald-600/50 items-center gap-1"
+          onclick="navegarA('vistaInicio')" 
+          class="strict-btn btn-3d-yellow text-xs px-3 py-2 flex items-center gap-1 font-bold"
         >
-          🏠 Inicio
+          🏠 <span class="hidden sm:inline">Inicio</span>
         </button>
-        <button 
-          onclick="abrirModalConfigWA()" 
-          class="strict-btn bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs px-2.5 py-2 border border-stone-700 flex items-center gap-1"
-          title="Configurar número de WhatsApp"
-        >
-          ⚙️ <span class="hidden sm:inline">WhatsApp</span>
-        </button>
+
+        <!-- RUEDITA / MENÚ DE AJUSTES -->
+        <div class="relative">
+          <button 
+            onclick="toggleMenuAjustes()" 
+            class="strict-btn btn-3d-stone text-xs p-2 sm:px-3 sm:py-2 flex items-center gap-1 font-bold"
+            title="Ajustes y Configuración"
+          >
+            ⚙️ <span class="hidden md:inline">Ajustes</span>
+          </button>
+
+          <!-- DESPLEGABLE DE MENÚ DE AJUSTES -->
+          <div 
+            id="menuAjustesDropdown" 
+            class="hidden absolute right-0 mt-2 w-56 bg-stone-900 border-4 border-yellow-400 shadow-2xl z-50 text-stone-100 divide-y divide-stone-800"
+          >
+            <div class="p-2 text-[11px] font-black uppercase text-yellow-400 tracking-wider bg-stone-950">
+              Configuraciones
+            </div>
+            <button 
+              onclick="abrirModalPaleta(); toggleMenuAjustes()" 
+              class="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-stone-800 flex items-center gap-2"
+            >
+              🎨 Cambiar Paleta
+            </button>
+            <button 
+              onclick="abrirModalConfigSupabase(); toggleMenuAjustes()" 
+              class="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-stone-800 flex items-center gap-2"
+            >
+              ⚡ Conectar Supabase
+            </button>
+            <button 
+              onclick="abrirModalConfigGoogleSheets(); toggleMenuAjustes()" 
+              class="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-stone-800 flex items-center gap-2"
+            >
+              📊 Google Sheets
+            </button>
+            <button 
+              onclick="abrirModalConfigWA(); toggleMenuAjustes()" 
+              class="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-stone-800 flex items-center gap-2"
+            >
+              💬 Num. WhatsApp
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL -->
-  <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6">
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6">
 
-    <!-- PANTALLA 1: INICIO CON 3 BOTONES ÚNICAMENTE -->
-    <section id="vistaInicio" class="space-y-6 py-4 sm:py-10">
-      <div class="text-center space-y-3">
-        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
-          Comunidad <span class="text-emerald-400 underline decoration-yellow-400 decoration-4">DORMYS</span>
+    <!-- ================= 1. PANTALLA PRINCIPAL (INICIO) ================= -->
+    <section id="vistaInicio" class="view-panel space-y-6 my-auto">
+      
+      <div class="text-center space-y-2 max-w-2xl mx-auto pt-4">
+        <span class="inline-block bg-yellow-400 text-stone-900 font-black text-xs px-3 py-1 border-2 border-stone-900 uppercase tracking-widest">
+          Comunidad de Vecinos
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black font-serif text-emerald-950 tracking-tight">
+          Ciclo de Eventos Dormys
         </h1>
-        <p class="text-stone-300 text-sm sm:text-base max-w-lg mx-auto">
-          Plataforma de propuestas, eventos diarios y actividades para vecinos del Club de Campo.
+        <p class="text-sm sm:text-base text-stone-700 font-medium">
+          Proponé charlas, actividades o talleres para disfrutar en el barrio.
         </p>
       </div>
 
-      <div class="max-w-md mx-auto space-y-4 pt-4">
-        <!-- BOTÓN 1: Proponer Evento -->
+      <!-- LOS 3 BOTONES PRINCIPALES DE ACCESO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto pt-4">
+        
         <button 
-          onclick="navegarA('proponer')" 
-          class="w-full strict-btn bg-yellow-400 hover:bg-yellow-500 text-stone-950 font-black text-lg py-5 px-6 border-b-4 border-r-4 border-yellow-700 shadow-lg flex items-center justify-between group transform active:translate-y-1"
+          onclick="prepararFormNuevo(); navegarA('vistaProponer')" 
+          class="strict-card bg-stone-100 p-6 border-4 border-stone-900 shadow-xl hover:bg-yellow-100 transition-all text-left flex flex-col justify-between group"
         >
-          <div class="flex items-center gap-3">
-            <span class="text-2xl">📝</span>
-            <span class="uppercase tracking-wider">1. Proponer Evento</span>
+          <div class="space-y-3">
+            <div class="w-12 h-12 bg-emerald-700 text-yellow-400 text-2xl flex items-center justify-center font-black border-2 border-black">
+              ✍️
+            </div>
+            <h2 class="text-xl font-black text-stone-900 uppercase font-serif group-hover:text-emerald-800">
+              Proponer Evento
+            </h2>
+            <p class="text-xs text-stone-600 font-medium leading-relaxed">
+              Ingresá tu propuesta indicando Dormy, categoría, fecha y archivo adjunto.
+            </p>
           </div>
-          <span class="text-stone-950 font-bold group-hover:translate-x-1 transition-transform">→</span>
+          <div class="mt-6 pt-3 border-t-2 border-stone-300 text-xs font-black text-emerald-700 uppercase flex items-center justify-between">
+            <span>Crear propuesta</span> ➔
+          </div>
         </button>
 
-        <!-- BOTÓN 2: Consultar Eventos -->
         <button 
-          onclick="navegarA('consultar')" 
-          class="w-full strict-btn bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg py-5 px-6 border-b-4 border-r-4 border-emerald-900 shadow-lg flex items-center justify-between group transform active:translate-y-1"
+          onclick="navegarA('vistaConsultar')" 
+          class="strict-card bg-stone-100 p-6 border-4 border-stone-900 shadow-xl hover:bg-emerald-100 transition-all text-left flex flex-col justify-between group"
         >
-          <div class="flex items-center gap-3">
-            <span class="text-2xl">🔍</span>
-            <span class="uppercase tracking-wider">2. Consultar Eventos</span>
+          <div class="space-y-3">
+            <div class="w-12 h-12 bg-yellow-400 text-black text-2xl flex items-center justify-center font-black border-2 border-black">
+              🔍
+            </div>
+            <h2 class="text-xl font-black text-stone-900 uppercase font-serif group-hover:text-emerald-800">
+              Consultar Eventos
+            </h2>
+            <p class="text-xs text-stone-600 font-medium leading-relaxed">
+              Buscá y filtrá eventos por palabra clave, dormy, categoría o estado.
+            </p>
           </div>
-          <span class="text-white font-bold group-hover:translate-x-1 transition-transform">→</span>
+          <div class="mt-6 pt-3 border-t-2 border-stone-300 text-xs font-black text-emerald-700 uppercase flex items-center justify-between">
+            <span>Ver listado</span> ➔
+          </div>
         </button>
 
-        <!-- BOTÓN 3: Eventos Confirmados (Calendario) -->
         <button 
-          onclick="navegarA('confirmados')" 
-          class="w-full strict-btn bg-stone-800 hover:bg-stone-700 text-yellow-400 font-black text-lg py-5 px-6 border-b-4 border-r-4 border-stone-950 border-yellow-400 shadow-lg flex items-center justify-between group transform active:translate-y-1"
+          onclick="navegarA('vistaConfirmados')" 
+          class="strict-card bg-stone-100 p-6 border-4 border-stone-900 shadow-xl hover:bg-yellow-100 transition-all text-left flex flex-col justify-between group"
         >
-          <div class="flex items-center gap-3">
-            <span class="text-2xl">📅</span>
-            <span class="uppercase tracking-wider">3. Eventos Confirmados</span>
+          <div class="space-y-3">
+            <div class="w-12 h-12 bg-emerald-900 text-white text-2xl flex items-center justify-center font-black border-2 border-black">
+              📅
+            </div>
+            <h2 class="text-xl font-black text-stone-900 uppercase font-serif group-hover:text-emerald-800">
+              Eventos Confirmados
+            </h2>
+            <p class="text-xs text-stone-600 font-medium leading-relaxed">
+              Explorá la agenda en formato calendario mensual interactivo.
+            </p>
           </div>
-          <span class="text-yellow-400 font-bold group-hover:translate-x-1 transition-transform">→</span>
+          <div class="mt-6 pt-3 border-t-2 border-stone-300 text-xs font-black text-emerald-700 uppercase flex items-center justify-between">
+            <span>Ver Agenda</span> ➔
+          </div>
         </button>
+
       </div>
 
-      <!-- Resumen rápido en portada -->
-      <div class="max-w-md mx-auto grid grid-cols-3 gap-2 text-center pt-6 text-xs text-stone-400 border-t border-stone-800">
-        <div class="p-2 bg-stone-900 border border-stone-800">
-          <span id="cantPropuestos" class="block font-bold text-yellow-400 text-lg">0</span>
-          <span>Propuestos</span>
-        </div>
-        <div class="p-2 bg-stone-900 border border-stone-800">
-          <span id="cantConfirmados" class="block font-bold text-emerald-400 text-lg">0</span>
-          <span>Confirmados</span>
-        </div>
-        <div class="p-2 bg-stone-900 border border-stone-800">
-          <span id="cantCancelados" class="block font-bold text-red-400 text-lg">0</span>
-          <span>Cancelados</span>
+      <!-- BOTONES RESUMEN POR ESTADO EN INICIO -->
+      <div class="max-w-4xl mx-auto pt-6 border-t-2 border-stone-300">
+        <h3 class="text-xs font-black uppercase text-stone-600 tracking-wider mb-3 text-center">
+          Resumen de Actividades en Comunidad:
+        </h3>
+        <div class="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+          
+          <button 
+            onclick="filtrarPorEstadoDirecto('Propuesto')" 
+            class="strict-card bg-stone-100 p-3 border-2 border-stone-800 hover:border-yellow-500 shadow"
+          >
+            <span class="block text-2xl font-black text-yellow-600" id="cntPropuestos">0</span>
+            <span class="text-[10px] sm:text-xs font-bold uppercase text-stone-700">Propuestos</span>
+          </button>
+
+          <button 
+            onclick="filtrarPorEstadoDirecto('Confirmado')" 
+            class="strict-card bg-stone-100 p-3 border-2 border-stone-800 hover:border-emerald-600 shadow"
+          >
+            <span class="block text-2xl font-black text-emerald-600" id="cntConfirmados">0</span>
+            <span class="text-[10px] sm:text-xs font-bold uppercase text-stone-700">Confirmados</span>
+          </button>
+
+          <button 
+            onclick="filtrarPorEstadoDirecto('Cancelado')" 
+            class="strict-card bg-stone-100 p-3 border-2 border-stone-800 hover:border-red-600 shadow"
+          >
+            <span class="block text-2xl font-black text-stone-500" id="cntCancelados">0</span>
+            <span class="text-[10px] sm:text-xs font-bold uppercase text-stone-700">Cancelados</span>
+          </button>
+
         </div>
       </div>
+
     </section>
 
-    <!-- PANTALLA 2: PROPONER EVENTO -->
-    <section id="vistaProponer" class="hidden space-y-4">
-      <div class="flex items-center justify-between">
-        <button onclick="navegarA('inicio')" class="text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:underline">
-          ← Volver al Inicio
+    <!-- ================= 2. PANTALLA PROPONER EVENTO ================= -->
+    <section id="vistaProponer" class="view-panel hidden space-y-4">
+      
+      <div class="flex items-center justify-between border-b-2 border-stone-400 pb-3">
+        <div>
+          <h2 id="tituloFormPropuesta" class="text-2xl font-black font-serif text-emerald-950 uppercase">
+            Proponer Evento
+          </h2>
+          <p class="text-xs text-stone-600">Completá los datos requeridos para la comunidad.</p>
+        </div>
+        <button onclick="navegarA('vistaInicio')" class="strict-btn btn-3d-stone text-xs px-3 py-1.5">
+          ⬅️ Volver
         </button>
-        <span class="bg-yellow-400 text-stone-950 text-xs font-bold px-2 py-1 uppercase">Nuevo Registro</span>
       </div>
 
-      <!-- CARD CON FONDO GRIS CLARO SOBRE EL QUE RESALTAN LOS FORMULARIOS -->
-      <div class="strict-card bg-stone-100 p-5 sm:p-7 border-4 border-stone-300 shadow-2xl text-stone-900">
-        <div class="border-b-2 border-stone-300 pb-3 mb-5">
-          <h2 class="text-2xl font-black text-stone-900 uppercase tracking-tight">Proponer Evento</h2>
-          <p class="text-xs text-stone-600 font-medium">Los eventos creados se registran inicialmente con estado <strong>PROPUESTO</strong>.</p>
-        </div>
-
-        <form id="formularioEvento" onsubmit="guardarEvento(event)" class="space-y-4">
+      <!-- CARD DEL FORMULARIO CON FONDO GRIS CLARO -->
+      <div class="strict-card bg-stone-100 p-4 sm:p-6 border-4 border-stone-900 shadow-xl max-w-3xl mx-auto">
+        <form id="formEvento" onsubmit="guardarEvento(event)" class="space-y-4">
+          
           <input type="hidden" id="eventoId" value="" />
 
-          <!-- 1) Nombre de la Actividad -->
+          <!-- 1. Nombre de la Actividad * -->
           <div>
             <label class="block text-xs font-black uppercase text-stone-800 mb-1">
               1) Nombre de la Actividad <span class="text-red-600">*</span>
             </label>
             <input 
               type="text" 
-              id="nombreEvento" 
+              id="inpNombre" 
               required 
-              placeholder="Ej: Torneo de Tenis Dobles"
-              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-semibold text-sm"
+              placeholder="Ej: Taller de Huerta en Otoño" 
+              class="strict-input w-full p-2.5 text-sm"
             />
           </div>
 
-          <!-- 2) Descripción del Evento -->
+          <!-- 2. Descripción del Evento * -->
           <div>
             <label class="block text-xs font-black uppercase text-stone-800 mb-1">
               2) Descripción del Evento <span class="text-red-600">*</span>
             </label>
             <textarea 
-              id="descripcionEvento" 
-              rows="3" 
+              id="inpDescripcion" 
               required 
-              placeholder="Detalla de qué trata la actividad, requerimientos o materiales necesarios..."
-              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none text-sm"
+              rows="3" 
+              placeholder="Explicá en qué consiste la actividad, materiales o dinámicas..." 
+              class="strict-input w-full p-2.5 text-sm"
             ></textarea>
           </div>
 
-          <!-- 3) Categoría -->
+          <!-- 3. Categoría * -->
           <div>
             <label class="block text-xs font-black uppercase text-stone-800 mb-1">
               3) Categoría <span class="text-red-600">*</span>
             </label>
-            <select 
-              id="categoriaEvento" 
-              required
-              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-bold text-sm"
-            >
+            <select id="inpCategoria" required class="strict-input w-full p-2.5 text-sm">
               <option value="">-- Seleccionar Categoría --</option>
               <option value="Informativa">Informativa</option>
               <option value="Cultural">Cultural</option>
@@ -233,152 +392,168 @@
             </select>
           </div>
 
-          <!-- 4) Fecha Sugerida / Prevista -->
+          <!-- 4. Fecha Sugerida / Prevista * -->
           <div>
             <label class="block text-xs font-black uppercase text-stone-800 mb-1">
               4) Fecha Sugerida / Prevista <span class="text-red-600">*</span>
             </label>
             <input 
               type="date" 
-              id="fechaEvento" 
-              required
-              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-bold text-sm"
+              id="inpFecha" 
+              required 
+              class="strict-input w-full p-2.5 text-sm"
             />
           </div>
 
-          <!-- RENGLÓN COMPARTIDO: 5) Horario y 6) Dormy -->
+          <!-- 5 y 6 en el mismo renglón: Horario y Dormy -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
             <!-- 5) Horario sugerido -->
             <div>
               <label class="block text-xs font-black uppercase text-stone-800 mb-1">
-                5) Horario Sugerido
+                5) Horario sugerido
               </label>
               <input 
                 type="text" 
-                id="horarioEvento" 
-                placeholder="Ej: 16:30hs"
-                class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none text-sm font-semibold"
+                id="inpHorario" 
+                placeholder="Ej: 17:00 hs" 
+                class="strict-input w-full p-2.5 text-sm"
               />
             </div>
 
-            <!-- 6) Nro. de Dormy -->
+            <!-- 6) Nro de Dormy (1 al 99) * -->
             <div>
               <label class="block text-xs font-black uppercase text-stone-800 mb-1">
                 6) Nro. de Dormy (1 al 99) <span class="text-red-600">*</span>
               </label>
               <input 
                 type="number" 
-                id="nroDormy" 
+                id="inpDormy" 
                 min="1" 
                 max="99" 
                 required 
-                placeholder="Dormy N°"
-                class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-bold text-sm"
+                placeholder="1-99" 
+                class="strict-input w-full p-2.5 text-sm"
               />
             </div>
+
           </div>
 
-          <!-- ARCHIVO ADJUNTO (Antes de Estado) -->
-          <div>
-            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
-              Adjuntar Archivo <span class="text-stone-500 font-normal">(Opcional: JPG, PDF, Word, Excel)</span>
+          <!-- ADJUNTO ARCHIVO (JPG, PDF, EXCEL, WORD) -->
+          <div class="p-3 bg-stone-200 border-2 border-stone-400 space-y-2">
+            <label class="block text-xs font-black uppercase text-stone-800">
+              📎 Adjuntar Folleto / Imagen / Documento (Opcional)
             </label>
             <input 
               type="file" 
-              id="archivoAdjunto" 
-              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx"
-              class="w-full strict-input p-2 border-2 border-stone-400 bg-white text-stone-800 text-xs focus:border-emerald-600"
+              id="inpArchivo" 
+              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx" 
+              class="text-xs text-stone-700 w-full"
             />
-            <span id="archivoAdjuntoNombre" class="hidden block mt-1 text-xs font-bold text-emerald-800 bg-emerald-100 p-2 border border-emerald-300"></span>
+            
+            <div id="bloquePrevioAdjunto" class="hidden flex items-center justify-between bg-stone-100 p-2 border border-stone-400 text-xs">
+              <span id="txtNombreAdjuntoPrevio" class="font-bold truncate text-emerald-900">
+                Archivo cargado
+              </span>
+              <button 
+                type="button" 
+                onclick="verAdjuntoFormulario()" 
+                class="strict-btn btn-3d-yellow text-[10px] px-2 py-1"
+              >
+                👁️ Ver Adjunto
+              </button>
+            </div>
           </div>
 
-          <!-- 7) Estado -->
+          <!-- 7. Estado -->
           <div>
             <label class="block text-xs font-black uppercase text-stone-800 mb-1">
-              7) Estado del Evento
+              7) Estado de la Actividad
             </label>
-            <select 
-              id="estadoEvento" 
-              class="w-full strict-input p-3 border-2 border-stone-400 bg-stone-200 text-stone-900 font-black text-sm focus:outline-none"
-            >
-              <option value="Propuesto" selected>Propuesto</option>
-              <option value="Confirmado">Confirmado</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
-          </div>
-
-          <!-- BOTONES DE ACCIÓN -->
-          <div class="pt-4 flex items-center justify-end gap-3 border-t border-stone-300">
-            <button 
-              type="button" 
-              onclick="cancelarEdicion()" 
-              class="strict-btn px-4 py-3 bg-stone-300 hover:bg-stone-400 text-stone-800 font-bold text-xs uppercase"
-            >
-              Limpiar
-            </button>
-            <button 
-              type="submit" 
-              class="strict-btn px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider border-b-4 border-emerald-900"
-            >
-              Guardar Evento
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- PANTALLA 3: CONSULTAR EVENTOS (CON BUSCADOR Y FILTROS POR ESTADO) -->
-    <section id="vistaConsultar" class="hidden space-y-4">
-      <div class="flex items-center justify-between">
-        <button onclick="navegarA('inicio')" class="text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:underline">
-          ← Volver al Inicio
-        </button>
-        <span class="bg-emerald-600 text-white text-xs font-bold px-2 py-1 uppercase">Búsqueda Completa</span>
-      </div>
-
-      <!-- CARD DE FILTROS EN GRIS CLARO -->
-      <div class="strict-card bg-stone-100 p-4 border-4 border-stone-300 shadow-md space-y-3">
-        <h3 class="text-sm font-black uppercase tracking-wider text-stone-900 flex items-center gap-2">
-          <span>🔍 Buscar y Filtrar Eventos</span>
-        </h3>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <!-- Búsqueda por texto -->
-          <div class="sm:col-span-1">
-            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Palabra Clave</label>
-            <input 
-              type="text" 
-              id="filtroBusqueda" 
-              oninput="renderizarEventos()" 
-              placeholder="Nombre, desc. o dormy..." 
-              class="w-full strict-input p-2.5 border-2 border-stone-400 bg-white text-stone-900 text-xs focus:border-emerald-600 focus:outline-none"
-            />
-          </div>
-
-          <!-- Filtro por Estado -->
-          <div>
-            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Estado</label>
-            <select 
-              id="filtroEstado" 
-              onchange="renderizarEventos()" 
-              class="w-full strict-input p-2.5 border-2 border-stone-400 bg-white text-stone-900 text-xs font-bold focus:border-emerald-600 focus:outline-none"
-            >
-              <option value="TODOS">Todos los Estados</option>
+            <select id="inpEstado" class="strict-input w-full p-2.5 text-sm bg-stone-100">
               <option value="Propuesto">Propuesto</option>
               <option value="Confirmado">Confirmado</option>
               <option value="Cancelado">Cancelado</option>
             </select>
           </div>
 
-          <!-- Filtro por Categoría -->
+          <!-- BOTONES GUARDAR Y CANCELAR -->
+          <div class="pt-4 flex items-center gap-3">
+            <button type="submit" class="strict-btn btn-3d-emerald text-sm px-6 py-3 flex-1 font-black">
+              💾 Guardar Propuesta
+            </button>
+            <button 
+              type="button" 
+              onclick="navegarA('vistaConsultar')" 
+              class="strict-btn btn-3d-stone text-sm px-4 py-3"
+            >
+              Cancelar
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </section>
+
+    <!-- ================= 3. PANTALLA CONSULTAR EVENTOS ================= -->
+    <section id="vistaConsultar" class="view-panel hidden space-y-4">
+      
+      <div class="flex items-center justify-between border-b-2 border-stone-400 pb-3">
+        <div>
+          <h2 class="text-2xl font-black font-serif text-emerald-950 uppercase">
+            Consultar Eventos
+          </h2>
+          <p class="text-xs text-stone-600">Buscá, filtrá o apoyá propuestas de la comunidad.</p>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <!-- Botón Lupa movil para alternar tarjeta de filtros -->
+          <button 
+            onclick="toggleFiltrosMobile()" 
+            class="sm:hidden strict-btn btn-3d-yellow text-xs px-3 py-1.5"
+            title="Mostrar u ocultar filtros"
+          >
+            🔍 Filtros
+          </button>
+          <button onclick="navegarA('vistaInicio')" class="strict-btn btn-3d-stone text-xs px-3 py-1.5">
+            ⬅️ Inicio
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD DE FILTROS (Se oculta en cel por defecto) -->
+      <div 
+        id="cardFiltros" 
+        class="hidden sm:block strict-card bg-stone-100 p-4 border-4 border-stone-900 shadow-md space-y-3"
+      >
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Buscador</label>
+            <input 
+              type="text" 
+              id="fltTexto" 
+              oninput="renderizarEventos()" 
+              placeholder="Buscar por palabra..." 
+              class="strict-input w-full p-2 text-xs"
+            />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Estado</label>
+            <select id="fltEstado" onchange="renderizarEventos()" class="strict-input w-full p-2 text-xs">
+              <option value="TODOS">Todos los estados</option>
+              <option value="Propuesto">Propuestos</option>
+              <option value="Confirmado">Confirmados</option>
+              <option value="Cancelado">Cancelados</option>
+            </select>
+          </div>
+
           <div>
             <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Categoría</label>
-            <select 
-              id="filtroCategoria" 
-              onchange="renderizarEventos()" 
-              class="w-full strict-input p-2.5 border-2 border-stone-400 bg-white text-stone-900 text-xs font-bold focus:border-emerald-600 focus:outline-none"
-            >
-              <option value="TODAS">Todas las Categorías</option>
+            <select id="fltCategoria" onchange="renderizarEventos()" class="strict-input w-full p-2 text-xs">
+              <option value="TODAS">Todas las categorías</option>
               <option value="Informativa">Informativa</option>
               <option value="Cultural">Cultural</option>
               <option value="Niños">Niños</option>
@@ -388,143 +563,259 @@
               <option value="Educacion">Educación</option>
             </select>
           </div>
+
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Nro. Dormy</label>
+            <input 
+              type="number" 
+              id="fltDormy" 
+              min="1" 
+              max="99" 
+              oninput="renderizarEventos()" 
+              placeholder="1-99" 
+              class="strict-input w-full p-2 text-xs"
+            />
+          </div>
+
         </div>
       </div>
 
-      <!-- LISTADO DE EVENTOS -->
-      <div id="listaEventos" class="space-y-4">
-        <!-- Generado dinámicamente -->
+      <!-- CONTENEDOR DEL LISTADO DE EVENTOS -->
+      <div id="contenedorListaEventos" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Renderizado dinámico vía JavaScript -->
       </div>
+
     </section>
 
-    <!-- PANTALLA 4: EVENTOS CONFIRMADOS / CALENDARIO -->
-    <section id="vistaConfirmados" class="hidden space-y-4">
-      <div class="flex items-center justify-between">
-        <button onclick="navegarA('inicio')" class="text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:underline">
-          ← Volver al Inicio
+    <!-- ================= 4. PANTALLA EVENTOS CONFIRMADOS (AGENDA) ================= -->
+    <section id="vistaConfirmados" class="view-panel hidden space-y-4">
+      
+      <div class="flex items-center justify-between border-b-2 border-stone-400 pb-3">
+        <div>
+          <h2 class="text-2xl font-black font-serif text-emerald-950 uppercase">
+            Agenda / Calendario
+          </h2>
+          <p class="text-xs text-stone-600">Explorá visualmente los eventos programados.</p>
+        </div>
+        <button onclick="navegarA('vistaInicio')" class="strict-btn btn-3d-stone text-xs px-3 py-1.5">
+          ⬅️ Inicio
         </button>
-        <span class="bg-yellow-400 text-stone-950 text-xs font-bold px-2 py-1 uppercase">Agenda Confirmada</span>
       </div>
 
-      <!-- CARD CALENDARIO GRIS CLARO -->
-      <div class="strict-card bg-stone-100 p-4 sm:p-6 border-4 border-stone-300 shadow-xl space-y-5">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b-2 border-stone-300 pb-3">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-black uppercase text-stone-900">Calendario de Eventos</h2>
-            <p class="text-xs text-stone-600">Eventos programados por fecha en el Club de Campo Dormys.</p>
-          </div>
-          
-          <!-- Filtro de vista del calendario -->
-          <select 
-            id="filtroEstadoCalendario" 
-            onchange="renderizarCalendario()" 
-            class="strict-input p-2 border-2 border-stone-400 bg-white text-stone-900 text-xs font-bold focus:border-emerald-600"
-          >
-            <option value="Confirmado" selected>Solo Confirmados</option>
-            <option value="Propuesto">Solo Propuestos</option>
-            <option value="TODOS">Todos los Estados</option>
-          </select>
-        </div>
-
-        <!-- CONTROLES MES/AÑO -->
-        <div class="flex items-center justify-between bg-stone-200 p-3 border border-stone-300">
-          <button onclick="cambiarMesCalendario(-1)" class="strict-btn px-3 py-1 bg-stone-900 text-white text-xs font-bold hover:bg-emerald-600">
-            ← Anterior
+      <!-- CARD CALENDARIO -->
+      <div class="strict-card bg-stone-100 p-4 sm:p-6 border-4 border-stone-900 shadow-xl space-y-4">
+        
+        <!-- MES Y NAVEGACIÓN -->
+        <div class="flex items-center justify-between bg-emerald-900 text-white p-3 border-2 border-black">
+          <button onclick="cambiarMesCalendario(-1)" class="strict-btn btn-3d-yellow text-xs px-3 py-1">
+            ◀ Anterior
           </button>
-          <span id="calMesAño" class="font-black text-sm uppercase tracking-wider text-stone-900"></span>
-          <button onclick="cambiarMesCalendario(1)" class="strict-btn px-3 py-1 bg-stone-900 text-white text-xs font-bold hover:bg-emerald-600">
-            Siguiente →
-          </button>
-        </div>
-
-        <!-- GRILLA DEL CALENDARIO -->
-        <div class="overflow-x-auto">
-          <div class="min-w-[300px]">
-            <!-- Días semana -->
-            <div class="grid grid-cols-7 gap-1 text-center font-black text-[11px] uppercase bg-stone-300 text-stone-800 py-2">
-              <div>Dom</div>
-              <div>Lun</div>
-              <div>Mar</div>
-              <div>Mié</div>
-              <div>Jue</div>
-              <div>Vie</div>
-              <div>Sáb</div>
-            </div>
-            <!-- Días mes -->
-            <div id="calDiasGrid" class="grid grid-cols-7 gap-1 bg-stone-300 pt-1">
-              <!-- JS Inyecta las celdas aquí -->
-            </div>
-          </div>
-        </div>
-
-        <!-- EVENTOS DEL MES SELECCIONADO -->
-        <div class="pt-4 border-t border-stone-300">
-          <h3 class="text-xs font-black uppercase tracking-wider text-stone-700 mb-3">
-            Lista de Actividades en el Mes
+          <h3 id="calTituloMes" class="text-base sm:text-xl font-black font-serif uppercase tracking-wider text-yellow-400">
+            Mes Año
           </h3>
+          <button onclick="cambiarMesCalendario(1)" class="strict-btn btn-3d-yellow text-xs px-3 py-1">
+            Siguiente ▶
+          </button>
+        </div>
+
+        <!-- REJILLA DE DÍAS -->
+        <div class="grid grid-cols-7 gap-1 text-center font-black text-xs uppercase bg-stone-300 p-2 border border-stone-400">
+          <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+        </div>
+
+        <div id="calDiasGrid" class="grid grid-cols-7 gap-1 text-xs">
+          <!-- Render dinámico del calendario -->
+        </div>
+
+        <!-- LISTA MENSUAL DE CONFIRMADOS -->
+        <div class="pt-4 border-t-2 border-stone-300">
+          <h4 class="text-sm font-black uppercase text-stone-800 mb-2">
+            📌 Eventos del Mes Seleccionado:
+          </h4>
           <div id="calListaMes" class="space-y-2">
-            <!-- JS inyecta lista del mes -->
+            <!-- Eventos del mes -->
           </div>
         </div>
+
       </div>
+
     </section>
 
   </main>
 
-  <!-- MODAL CONFIGURACIÓN NÚMERO WHATSAPP -->
-  <div id="modalConfigWA" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="strict-card bg-stone-100 max-w-sm w-full p-6 border-4 border-stone-400 shadow-2xl space-y-4">
-      <h3 class="text-lg font-black uppercase text-stone-900 border-b-2 border-stone-300 pb-2">
-        ⚙️ Configurar WhatsApp
-      </h3>
-      <p class="text-xs text-stone-600">
-        Ingresa el número de teléfono con código de país para el envío de propuestas.
-      </p>
-      <div>
-        <label class="block text-xs font-black uppercase text-stone-700 mb-1">N° WhatsApp (con código de país):</label>
-        <input 
-          type="text" 
-          id="inputWAConfig" 
-          value="+541131815778"
-          class="w-full strict-input p-3 border-2 border-stone-400 bg-white font-bold text-stone-900 text-sm"
-          placeholder="Ej: +541131815778"
-        />
+  <!-- MODAL DE VISOR DE ADJUNTOS -->
+  <div 
+    id="modalVisorAdjunto" 
+    class="hidden fixed inset-0 bg-stone-950/90 backdrop-blur-md z-[100] flex items-center justify-center p-3 sm:p-6"
+  >
+    <div class="strict-card bg-stone-900 border-4 border-yellow-400 w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl rounded-none overflow-hidden text-stone-100">
+      
+      <!-- Cabecera del Visor -->
+      <div class="bg-stone-800 p-3 sm:p-4 border-b-2 border-stone-700 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2 overflow-hidden">
+          <span class="text-xl">📎</span>
+          <h3 id="visorNombreArchivo" class="text-sm sm:text-base font-black truncate text-yellow-400">
+            Archivo Adjunto
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button 
+            id="visorBtnDescargar"
+            class="strict-btn btn-3d-emerald text-xs px-3 py-1.5 font-bold flex items-center gap-1"
+            title="Descargar archivo"
+          >
+            ⬇️ <span class="hidden sm:inline">Descargar</span>
+          </button>
+          <button 
+            onclick="cerrarModalVisor()" 
+            class="strict-btn btn-3d-red text-xs px-3 py-1.5 font-black"
+            title="Cerrar visor"
+          >
+            ✖️
+          </button>
+        </div>
       </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="cerrarModalConfigWA()" class="strict-btn px-4 py-2 bg-stone-300 text-stone-800 font-bold text-xs">Cancelar</button>
-        <button onclick="guardarWAConfig()" class="strict-btn px-4 py-2 bg-emerald-600 text-white font-bold text-xs">Guardar</button>
+
+      <!-- Cuerpo del Visor con Scroll/Centrado Fluido -->
+      <div 
+        id="visorContenido" 
+        class="flex-1 bg-stone-950 p-2 sm:p-4 overflow-auto flex items-center justify-center min-h-[250px] max-h-[75vh]"
+      >
+        <!-- Se inyecta dinámicamente imagen o PDF optimizado -->
+      </div>
+
+      <!-- Pie informativo -->
+      <div class="bg-stone-900 p-2 text-center border-t border-stone-800">
+        <p class="text-[11px] font-mono text-stone-400">
+          Usa los dedos o rueda del mouse para desplazar. Si el archivo no carga, presiona Descargar.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL DE PALETA DE COLORES -->
+  <div id="modalPaletaColors" class="hidden fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4">
+    <div class="strict-card bg-stone-100 p-6 border-4 border-stone-900 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-stone-300 pb-2">
+        <h3 class="text-lg font-black uppercase text-stone-900">🎨 Paleta de Colores</h3>
+        <button onclick="cerrarModalPaleta()" class="text-sm font-bold text-red-600">✖️</button>
+      </div>
+      <p class="text-xs text-stone-600">Seleccioná un estilo visual para personalizar la app:</p>
+      <div class="grid grid-cols-1 gap-2">
+        <button onclick="aplicarTema('esmeralda')" class="strict-btn p-3 bg-emerald-800 text-white border-2 border-black text-left flex items-center justify-between">
+          <span>Esmeralda & Amarillo (Predeterminado)</span>
+          <span class="w-4 h-4 bg-yellow-400 border border-black inline-block"></span>
+        </button>
+        <button onclick="aplicarTema('marino')" class="strict-btn p-3 bg-blue-900 text-white border-2 border-black text-left flex items-center justify-between">
+          <span>Azul Marino & Dorado</span>
+          <span class="w-4 h-4 bg-amber-400 border border-black inline-block"></span>
+        </button>
+        <button onclick="aplicarTema('bordo')" class="strict-btn p-3 bg-red-900 text-white border-2 border-black text-left flex items-center justify-between">
+          <span>Bordó Tradicional</span>
+          <span class="w-4 h-4 bg-yellow-300 border border-black inline-block"></span>
+        </button>
+      </div>
+      <div class="pt-2 text-right">
+        <button onclick="cerrarModalPaleta()" class="strict-btn btn-3d-stone text-xs px-4 py-2">
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- PIE DE PÁGINA -->
-  <footer class="bg-stone-900 border-t border-stone-800 py-4 text-center text-xs text-stone-400 mt-auto">
-    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p>© Dormys Club de Campo - Gestión de Eventos Vecinales</p>
-      <div class="flex items-center gap-3">
-        <button onclick="exportarJSON()" class="hover:text-emerald-400">Exportar Datos</button>
-        <span>•</span>
-        <button onclick="importarJSON()" class="hover:text-emerald-400">Importar Datos</button>
+  <!-- MODAL DE CONFIGURACIÓN SUPABASE -->
+  <div id="modalConfigSupabase" class="hidden fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4">
+    <div class="strict-card bg-stone-100 p-6 border-4 border-stone-900 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-stone-300 pb-2">
+        <h3 class="text-lg font-black uppercase text-emerald-900">⚡ Supabase Config (ADMDH)</h3>
+        <button onclick="cerrarModalConfigSupabase()" class="text-sm font-bold text-red-600">✖️</button>
+      </div>
+      <p class="text-xs text-stone-600 leading-relaxed">
+        Ingresá las credenciales de tu proyecto de Supabase para guardar en tiempo real.
+      </p>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-black uppercase text-stone-800">Supabase URL</label>
+          <input type="text" id="inpSupaUrl" placeholder="https://xxxx.supabase.co" class="strict-input w-full p-2 text-xs" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-black uppercase text-stone-800">Supabase Anon Key</label>
+          <input type="password" id="inpSupaKey" placeholder="eyJhbGciOi..." class="strict-input w-full p-2 text-xs" />
+        </div>
+      </div>
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="guardarConfigSupabase()" class="strict-btn btn-3d-emerald text-xs px-4 py-2">
+          Guardar Conexión
+        </button>
+        <button onclick="cerrarModalConfigSupabase()" class="strict-btn btn-3d-stone text-xs px-3 py-2">
+          Cancelar
+        </button>
       </div>
     </div>
-  </footer>
+  </div>
 
-  <!-- SISTEMA JAVASCRIPT -->
+  <!-- MODAL GOOGLE SHEETS -->
+  <div id="modalConfigGoogleSheets" class="hidden fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4">
+    <div class="strict-card bg-stone-100 p-6 border-4 border-stone-900 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-stone-300 pb-2">
+        <h3 class="text-lg font-black uppercase text-emerald-900">📊 Google Sheets API</h3>
+        <button onclick="cerrarModalConfigGoogleSheets()" class="text-sm font-bold text-red-600">✖️</button>
+      </div>
+      <div>
+        <label class="block text-[10px] font-black uppercase text-stone-800 mb-1">Web App URL (Apps Script)</label>
+        <input type="text" id="inpGSheetUrl" placeholder="https://script.google.com/macros/s/.../exec" class="strict-input w-full p-2 text-xs" />
+      </div>
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="guardarConfigGSheets()" class="strict-btn btn-3d-emerald text-xs px-4 py-2">
+          Guardar y Sincronizar
+        </button>
+        <button onclick="cerrarModalConfigGoogleSheets()" class="strict-btn btn-3d-stone text-xs px-3 py-2">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIG WHATSAPP -->
+  <div id="modalConfigWA" class="hidden fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4">
+    <div class="strict-card bg-stone-100 p-6 border-4 border-stone-900 w-full max-w-sm shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-stone-300 pb-2">
+        <h3 class="text-lg font-black uppercase text-emerald-900">💬 Número de WhatsApp</h3>
+        <button onclick="cerrarModalConfigWA()" class="text-sm font-bold text-red-600">✖️</button>
+      </div>
+      <div>
+        <label class="block text-[10px] font-black uppercase text-stone-800 mb-1">Número de Destino / Grupo</label>
+        <input type="text" id="inputNumeroWA" class="strict-input w-full p-2 text-xs" />
+      </div>
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="guardarConfigWA()" class="strict-btn btn-3d-emerald text-xs px-4 py-2">
+          Guardar Número
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT PRINCIPAL -->
   <script>
-    // ESTADO GLOBAL DE LA APLICACIÓN
+    // ESTADO DE LA APLICACIÓN Y CONFIGURACIÓN GLOBAL
     let eventos = [];
-    let numeroWhatsApp = "+541131815778";
-    let fechaCalendario = new Date();
+    let numeroWhatsApp = "+54 11 31815778";
+    let temaActual = "esmeralda";
+    let mesCalendario = new Date();
+    let supabaseClient = null;
+    let urlGoogleSheets = "";
+    let tempArchivoCargado = null;
 
-    // DATOS INICIALES DEMO
+    // EVENTOS DEMO DE PRUEBA INITIAL
     const eventosIniciales = [
       {
-        id: "evt-1",
-        nombre: "Torneo de Tenis Dobles Relámpago",
-        descripcion: "Torneo relámpago de tenis para todas las edades. Traer raqueta. Habrá entrega de trofeos.",
-        categoria: "Esparcimiento",
+        id: "ev-1",
+        nombre: "Taller de Huerta Orgánica",
+        descripcion: "Consejos para armar tu compostera y siembra de vegetales de estación en el dormy.",
+        categoria: "Jardineria",
         fecha: "2026-11-15",
-        horario: "15:00 hs",
+        horario: "17:00 hs",
         dormy: 12,
         estado: "Confirmado",
         votos: 8,
@@ -532,89 +823,134 @@
         archivo: null
       },
       {
-        id: "evt-2",
-        nombre: "Taller de Jardinería y Paisajismo",
-        descripcion: "Charla teórica y práctica sobre cuidado de plantas autóctonas y diseño de jardines de verano.",
-        categoria: "Jardineria",
+        id: "ev-2",
+        nombre: "Torneo de Tenis Infantil",
+        descripcion: "Actividad recreativa para chicos de 6 a 12 años en las canchas principales.",
+        categoria: "Niños",
         fecha: "2026-11-20",
         horario: "10:30 hs",
         dormy: 45,
         estado: "Propuesto",
-        votos: 5,
-        votoUsuario: false,
-        archivo: null
-      },
-      {
-        id: "evt-3",
-        nombre: "Tarde de Juegos y Kermesse Infantil",
-        descripcion: "Juegos organizados, castillos inflables y merienda compartida para los niños del club.",
-        categoria: "Niños",
-        fecha: "2026-11-22",
-        horario: "16:00 hs",
-        dormy: 7,
-        estado: "Confirmado",
-        votos: 12,
+        votos: 14,
         votoUsuario: false,
         archivo: null
       }
     ];
 
-    // CARGA INICIAL
+    // INICIALIZACIÓN
     window.onload = function() {
       cargarStorage();
-      actualizarContadores();
       renderizarEventos();
       renderizarCalendario();
+      actualizarContadores();
     };
 
     // NAVEGACIÓN ENTRE VISTAS
-    function navegarA(vista) {
-      document.getElementById('vistaInicio').classList.add('hidden');
-      document.getElementById('vistaProponer').classList.add('hidden');
-      document.getElementById('vistaConsultar').classList.add('hidden');
-      document.getElementById('vistaConfirmados').classList.add('hidden');
+    function navegarA(idVista) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+      const vista = document.getElementById(idVista);
+      if (vista) vista.classList.remove('hidden');
 
-      const navBtnInicio = document.getElementById('navBtnInicio');
-      if (vista === 'inicio') {
-        navBtnInicio.classList.add('hidden');
-        navBtnInicio.classList.remove('flex');
-        document.getElementById('vistaInicio').classList.remove('hidden');
-      } else {
-        navBtnInicio.classList.remove('hidden');
-        navBtnInicio.classList.add('flex');
-        if (vista === 'proponer') document.getElementById('vistaProponer').classList.remove('hidden');
-        if (vista === 'consultar') document.getElementById('vistaConsultar').classList.remove('hidden');
-        if (vista === 'confirmados') {
-          document.getElementById('vistaConfirmados').classList.remove('hidden');
-          renderizarCalendario();
-        }
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (idVista === 'vistaConsultar') renderizarEventos();
+      if (idVista === 'vistaConfirmados') renderizarCalendario();
+      window.scrollTo(0, 0);
     }
 
-    // GESTIÓN LOCAL STORAGE
+    // DESPLEGABLE DE MENÚ DE AJUSTES
+    function toggleMenuAjustes() {
+      const menu = document.getElementById('menuAjustesDropdown');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('menuAjustesDropdown');
+      const btn = e.target.closest('button[onclick*="toggleMenuAjustes"]');
+      if (menu && !menu.classList.contains('hidden') && !btn && !menu.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    // FUNCIONES DE CONTROL DE MODALES DE AJUSTES (RUEDITA ⚙️)
+    function abrirModalPaleta() {
+      const modal = document.getElementById('modalPaletaColors');
+      if (modal) modal.classList.remove('hidden');
+    }
+    function cerrarModalPaleta() {
+      const modal = document.getElementById('modalPaletaColors');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function abrirModalConfigSupabase() {
+      const url = localStorage.getItem('dormys_supa_url') || '';
+      const key = localStorage.getItem('dormys_supa_key') || '';
+      document.getElementById('inpSupaUrl').value = url;
+      document.getElementById('inpSupaKey').value = key;
+
+      const modal = document.getElementById('modalConfigSupabase');
+      if (modal) modal.classList.remove('hidden');
+    }
+    function cerrarModalConfigSupabase() {
+      const modal = document.getElementById('modalConfigSupabase');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function abrirModalConfigGoogleSheets() {
+      const url = localStorage.getItem('dormys_gsheets_url') || '';
+      document.getElementById('inpGSheetUrl').value = url;
+
+      const modal = document.getElementById('modalConfigGoogleSheets');
+      if (modal) modal.classList.remove('hidden');
+    }
+    function cerrarModalConfigGoogleSheets() {
+      const modal = document.getElementById('modalConfigGoogleSheets');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function abrirModalConfigWA() {
+      const num = localStorage.getItem('dormys_whatsapp_num') || numeroWhatsApp;
+      document.getElementById('inputNumeroWA').value = num;
+
+      const modal = document.getElementById('modalConfigWA');
+      if (modal) modal.classList.remove('hidden');
+    }
+    function cerrarModalConfigWA() {
+      const modal = document.getElementById('modalConfigWA');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function guardarConfigWA() {
+      const num = document.getElementById('inputNumeroWA').value.trim();
+      if (num) {
+        numeroWhatsApp = num;
+        localStorage.setItem('dormys_whatsapp_num', num);
+      }
+      cerrarModalConfigWA();
+    }
+
+    // CARGAR/GUARDAR STORAGE LOCAL Y NUBE
     function cargarStorage() {
-      const datosGuardados = localStorage.getItem('dormys_eventos');
-      if (datosGuardados) {
-        try {
-          eventos = JSON.parse(datosGuardados);
-        } catch (e) {
-          eventos = [...eventosIniciales];
-        }
+      const localWA = localStorage.getItem('dormys_whatsapp_num');
+      if (localWA) numeroWhatsApp = localWA;
+
+      const localData = localStorage.getItem('dormys_eventos_db');
+      if (localData) {
+        try { eventos = JSON.parse(localData); } catch(e) { eventos = eventosIniciales; }
       } else {
-        eventos = [...eventosIniciales];
+        eventos = eventosIniciales;
         guardarStorage();
       }
 
-      const waGuardado = localStorage.getItem('dormys_wa');
-      if (waGuardado) {
-        numeroWhatsApp = waGuardado;
-        document.getElementById('inputWAConfig').value = waGuardado;
+      // Supabase credentials check
+      const sUrl = localStorage.getItem('dormys_supa_url');
+      const sKey = localStorage.getItem('dormys_supa_key');
+      if (sUrl && sKey && window.supabase) {
+        supabaseClient = window.supabase.createClient(sUrl, sKey);
+        cargarDesdeSupabase();
       }
     }
 
     function guardarStorage() {
-      localStorage.setItem('dormys_eventos', JSON.stringify(eventos));
+      localStorage.setItem('dormys_eventos_db', JSON.stringify(eventos));
       actualizarContadores();
     }
 
@@ -623,91 +959,19 @@
       const conf = eventos.filter(e => e.estado === 'Confirmado').length;
       const canc = eventos.filter(e => e.estado === 'Cancelado').length;
 
-      document.getElementById('cantPropuestos').innerText = prop;
-      document.getElementById('cantConfirmados').innerText = conf;
-      document.getElementById('cantCancelados').innerText = canc;
+      document.getElementById('cntPropuestos').innerText = prop;
+      document.getElementById('cntConfirmados').innerText = conf;
+      document.getElementById('cntCancelados').innerText = canc;
     }
 
-    // MANEJO DE ARCHIVOS ADJUNTOS
-    let archivoBase64Temp = null;
-    let archivoNombreTemp = null;
-
-    document.getElementById('archivoAdjunto').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        if (file.size > 3 * 1024 * 1024) {
-          alert("El archivo es demasiado grande. Máximo permitido: 3MB.");
-          e.target.value = "";
-          return;
-        }
-        archivoNombreTemp = file.name;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          archivoBase64Temp = evt.target.result;
-          const info = document.getElementById('archivoAdjuntoNombre');
-          info.innerText = "📎 Archivo cargado: " + file.name;
-          info.classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // ABM - GUARDAR / EDITAR EVENTO
-    function guardarEvento(e) {
-      e.preventDefault();
-
-      const id = document.getElementById('eventoId').value;
-      const nombre = document.getElementById('nombreEvento').value.trim();
-      const descripcion = document.getElementById('descripcionEvento').value.trim();
-      const categoria = document.getElementById('categoriaEvento').value;
-      const fecha = document.getElementById('fechaEvento').value;
-      const horario = document.getElementById('horarioEvento').value.trim() || 'A definir';
-      const dormy = parseInt(document.getElementById('nroDormy').value, 10);
-      const estado = document.getElementById('estadoEvento').value;
-
-      if (dormy < 1 || dormy > 99 || isNaN(dormy)) {
-        alert("El número de Dormy debe ser un valor entre 1 y 99.");
-        return;
-      }
-
-      if (id) {
-        // Modificación
-        const index = eventos.findIndex(ev => ev.id === id);
-        if (index !== -1) {
-          eventos[index] = {
-            ...eventos[index],
-            nombre,
-            descripcion,
-            categoria,
-            fecha,
-            horario,
-            dormy,
-            estado,
-            archivo: archivoBase64Temp !== null ? { nombre: archivoNombreTemp, data: archivoBase64Temp } : eventos[index].archivo
-          };
-        }
-      } else {
-        // Alta
-        const nuevo = {
-          id: 'evt-' + Date.now(),
-          nombre,
-          descripcion,
-          categoria,
-          fecha,
-          horario,
-          dormy,
-          estado: estado || 'Propuesto',
-          votos: 0,
-          votoUsuario: false,
-          archivo: archivoBase64Temp ? { nombre: archivoNombreTemp, data: archivoBase64Temp } : null
-        };
-        eventos.unshift(nuevo);
-      }
-
-      guardarStorage();
-      cancelarEdicion();
-      renderizarEventos();
-      navegarA('consultar');
+    // GESTIÓN DEL FORMULARIO DE EVENTOS (PROPONER/EDITAR)
+    function prepararFormNuevo() {
+      document.getElementById('formEvento').reset();
+      document.getElementById('eventoId').value = '';
+      document.getElementById('inpEstado').value = 'Propuesto';
+      document.getElementById('tituloFormPropuesta').innerText = 'Proponer Evento';
+      tempArchivoCargado = null;
+      document.getElementById('bloquePrevioAdjunto').classList.add('hidden');
     }
 
     function editarEvento(id) {
@@ -715,51 +979,104 @@
       if (!ev) return;
 
       document.getElementById('eventoId').value = ev.id;
-      document.getElementById('nombreEvento').value = ev.nombre;
-      document.getElementById('descripcionEvento').value = ev.descripcion;
-      document.getElementById('categoriaEvento').value = ev.categoria;
-      document.getElementById('fechaEvento').value = ev.fecha;
-      document.getElementById('horarioEvento').value = ev.horario;
-      document.getElementById('nroDormy').value = ev.dormy;
-      document.getElementById('estadoEvento').value = ev.estado;
+      document.getElementById('inpNombre').value = ev.nombre;
+      document.getElementById('inpDescripcion').value = ev.descripcion;
+      document.getElementById('inpCategoria').value = ev.categoria;
+      document.getElementById('inpFecha').value = ev.fecha;
+      document.getElementById('inpHorario').value = ev.horario || '';
+      document.getElementById('inpDormy').value = ev.dormy;
+      document.getElementById('inpEstado').value = ev.estado;
+      document.getElementById('tituloFormPropuesta').innerText = 'Editar Evento';
 
-      if (ev.archivo) {
-        const info = document.getElementById('archivoAdjuntoNombre');
-        info.innerText = "📎 Archivo actual: " + ev.archivo.nombre;
-        info.classList.remove('hidden');
+      if (ev.archivo && ev.archivo.data) {
+        tempArchivoCargado = ev.archivo;
+        document.getElementById('txtNombreAdjuntoPrevio').innerText = ev.archivo.nombre;
+        document.getElementById('bloquePrevioAdjunto').classList.remove('hidden');
       } else {
-        document.getElementById('archivoAdjuntoNombre').classList.add('hidden');
+        tempArchivoCargado = null;
+        document.getElementById('bloquePrevioAdjunto').classList.add('hidden');
       }
 
-      navegarA('proponer');
+      navegarA('vistaProponer');
     }
 
+    async function guardarEvento(e) {
+      e.preventDefault();
+
+      const idExistente = document.getElementById('eventoId').value;
+      const fileInput = document.getElementById('inpArchivo');
+      let datosArchivo = tempArchivoCargado;
+
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const base64 = await convertirABase64(file);
+        datosArchivo = {
+          nombre: file.name,
+          data: base64
+        };
+      }
+
+      const nuevoEvento = {
+        id: idExistente || 'ev-' + Date.now(),
+        nombre: document.getElementById('inpNombre').value.trim(),
+        descripcion: document.getElementById('inpDescripcion').value.trim(),
+        categoria: document.getElementById('inpCategoria').value,
+        fecha: document.getElementById('inpFecha').value,
+        horario: document.getElementById('inpHorario').value.trim() || 'A convenir',
+        dormy: parseInt(document.getElementById('inpDormy').value),
+        estado: document.getElementById('inpEstado').value,
+        votos: idExistente ? (eventos.find(x => x.id === idExistente)?.votos || 0) : 0,
+        votoUsuario: idExistente ? (eventos.find(x => x.id === idExistente)?.votoUsuario || false) : false,
+        archivo: datosArchivo
+      };
+
+      if (idExistente) {
+        const idx = eventos.findIndex(item => item.id === idExistente);
+        if (idx !== -1) eventos[idx] = nuevoEvento;
+      } else {
+        eventos.unshift(nuevoEvento);
+      }
+
+      guardarStorage();
+      if (supabaseClient) guardarEnSupabase(nuevoEvento);
+
+      navegarA('vistaConsultar');
+    }
+
+    function convertirABase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    function verAdjuntoFormulario() {
+      if (tempArchivoCargado && tempArchivoCargado.data) {
+        mostrarModalVisor(tempArchivoCargado.nombre, tempArchivoCargado.data);
+      }
+    }
+
+    // ELIMINAR Y CAMBIAR ESTADO
     function eliminarEvento(id) {
-      if (confirm("¿Estás seguro de borrar esta propuesta de evento?")) {
+      if (confirm('¿Estás seguro de eliminar este evento?')) {
         eventos = eventos.filter(e => e.id !== id);
         guardarStorage();
+        if (supabaseClient) eliminarEnSupabase(id);
         renderizarEventos();
-        renderizarCalendario();
       }
     }
 
-    function cancelarEdicion() {
-      document.getElementById('formularioEvento').reset();
-      document.getElementById('eventoId').value = "";
-      document.getElementById('archivoAdjuntoNombre').classList.add('hidden');
-      archivoBase64Temp = null;
-      archivoNombreTemp = null;
-    }
-
-    function meInteresa(id) {
+    function toggleVoto(id) {
       const ev = eventos.find(e => e.id === id);
       if (!ev) return;
 
       if (ev.votoUsuario) {
-        ev.votos = Math.max(0, (ev.votos || 1) - 1);
+        ev.votos = Math.max(0, ev.votos - 1);
         ev.votoUsuario = false;
       } else {
-        ev.votos = (ev.votos || 0) + 1;
+        ev.votos += 1;
         ev.votoUsuario = true;
       }
 
@@ -767,218 +1084,259 @@
       renderizarEventos();
     }
 
-    // ENVIAR / COMPARTIR POR WHATSAPP CON UN SOLO CLIC EN EL ÍCONO
-    function enviarWhatsApp(id) {
-      const ev = eventos.find(e => e.id === id);
-      if (!ev) return;
-
-      const numLimpio = numeroWhatsApp.replace(/[^0-9]/g, '');
-      const mensaje = `*DORMYS CLUB DE CAMPO*%0A` +
-                      `📌 *Evento:* ${ev.nombre}%0A` +
-                      `🏷️ *Categoría:* ${ev.categoria}%0A` +
-                      `📅 *Fecha:* ${ev.fecha} - ${ev.horario}%0A` +
-                      `🏠 *Dormy N°:* ${ev.dormy}%0A` +
-                      `📊 *Estado:* ${ev.estado}%0A` +
-                      `📝 *Descripción:* ${ev.descripcion}`;
-
-      const url = `https://wa.me/${numLimpio}?text=${mensaje}`;
-      window.open(url, '_blank');
-    }
-
-    // RENDERIZAR LISTADO DE EVENTOS
+    // RENDERIZADO DEL LISTADO
     function renderizarEventos() {
-      const contenedor = document.getElementById('listaEventos');
-      const texto = document.getElementById('filtroBusqueda').value.toLowerCase().trim();
-      const estadoFiltro = document.getElementById('filtroEstado').value;
-      const catFiltro = document.getElementById('filtroCategoria').value;
+      const contenedor = document.getElementById('contenedorListaEventos');
+      if (!contenedor) return;
+
+      const txt = (document.getElementById('fltTexto')?.value || '').toLowerCase();
+      const est = document.getElementById('fltEstado')?.value || 'TODOS';
+      const cat = document.getElementById('fltCategoria')?.value || 'TODAS';
+      const dormy = document.getElementById('fltDormy')?.value;
 
       const filtrados = eventos.filter(ev => {
-        const coincideTexto = ev.nombre.toLowerCase().includes(texto) ||
-                              ev.descripcion.toLowerCase().includes(texto) ||
-                              ev.dormy.toString().includes(texto);
-        const coincideEstado = (estadoFiltro === 'TODOS') || (ev.estado === estadoFiltro);
-        const coincideCat = (catFiltro === 'TODAS') || (ev.categoria === catFiltro);
-        return coincideTexto && coincideEstado && coincideCat;
+        const cumpleTxt = ev.nombre.toLowerCase().includes(txt) || ev.descripcion.toLowerCase().includes(txt);
+        const cumpleEst = (est === 'TODOS') || (ev.estado === est);
+        const cumpleCat = (cat === 'TODAS') || (ev.categoria === cat);
+        const cumpleDormy = !dormy || (ev.dormy == dormy);
+        return cumpleTxt && cumpleEst && cumpleCat && cumpleDormy;
       });
 
       if (filtrados.length === 0) {
         contenedor.innerHTML = `
-          <div class="strict-card bg-stone-100 p-8 text-center border-4 border-stone-300">
-            <p class="text-stone-600 font-bold text-sm">No se encontraron eventos con los filtros seleccionados.</p>
+          <div class="col-span-full strict-card bg-stone-100 p-8 border-2 border-stone-400 text-center space-y-2">
+            <p class="text-2xl">🔍</p>
+            <p class="text-sm font-black uppercase text-stone-700">No se encontraron propuestas con esos filtros.</p>
           </div>
         `;
         return;
       }
 
       contenedor.innerHTML = filtrados.map(ev => {
-        // Badge de Estado
-        let estadoBadge = 'bg-yellow-400 text-stone-950';
-        if (ev.estado === 'Confirmado') estadoBadge = 'bg-emerald-600 text-white';
-        if (ev.estado === 'Cancelado') estadoBadge = 'bg-red-600 text-white';
+        const colorEstado = ev.estado === 'Confirmado' ? 'bg-emerald-600 text-white' : (ev.estado === 'Cancelado' ? 'bg-red-600 text-white' : 'bg-yellow-400 text-black');
+        
+        let botonVerAdjunto = '';
+        if (ev.archivo && ev.archivo.data) {
+          botonVerAdjunto = `
+            <button 
+              onclick="verAdjunto('${ev.id}')" 
+              class="strict-btn btn-3d-yellow text-[10px] px-2 py-1 flex items-center gap-1"
+            >
+              👁️ 📎 Ver Adjunto
+            </button>
+          `;
+        }
 
         return `
-          <div class="strict-card bg-stone-100 border-4 border-stone-300 p-4 sm:p-5 shadow-lg hover:border-emerald-600 transition-colors">
-            
-            <!-- Encabezado de la Tarjeta -->
-            <div class="flex flex-wrap items-start justify-between gap-2 border-b-2 border-stone-300 pb-3 mb-3">
-              <div>
-                <span class="inline-block text-[10px] font-black uppercase tracking-wider px-2 py-0.5 bg-stone-300 text-stone-800 border border-stone-400 mb-1">
+          <div class="strict-card bg-stone-100 p-4 sm:p-5 border-4 border-stone-900 shadow-lg flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2 border-b-2 border-stone-300 pb-2">
+                <span class="text-[10px] font-black uppercase tracking-widest bg-stone-300 px-2 py-0.5 border border-stone-400">
                   ${ev.categoria}
                 </span>
-                <h3 class="text-lg sm:text-xl font-black text-stone-900 leading-snug">
-                  ${ev.nombre}
-                </h3>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <!-- Badge de Estado -->
-                <span class="strict-btn px-2.5 py-1 text-xs font-black uppercase border border-stone-900 ${estadoBadge}">
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 border border-black ${colorEstado}">
                   ${ev.estado}
                 </span>
-                
-                <!-- ÍCONO DIRECTO DE WHATSAPP AL LADO DEL EVENTO -->
-                <button 
-                  onclick="enviarWhatsApp('${ev.id}')"
-                  class="strict-btn bg-emerald-600 hover:bg-emerald-500 text-white p-1.5 border border-emerald-950 flex items-center justify-center shadow"
-                  title="Compartir directo por WhatsApp"
-                >
-                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
-                  </svg>
-                </button>
+              </div>
+
+              <h3 class="text-lg font-black text-stone-900 font-serif uppercase leading-tight">${ev.nombre}</h3>
+              <p class="text-xs text-stone-700 font-medium leading-relaxed">${ev.descripcion}</p>
+              
+              <div class="grid grid-cols-2 gap-2 pt-2 text-[11px] font-bold text-stone-800 bg-stone-200 p-2 border border-stone-300">
+                <div>📅 ${ev.fecha}</div>
+                <div>⏰ ${ev.horario || 'A convenir'}</div>
+                <div>🏠 Dormy N° ${ev.dormy}</div>
+                <div>${botonVerAdjunto || '📄 Sin adjunto'}</div>
               </div>
             </div>
 
-            <!-- Descripción -->
-            <p class="text-xs sm:text-sm text-stone-800 mb-4 font-medium leading-relaxed">
-              ${ev.descripcion}
-            </p>
-
-            <!-- Datos Secundarios -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-stone-200 p-2.5 border border-stone-300 text-xs text-stone-900 mb-4 font-semibold">
-              <div>
-                <span class="block text-[10px] text-stone-600 font-bold uppercase">Fecha / Hora:</span>
-                <span>📅 ${ev.fecha} (${ev.horario})</span>
-              </div>
-              <div>
-                <span class="block text-[10px] text-stone-600 font-bold uppercase">Proponente:</span>
-                <span>🏠 Dormy N° ${ev.dormy}</span>
-              </div>
-              <div class="col-span-2 sm:col-span-1">
-                <span class="block text-[10px] text-stone-600 font-bold uppercase">Adjunto:</span>
-                ${ev.archivo ? `
-                  <a href="${ev.archivo.data}" download="${ev.archivo.nombre}" class="text-emerald-700 underline font-bold truncate block">
-                    📎 ${ev.archivo.nombre}
-                  </a>
-                ` : '<span class="text-stone-500 italic">Sin archivo</span>'}
-              </div>
-            </div>
-
-            <!-- Botones de Acción -->
-            <div class="flex items-center justify-between gap-2 pt-2 border-t border-stone-300">
-              <!-- Me Interesa -->
-              <button 
-                onclick="meInteresa('${ev.id}')"
-                class="strict-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 border ${ev.votoUsuario ? 'bg-yellow-400 text-stone-950 border-yellow-600' : 'bg-white text-stone-800 border-stone-400 hover:bg-stone-50'}"
-              >
-                <span>👍 Me Interesa</span>
-                <span class="bg-stone-900 text-white px-1.5 py-0.2 text-[10px] font-black">${ev.votos || 0}</span>
-              </button>
-
+            <div class="pt-3 border-t-2 border-stone-300 flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
                 <button 
-                  onclick="editarEvento('${ev.id}')"
-                  class="strict-btn bg-stone-300 hover:bg-stone-400 text-stone-900 px-3 py-1.5 text-xs font-bold"
+                  onclick="toggleVoto('${ev.id}')" 
+                  class="strict-btn ${ev.votoUsuario ? 'btn-3d-yellow' : 'btn-3d-stone'} text-xs px-2.5 py-1.5"
                 >
-                  ✏️ Editar
+                  👍 ${ev.votos}
                 </button>
                 <button 
-                  onclick="eliminarEvento('${ev.id}')"
-                  class="strict-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 text-xs font-bold"
+                  onclick="compartirPorWhatsApp('${ev.id}')" 
+                  class="strict-btn btn-3d-emerald text-xs p-2" 
+                  title="Compartir por WhatsApp"
                 >
-                  🗑️ Borrar
+                  📲
+                </button>
+              </div>
+
+              <div class="flex items-center gap-1">
+                <button onclick="editarEvento('${ev.id}')" class="strict-btn btn-3d-stone text-[11px] px-2 py-1">
+                  ✏️ Editar
+                </button>
+                <button onclick="eliminarEvento('${ev.id}')" class="strict-btn btn-3d-red text-[11px] px-2 py-1">
+                  🗑️
                 </button>
               </div>
             </div>
-
           </div>
         `;
       }).join('');
     }
 
-    // RENDERIZAR CALENDARIO
-    function cambiarMesCalendario(delta) {
-      fechaCalendario.setMonth(fechaCalendario.getMonth() + delta);
+    function verAdjunto(id) {
+      const ev = eventos.find(e => e.id === id);
+      if (ev && ev.archivo && ev.archivo.data) {
+        mostrarModalVisor(ev.archivo.nombre, ev.archivo.data);
+      }
+    }
+
+    // VISOR MODAL REPARADO
+    function cerrarModalVisor() {
+      const modal = document.getElementById('modalVisorAdjunto');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      const contenedor = document.getElementById('visorContenido');
+      if (contenedor) contenedor.innerHTML = '';
+    }
+
+    function mostrarModalVisor(nombre, dataUrl) {
+      if (!dataUrl) return;
+
+      const modal = document.getElementById('modalVisorAdjunto');
+      const titulo = document.getElementById('visorNombreArchivo');
+      const contenedor = document.getElementById('visorContenido');
+      const btnDescargar = document.getElementById('visorBtnDescargar');
+
+      if (!modal || !contenedor) return;
+
+      if (titulo) titulo.innerText = nombre || 'Archivo Adjunto';
+
+      if (btnDescargar) {
+        btnDescargar.onclick = function() {
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = nombre || 'adjunto';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        };
+      }
+
+      const strData = String(dataUrl).toLowerCase();
+      const strNombre = String(nombre).toLowerCase();
+
+      const esImagen = strData.startsWith('data:image') || strNombre.endsWith('.png') || strNombre.endsWith('.jpg') || strNombre.endsWith('.jpeg') || strNombre.endsWith('.webp');
+      const esPDF = strData.startsWith('data:application/pdf') || strNombre.endsWith('.pdf');
+
+      contenedor.innerHTML = '';
+
+      if (esImagen) {
+        contenedor.innerHTML = `
+          <div class="w-full h-full flex items-center justify-center p-2">
+            <img 
+              src="${dataUrl}" 
+              alt="${nombre}" 
+              class="max-w-full max-h-[70vh] object-contain border-2 border-stone-700 shadow-2xl bg-stone-900"
+            />
+          </div>
+        `;
+      } else if (esPDF) {
+        contenedor.innerHTML = `
+          <div class="w-full h-[70vh] bg-stone-900 border border-stone-800">
+            <object data="${dataUrl}" type="application/pdf" class="w-full h-full min-h-[400px]">
+              <iframe src="${dataUrl}" class="w-full h-full border-0"></iframe>
+            </object>
+          </div>
+        `;
+      } else {
+        contenedor.innerHTML = `
+          <div class="text-center p-8 space-y-4 max-w-md">
+            <div class="text-5xl">📄</div>
+            <p class="text-stone-300 text-sm font-medium">
+              Este formato (<strong class="text-yellow-400">${nombre.split('.').pop().toUpperCase()}</strong>) no admite vista previa interactiva directa.
+            </p>
+            <button 
+              onclick="document.getElementById('visorBtnDescargar').click()" 
+              class="strict-btn btn-3d-yellow text-xs px-5 py-2.5 font-black uppercase"
+            >
+              ⬇️ Descargar "${nombre}"
+            </button>
+          </div>
+        `;
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    // CALENDARIO INTERACTIVO
+    function cambiarMesCalendario(offset) {
+      mesCalendario.setMonth(mesCalendario.getMonth() + offset);
       renderizarCalendario();
     }
 
     function renderizarCalendario() {
-      const filtroEst = document.getElementById('filtroEstadoCalendario').value;
-      const anio = fechaCalendario.getFullYear();
-      const mes = fechaCalendario.getMonth();
+      const tituloMes = document.getElementById('calTituloMes');
+      const grid = document.getElementById('calDiasGrid');
+      const lista = document.getElementById('calListaMes');
+
+      if (!grid || !lista) return;
+
+      const mes = mesCalendario.getMonth();
+      const anio = mesCalendario.getFullYear();
 
       const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      document.getElementById('calMesAño').innerText = `${nombresMeses[mes]} ${anio}`;
+      if (tituloMes) tituloMes.innerText = `${nombresMeses[mes]} ${anio}`;
 
       const primerDia = new Date(anio, mes, 1).getDay();
       const totalDias = new Date(anio, mes + 1, 0).getDate();
 
-      const grid = document.getElementById('calDiasGrid');
-      grid.innerHTML = "";
-
-      // Días previos en blanco
+      let htmlGrid = '';
       for (let i = 0; i < primerDia; i++) {
-        grid.innerHTML += `<div class="bg-stone-200 h-16 sm:h-20 border border-stone-300 opacity-40"></div>`;
+        htmlGrid += `<div class="p-2 bg-stone-200 border border-stone-300"></div>`;
       }
 
-      // Filtrar eventos del mes actual
-      const eventosMes = eventos.filter(e => {
-        if (!e.fecha) return false;
-        const [eAnio, eMes] = e.fecha.split('-').map(Number);
-        const coincideFecha = (eAnio === anio) && (eMes === (mes + 1));
-        const coincideEstado = (filtroEst === 'TODOS') || (e.estado === filtroEst);
-        return coincideFecha && coincideEstado;
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const fechaStr = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const evsDia = eventos.filter(e => e.fecha === fechaStr);
+
+        let bgClass = "bg-stone-100";
+        if (evsDia.length > 0) bgClass = "bg-yellow-200 border-2 border-yellow-500 font-bold";
+
+        htmlGrid += `
+          <div class="p-1 sm:p-2 border border-stone-300 ${bgClass} flex flex-col justify-between min-h-[45px] sm:min-h-[60px]">
+            <span class="font-bold text-[10px] sm:text-xs text-stone-800">${dia}</span>
+            ${evsDia.map(ev => `
+              <button 
+                onclick="editarEvento('${ev.id}')" 
+                class="text-[9px] truncate bg-emerald-800 text-white p-0.5 mt-0.5 text-left border border-black"
+                title="${ev.nombre}"
+              >
+                ${ev.nombre}
+              </button>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      grid.innerHTML = htmlGrid;
+
+      // Lista del mes
+      const evsMes = eventos.filter(e => {
+        const d = new Date(e.fecha + 'T00:00:00');
+        return d.getMonth() === mes && d.getFullYear() === anio;
       });
 
-      // Rellenar días
-      for (let d = 1; d <= totalDias; d++) {
-        const fechaStr = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const evsDelDia = eventosMes.filter(e => e.fecha === fechaStr);
-
-        let celdaHtml = `
-          <div class="bg-white h-16 sm:h-20 p-1 border border-stone-300 flex flex-col justify-between overflow-hidden">
-            <span class="text-[11px] font-black text-stone-700">${d}</span>
-            <div class="space-y-0.5">
-        `;
-
-        evsDelDia.forEach(ev => {
-          let bgClass = 'bg-yellow-400 text-stone-950';
-          if (ev.estado === 'Confirmado') bgClass = 'bg-emerald-600 text-white';
-          if (ev.estado === 'Cancelado') bgClass = 'bg-red-600 text-white';
-
-          celdaHtml += `
-            <div title="${ev.nombre} - Dormy ${ev.dormy}" class="text-[9px] font-bold p-0.5 truncate ${bgClass}">
-              ${ev.nombre}
-            </div>
-          `;
-        });
-
-        celdaHtml += `</div></div>`;
-        grid.innerHTML += celdaHtml;
-      }
-
-      // Lista resumida del mes
-      const listaMes = document.getElementById('calListaMes');
-      if (eventosMes.length === 0) {
-        listaMes.innerHTML = `<p class="text-xs text-stone-500 italic p-2 bg-white border border-stone-300">No hay eventos en este mes con el filtro seleccionado.</p>`;
+      if (evsMes.length === 0) {
+        lista.innerHTML = `<p class="text-xs text-stone-500 italic">No hay eventos registrados en este mes.</p>`;
       } else {
-        listaMes.innerHTML = eventosMes.map(ev => `
-          <div class="p-2.5 bg-white border-l-4 ${ev.estado === 'Confirmado' ? 'border-emerald-600' : 'border-yellow-400'} border-y border-r border-stone-300 flex items-center justify-between text-xs">
+        lista.innerHTML = evsMes.map(ev => `
+          <div onclick="editarEvento('${ev.id}')" class="cursor-pointer bg-stone-200 p-2.5 border-l-4 border-emerald-700 flex items-center justify-between hover:bg-yellow-100 transition-colors">
             <div>
-              <span class="font-black text-stone-900">${ev.fecha}</span> - <span class="font-bold text-emerald-800">${ev.nombre}</span>
-              <span class="text-stone-600 text-[10px] block">Dormy N° ${ev.dormy} • Categoría: ${ev.categoria}</span>
+              <span class="text-xs font-black uppercase text-stone-900">${ev.nombre}</span>
+              <span class="text-[10px] text-stone-600 block">📅 ${ev.fecha} | Dormy ${ev.dormy}</span>
             </div>
-            <span class="font-bold uppercase text-[10px] px-2 py-0.5 ${ev.estado === 'Confirmado' ? 'bg-emerald-100 text-emerald-800' : 'bg-yellow-100 text-yellow-800'}">
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-stone-300 border border-stone-400">
               ${ev.estado}
             </span>
           </div>
@@ -986,58 +1344,124 @@
       }
     }
 
-    // CONFIGURACIÓN DE WHATSAPP
-    function abrirModalConfigWA() {
-      document.getElementById('modalConfigWA').classList.remove('hidden');
-    }
-    function cerrarModalConfigWA() {
-      document.getElementById('modalConfigWA').classList.add('hidden');
-    }
-    function guardarWAConfig() {
-      const val = document.getElementById('inputWAConfig').value.trim();
-      if (val) {
-        numeroWhatsApp = val;
-        localStorage.setItem('dormys_wa', val);
-        cerrarModalConfigWA();
-        alert("Número de WhatsApp actualizado correctamente.");
+    // FILTRO DIRECTO DESDE PORTADA
+    function filtrarPorEstadoDirecto(estado) {
+      navegarA('vistaConsultar');
+      const sel = document.getElementById('fltEstado');
+      if (sel) {
+        sel.value = estado;
+        renderizarEventos();
       }
     }
 
-    // RESPALDO JSON
-    function exportarJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(eventos, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "eventos_dormys.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+    function toggleFiltrosMobile() {
+      const card = document.getElementById('cardFiltros');
+      if (card) card.classList.toggle('hidden');
     }
 
-    function importarJSON() {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = '.json';
-      input.onchange = e => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = event => {
-          try {
-            const parsed = JSON.parse(event.target.result);
-            if (Array.isArray(parsed)) {
-              eventos = parsed;
-              guardarStorage();
-              renderizarEventos();
-              renderizarCalendario();
-              alert("Datos importados con éxito.");
-            }
-          } catch (err) {
-            alert("El archivo subido no contiene un formato JSON válido.");
-          }
-        };
-        reader.readAsText(file);
-      };
-      input.click();
+    // COMPARTIR WHATSAPP CON REFERENCIA DE IMAGEN
+    function compartirPorWhatsApp(id) {
+      const ev = eventos.find(item => item.id === id);
+      if (!ev) return;
+
+      const numLimpio = numeroWhatsApp.replace(/[^\d]/g, '');
+      let detalleAdjunto = '';
+      if (ev.archivo && ev.archivo.nombre) {
+        detalleAdjunto = `\n• *Folleto/Imagen:* 📄 ${ev.archivo.nombre}`;
+      }
+
+      const texto = `📌 *PROPUESTA DE EVENTO - DORMYS*\n\n` +
+        `• *Actividad:* ${ev.nombre}\n` +
+        `• *Categoría:* ${ev.categoria}\n` +
+        `• *Descripción:* ${ev.descripcion}\n` +
+        `• *Fecha Sugerida:* ${ev.fecha}\n` +
+        `• *Horario:* ${ev.horario || 'A convenir'}\n` +
+        `• *Propuesto por Dormy:* N° ${ev.dormy}\n` +
+        `• *Estado:* ${ev.estado}` +
+        `${detalleAdjunto}\n\n` +
+        `¡Ingresá a la app de Dormys para votar o proponer!`;
+
+      if (ev.archivo && ev.archivo.data && ev.archivo.data.startsWith('data:image')) {
+        const a = document.createElement('a');
+        a.href = ev.archivo.data;
+        a.download = `Promocion_${ev.nombre.replace(/\s+/g, '_')}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      window.open(`https://wa.me/${numLimpio}?text=${encodeURIComponent(texto)}`, '_blank');
+    }
+
+    // SUPABASE INTEG
+    async function cargarDesdeSupabase() {
+      if (!supabaseClient) return;
+      const { data, error } = await supabaseClient.from('eventos').select('*').order('created_at', { ascending: false });
+      if (!error && data) {
+        eventos = data.map(d => ({
+          id: d.id,
+          nombre: d.nombre,
+          descripcion: d.descripcion,
+          categoria: d.categoria,
+          fecha: d.fecha,
+          horario: d.horario,
+          dormy: d.dormy,
+          estado: d.estado,
+          votos: d.votos || 0,
+          archivo: d.archivo_data ? { nombre: d.archivo_nombre || 'adjunto', data: d.archivo_data } : null
+        }));
+        guardarStorage();
+        renderizarEventos();
+      }
+    }
+
+    async function guardarEnSupabase(ev) {
+      if (!supabaseClient) return;
+      await supabaseClient.from('eventos').upsert({
+        id: ev.id.startsWith('ev-') ? undefined : ev.id,
+        nombre: ev.nombre,
+        descripcion: ev.descripcion,
+        categoria: ev.categoria,
+        fecha: ev.fecha,
+        horario: ev.horario,
+        dormy: ev.dormy,
+        estado: ev.estado,
+        votos: ev.votos,
+        archivo_nombre: ev.archivo ? ev.archivo.nombre : null,
+        archivo_data: ev.archivo ? ev.archivo.data : null
+      });
+    }
+
+    async function eliminarEnSupabase(id) {
+      if (!supabaseClient) return;
+      await supabaseClient.from('eventos').delete().eq('id', id);
+    }
+
+    function guardarConfigSupabase() {
+      const url = document.getElementById('inpSupaUrl').value.trim();
+      const key = document.getElementById('inpSupaKey').value.trim();
+      if (url && key) {
+        localStorage.setItem('dormys_supa_url', url);
+        localStorage.setItem('dormys_supa_key', key);
+        supabaseClient = window.supabase.createClient(url, key);
+        cargarDesdeSupabase();
+      }
+      cerrarModalConfigSupabase();
+    }
+
+    function guardarConfigGSheets() {
+      const url = document.getElementById('inpGSheetUrl').value.trim();
+      if (url) {
+        localStorage.setItem('dormys_gsheets_url', url);
+        urlGoogleSheets = url;
+      }
+      cerrarModalConfigGoogleSheets();
+    }
+
+    function aplicarTema(nombre) {
+      temaActual = nombre;
+      localStorage.setItem('dormys_tema', nombre);
+      cerrarModalPaleta();
     }
   </script>
 </body>

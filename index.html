@@ -30,15 +30,41 @@
   </script>
 
   <style>
-    /* BORDES Y ESTILOS RECTANGULARES CON EFECTO 3D TÁCTIL */
+    /* VARIABLES DE PALETAS DINÁMICAS DE COLOR */
+    :root {
+      --color-header-bg: #064e3b;
+      --color-header-text: #ffffff;
+      --color-bg-app: #e7e5e4;
+      --color-card-bg: #f5f5f4;
+      --color-card-border: #1c1917;
+      --color-primary: #059669;
+      --color-primary-dark: #064e3b;
+      --color-accent: #eab308;
+      --color-accent-dark: #854d0e;
+      --color-text-main: #1c1917;
+    }
+
+    body {
+      background-color: var(--color-bg-app) !important;
+      color: var(--color-text-main) !important;
+    }
+
+    header {
+      background-color: var(--color-header-bg) !important;
+      color: var(--color-header-text) !important;
+    }
+
+    /* BORDES Y ESTILOS RECTANGULARES CON EFECTO 3D TÁCTIL DINÁMICO */
     .strict-card {
       border-radius: 0px !important;
+      background-color: var(--color-card-bg) !important;
+      border-color: var(--color-card-border) !important;
     }
     
     .strict-input {
       border-radius: 0px !important;
       border-width: 2px !important;
-      border-color: #1c1917 !important; /* stone-900 */
+      border-color: var(--color-card-border) !important;
       background-color: #ffffff !important;
       color: #1c1917 !important;
       font-weight: 600 !important;
@@ -46,11 +72,11 @@
     
     .strict-input:focus {
       outline: none !important;
-      border-color: #059669 !important; /* emerald-600 */
+      border-color: var(--color-primary) !important;
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.25) !important;
     }
 
-    /* BOTONES CON RELIEVE 3D */
+    /* BOTONES CON RELIEVE 3D Y TEMATIZACIÓN COMPLETA */
     .strict-btn {
       border-radius: 0px !important;
       font-weight: 800 !important;
@@ -62,9 +88,9 @@
     }
 
     .btn-3d-emerald {
-      background-color: #059669 !important;
+      background-color: var(--color-primary) !important;
       color: #ffffff !important;
-      border: 2px solid #064e3b !important;
+      border: 2px solid var(--color-primary-dark) !important;
       border-bottom-width: 5px !important;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     }
@@ -75,9 +101,9 @@
     }
 
     .btn-3d-yellow {
-      background-color: #eab308 !important;
+      background-color: var(--color-accent) !important;
       color: #000000 !important;
-      border: 2px solid #854d0e !important;
+      border: 2px solid var(--color-accent-dark) !important;
       border-bottom-width: 5px !important;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     }
@@ -176,6 +202,12 @@
             <div class="p-2 text-[11px] font-black uppercase text-yellow-400 tracking-wider bg-stone-950">
               Configuraciones
             </div>
+            <button 
+              onclick="abrirModalCategorias(); toggleMenuAjustes()" 
+              class="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-stone-800 flex items-center gap-2 text-yellow-300"
+            >
+              🏷️ Administrar Categorías
+            </button>
             <button 
               onclick="abrirModalPaleta(); toggleMenuAjustes()" 
               class="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-stone-800 flex items-center gap-2"
@@ -382,13 +414,7 @@
             </label>
             <select id="inpCategoria" required class="strict-input w-full p-2.5 text-sm">
               <option value="">-- Seleccionar Categoría --</option>
-              <option value="Informativa">Informativa</option>
-              <option value="Cultural">Cultural</option>
-              <option value="Niños">Niños</option>
-              <option value="Esparcimiento">Esparcimiento</option>
-              <option value="Culinaria">Culinaria</option>
-              <option value="Jardineria">Jardinería</option>
-              <option value="Educacion">Educación</option>
+              <!-- Dinámico según lista de categorías -->
             </select>
           </div>
 
@@ -477,15 +503,15 @@
             </select>
           </div>
 
-          <!-- BOTONES GUARDAR Y CANCELAR -->
-          <div class="pt-4 flex items-center gap-3">
-            <button type="submit" class="strict-btn btn-3d-emerald text-sm px-6 py-3 flex-1 font-black">
+          <!-- BOTONES GUARDAR Y CANCELAR (UNIFICADOS Y DE MISMO TAMAÑO) -->
+          <div class="pt-4 flex items-center gap-3 w-full">
+            <button type="submit" class="strict-btn btn-3d-emerald text-xs sm:text-sm px-4 py-3 flex-1 font-black text-center">
               💾 Guardar Propuesta
             </button>
             <button 
               type="button" 
               onclick="navegarA('vistaConsultar')" 
-              class="strict-btn btn-3d-stone text-sm px-4 py-3"
+              class="strict-btn btn-3d-stone text-xs sm:text-sm px-4 py-3 flex-1 font-black text-center"
             >
               Cancelar
             </button>
@@ -508,13 +534,13 @@
         </div>
         
         <div class="flex items-center gap-2">
-          <!-- Botón Lupa movil para alternar tarjeta de filtros -->
+          <!-- Botón Lupa para alternar tarjeta de filtros (Celular y Escritorio) -->
           <button 
             onclick="toggleFiltrosMobile()" 
-            class="sm:hidden strict-btn btn-3d-yellow text-xs px-3 py-1.5"
-            title="Mostrar u ocultar filtros"
+            class="strict-btn btn-3d-yellow text-xs px-3 py-1.5 flex items-center gap-1 font-bold"
+            title="Mostrar u ocultar buscador y filtros"
           >
-            🔍 Filtros
+            🔍 <span class="hidden xs:inline">Filtros</span>
           </button>
           <button onclick="navegarA('vistaInicio')" class="strict-btn btn-3d-stone text-xs px-3 py-1.5">
             ⬅️ Inicio
@@ -522,10 +548,10 @@
         </div>
       </div>
 
-      <!-- CARD DE FILTROS (Se oculta en cel por defecto) -->
+      <!-- CARD DE FILTROS (Oculto por defecto) -->
       <div 
         id="cardFiltros" 
-        class="hidden sm:block strict-card bg-stone-100 p-4 border-4 border-stone-900 shadow-md space-y-3"
+        class="hidden strict-card bg-stone-100 p-4 border-4 border-stone-900 shadow-md space-y-3"
       >
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
           
@@ -554,13 +580,7 @@
             <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Categoría</label>
             <select id="fltCategoria" onchange="renderizarEventos()" class="strict-input w-full p-2 text-xs">
               <option value="TODAS">Todas las categorías</option>
-              <option value="Informativa">Informativa</option>
-              <option value="Cultural">Cultural</option>
-              <option value="Niños">Niños</option>
-              <option value="Esparcimiento">Esparcimiento</option>
-              <option value="Culinaria">Culinaria</option>
-              <option value="Jardineria">Jardinería</option>
-              <option value="Educacion">Educación</option>
+              <!-- Opciones dinámicas de categorías -->
             </select>
           </div>
 
@@ -597,33 +617,75 @@
           </h2>
           <p class="text-xs text-stone-600">Explorá visualmente los eventos programados.</p>
         </div>
-        <button onclick="navegarA('vistaInicio')" class="strict-btn btn-3d-stone text-xs px-3 py-1.5">
-          ⬅️ Inicio
-        </button>
+        
+        <div class="flex items-center gap-2">
+          <!-- Botón Lupa para alternar tarjeta de filtros en la Agenda -->
+          <button 
+            onclick="toggleFiltrosAgenda()" 
+            class="strict-btn btn-3d-yellow text-xs px-3 py-1.5 flex items-center gap-1 font-bold"
+            title="Mostrar u ocultar buscador de la agenda"
+          >
+            🔍 <span class="hidden xs:inline">Buscar</span>
+          </button>
+          <button onclick="navegarA('vistaInicio')" class="strict-btn btn-3d-stone text-xs px-3 py-1.5">
+            ⬅️ Inicio
+          </button>
+        </div>
       </div>
 
-      <!-- CARD CALENDARIO -->
-      <div class="strict-card bg-stone-100 p-4 sm:p-6 border-4 border-stone-900 shadow-xl space-y-4">
+      <!-- CARD BUSCADOR DE LA AGENDA (Oculto por defecto) -->
+      <div 
+        id="cardFiltrosAgenda" 
+        class="hidden strict-card bg-stone-100 p-4 border-4 border-stone-900 shadow-md space-y-3"
+      >
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Buscar evento confirmados</label>
+            <input 
+              type="text" 
+              id="fltAgendaTexto" 
+              oninput="renderizarCalendario()" 
+              placeholder="Buscar por nombre o palabra..." 
+              class="strict-input w-full p-2 text-xs"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Nro. Dormy</label>
+            <input 
+              type="number" 
+              id="fltAgendaDormy" 
+              min="1" 
+              max="99" 
+              oninput="renderizarCalendario()" 
+              placeholder="1-99" 
+              class="strict-input w-full p-2 text-xs"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD CALENDARIO (Ajustado para no desbordar en celulares) -->
+      <div class="strict-card bg-stone-100 p-3 sm:p-6 border-4 border-stone-900 shadow-xl space-y-4 max-w-full overflow-x-auto">
         
-        <!-- MES Y NAVEGACIÓN -->
-        <div class="flex items-center justify-between bg-emerald-900 text-white p-3 border-2 border-black">
-          <button onclick="cambiarMesCalendario(-1)" class="strict-btn btn-3d-yellow text-xs px-3 py-1">
-            ◀ Anterior
+        <!-- MES Y NAVEGACIÓN SOLO FLECHAS -->
+        <div class="flex items-center justify-between bg-emerald-900 text-white p-2.5 border-2 border-black">
+          <button onclick="cambiarMesCalendario(-1)" class="strict-btn btn-3d-yellow text-sm px-3 py-1 font-black" title="Mes Anterior">
+            ◀
           </button>
-          <h3 id="calTituloMes" class="text-base sm:text-xl font-black font-serif uppercase tracking-wider text-yellow-400">
+          <h3 id="calTituloMes" class="text-sm sm:text-xl font-black font-serif uppercase tracking-wider text-yellow-400 text-center truncate px-2">
             Mes Año
           </h3>
-          <button onclick="cambiarMesCalendario(1)" class="strict-btn btn-3d-yellow text-xs px-3 py-1">
-            Siguiente ▶
+          <button onclick="cambiarMesCalendario(1)" class="strict-btn btn-3d-yellow text-sm px-3 py-1 font-black" title="Mes Siguiente">
+            ▶
           </button>
         </div>
 
         <!-- REJILLA DE DÍAS -->
-        <div class="grid grid-cols-7 gap-1 text-center font-black text-xs uppercase bg-stone-300 p-2 border border-stone-400">
+        <div class="grid grid-cols-7 gap-1 text-center font-black text-[10px] sm:text-xs uppercase bg-stone-300 p-1.5 border border-stone-400">
           <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
         </div>
 
-        <div id="calDiasGrid" class="grid grid-cols-7 gap-1 text-xs">
+        <div id="calDiasGrid" class="grid grid-cols-7 gap-1 text-[10px] sm:text-xs">
           <!-- Render dinámico del calendario -->
         </div>
 
@@ -651,74 +713,79 @@
     <div class="strict-card bg-stone-900 border-4 border-yellow-400 w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl rounded-none overflow-hidden text-stone-100">
       
       <!-- Cabecera del Visor -->
-      <div class="bg-stone-800 p-3 sm:p-4 border-b-2 border-stone-700 flex items-center justify-between gap-3">
+      <div class="bg-stone-950 p-3 sm:p-4 border-b-2 border-stone-800 flex items-center justify-between gap-2">
         <div class="flex items-center gap-2 overflow-hidden">
           <span class="text-xl">📎</span>
-          <h3 id="visorNombreArchivo" class="text-sm sm:text-base font-black truncate text-yellow-400">
-            Archivo Adjunto
+          <h3 id="modalVisorTitulo" class="font-black text-xs sm:text-sm uppercase text-yellow-400 truncate">
+            Visualizador de Adjunto
           </h3>
         </div>
         <div class="flex items-center gap-2">
-          <button 
-            id="visorBtnDescargar"
-            class="strict-btn btn-3d-emerald text-xs px-3 py-1.5 font-bold flex items-center gap-1"
-            title="Descargar archivo"
+          <a 
+            id="btnDescargarVisor" 
+            download 
+            href="#" 
+            class="strict-btn btn-3d-emerald text-[10px] sm:text-xs px-2.5 py-1.5 flex items-center gap-1 font-bold"
           >
             ⬇️ <span class="hidden sm:inline">Descargar</span>
-          </button>
+          </a>
           <button 
             onclick="cerrarModalVisor()" 
-            class="strict-btn btn-3d-red text-xs px-3 py-1.5 font-black"
-            title="Cerrar visor"
+            class="strict-btn btn-3d-red text-[10px] sm:text-xs px-2.5 py-1.5 font-bold"
           >
             ✖️
           </button>
         </div>
       </div>
 
-      <!-- Cuerpo del Visor con Scroll/Centrado Fluido -->
-      <div 
-        id="visorContenido" 
-        class="flex-1 bg-stone-950 p-2 sm:p-4 overflow-auto flex items-center justify-center min-h-[250px] max-h-[75vh]"
-      >
-        <!-- Se inyecta dinámicamente imagen o PDF optimizado -->
+      <!-- Cuerpo del Visor -->
+      <div id="modalVisorContenido" class="flex-1 p-3 sm:p-6 overflow-auto flex items-center justify-center bg-stone-950/50 min-h-[300px]">
+        <!-- Render dinámico según tipo de archivo -->
       </div>
-
-      <!-- Pie informativo -->
-      <div class="bg-stone-900 p-2 text-center border-t border-stone-800">
-        <p class="text-[11px] font-mono text-stone-400">
-          Usa los dedos o rueda del mouse para desplazar. Si el archivo no carga, presiona Descargar.
-        </p>
-      </div>
-
     </div>
   </div>
 
-  <!-- MODAL DE PALETA DE COLORES -->
+  <!-- MODAL DE PALETA DE COLORES MULTI-ESTILO -->
   <div id="modalPaletaColors" class="hidden fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4">
     <div class="strict-card bg-stone-100 p-6 border-4 border-stone-900 w-full max-w-md shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b-2 border-stone-300 pb-2">
-        <h3 class="text-lg font-black uppercase text-stone-900">🎨 Paleta de Colores</h3>
+        <h3 class="text-lg font-black uppercase text-stone-900">🎨 Seleccionar Paleta Visual</h3>
         <button onclick="cerrarModalPaleta()" class="text-sm font-bold text-red-600">✖️</button>
       </div>
-      <p class="text-xs text-stone-600">Seleccioná un estilo visual para personalizar la app:</p>
-      <div class="grid grid-cols-1 gap-2">
-        <button onclick="aplicarTema('esmeralda')" class="strict-btn p-3 bg-emerald-800 text-white border-2 border-black text-left flex items-center justify-between">
-          <span>Esmeralda & Amarillo (Predeterminado)</span>
-          <span class="w-4 h-4 bg-yellow-400 border border-black inline-block"></span>
+      <p class="text-xs text-stone-600 font-medium">Elegí una combinación de color para personalizar toda la app:</p>
+      
+      <div class="grid grid-cols-1 gap-2.5">
+        <button onclick="aplicarTema('esmeralda')" class="strict-btn p-3 bg-emerald-800 text-white border-2 border-black text-left flex items-center justify-between hover:opacity-90">
+          <div>
+            <span class="block text-xs font-black uppercase">Esmeralda & Amarillo</span>
+            <span class="text-[10px] text-emerald-200">Estilo Clásico de Club de Campo</span>
+          </div>
+          <div class="flex gap-1">
+            <span class="w-4 h-4 bg-emerald-600 border border-black inline-block"></span>
+            <span class="w-4 h-4 bg-yellow-400 border border-black inline-block"></span>
+          </div>
         </button>
-        <button onclick="aplicarTema('marino')" class="strict-btn p-3 bg-blue-900 text-white border-2 border-black text-left flex items-center justify-between">
-          <span>Azul Marino & Dorado</span>
-          <span class="w-4 h-4 bg-amber-400 border border-black inline-block"></span>
+
+        <button onclick="aplicarTema('marino')" class="strict-btn p-3 bg-blue-900 text-white border-2 border-black text-left flex items-center justify-between hover:opacity-90">
+          <div>
+            <span class="block text-xs font-black uppercase">Azul Marino & Dorado</span>
+            <span class="text-[10px] text-blue-200">Diseño Elegante y Náutico</span>
+          </div>
+          <div class="flex gap-1">
+            <span class="w-4 h-4 bg-blue-700 border border-black inline-block"></span>
+            <span class="w-4 h-4 bg-amber-400 border border-black inline-block"></span>
+          </div>
         </button>
-        <button onclick="aplicarTema('bordo')" class="strict-btn p-3 bg-red-900 text-white border-2 border-black text-left flex items-center justify-between">
-          <span>Bordó Tradicional</span>
-          <span class="w-4 h-4 bg-yellow-300 border border-black inline-block"></span>
-        </button>
-      </div>
-      <div class="pt-2 text-right">
-        <button onclick="cerrarModalPaleta()" class="strict-btn btn-3d-stone text-xs px-4 py-2">
-          Cerrar
+
+        <button onclick="aplicarTema('bordo')" class="strict-btn p-3 bg-red-950 text-white border-2 border-black text-left flex items-center justify-between hover:opacity-90">
+          <div>
+            <span class="block text-xs font-black uppercase">Bordó & Crema</span>
+            <span class="text-[10px] text-red-200">Estilo Tradicional y Cálido</span>
+          </div>
+          <div class="flex gap-1">
+            <span class="w-4 h-4 bg-red-800 border border-black inline-block"></span>
+            <span class="w-4 h-4 bg-yellow-200 border border-black inline-block"></span>
+          </div>
         </button>
       </div>
     </div>
@@ -796,555 +863,91 @@
     </div>
   </div>
 
+  <!-- MODAL ABM DE CATEGORÍAS -->
+  <div id="modalABMCategorias" class="hidden fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4">
+    <div class="strict-card bg-stone-100 p-6 border-4 border-stone-900 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-stone-300 pb-2">
+        <h3 class="text-lg font-black uppercase text-emerald-900">🏷️ Administrar Categorías</h3>
+        <button onclick="cerrarModalCategorias()" class="text-sm font-bold text-red-600">✖️</button>
+      </div>
+
+      <!-- Agregar nueva categoría -->
+      <div class="flex gap-2">
+        <input 
+          type="text" 
+          id="inpNuevaCat" 
+          placeholder="Nueva categoría..." 
+          class="strict-input w-full p-2 text-xs" 
+        />
+        <button 
+          type="button" 
+          onclick="agregarCategoria()" 
+          class="strict-btn btn-3d-emerald text-xs px-3 py-2 whitespace-nowrap"
+        >
+          ➕ Agregar
+        </button>
+      </div>
+
+      <!-- Lista de categorías existentes -->
+      <div id="listaCatABM" class="max-h-60 overflow-y-auto space-y-1.5 pt-2 border-t border-stone-300">
+        <!-- Render dinámico desde JS -->
+      </div>
+
+      <div class="pt-2 text-right">
+        <button onclick="cerrarModalCategorias()" class="strict-btn btn-3d-stone text-xs px-4 py-2">
+          Listo
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT PRINCIPAL -->
   <script>
     // ESTADO DE LA APLICACIÓN Y CONFIGURACIÓN GLOBAL
     let eventos = [];
+    let categorias = [
+      'Informativa',
+      'Cultural',
+      'Niños',
+      'Esparcimiento',
+      'Culinaria',
+      'Jardineria',
+      'Educacion'
+    ];
     let numeroWhatsApp = "+54 11 31815778";
     let temaActual = "esmeralda";
     let mesCalendario = new Date();
     let supabaseClient = null;
     let urlGoogleSheets = "";
-    let tempArchivoCargado = null;
-
-    // EVENTOS DEMO DE PRUEBA INITIAL
-    const eventosIniciales = [
-      {
-        id: "ev-1",
-        nombre: "Taller de Huerta Orgánica",
-        descripcion: "Consejos para armar tu compostera y siembra de vegetales de estación en el dormy.",
-        categoria: "Jardineria",
-        fecha: "2026-11-15",
-        horario: "17:00 hs",
-        dormy: 12,
-        estado: "Confirmado",
-        votos: 8,
-        votoUsuario: false,
-        archivo: null
-      },
-      {
-        id: "ev-2",
-        nombre: "Torneo de Tenis Infantil",
-        descripcion: "Actividad recreativa para chicos de 6 a 12 años en las canchas principales.",
-        categoria: "Niños",
-        fecha: "2026-11-20",
-        horario: "10:30 hs",
-        dormy: 45,
-        estado: "Propuesto",
-        votos: 14,
-        votoUsuario: false,
-        archivo: null
-      }
-    ];
 
     // INICIALIZACIÓN
     window.onload = function() {
+      const temaGuardado = localStorage.getItem('dormys_tema') || 'esmeralda';
+      aplicarTema(temaGuardado);
+
+      const catsGuardadas = localStorage.getItem('dormys_categorias');
+      if (catsGuardadas) {
+        try { categorias = JSON.parse(catsGuardadas); } catch(e) {}
+      }
+
+      poblarSelectsCategorias();
       cargarStorage();
       renderizarEventos();
       renderizarCalendario();
       actualizarContadores();
     };
 
-    // NAVEGACIÓN ENTRE VISTAS
     function navegarA(idVista) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
       const vista = document.getElementById(idVista);
       if (vista) vista.classList.remove('hidden');
-
-      if (idVista === 'vistaConsultar') renderizarEventos();
-      if (idVista === 'vistaConfirmados') renderizarCalendario();
-      window.scrollTo(0, 0);
     }
 
-    // DESPLEGABLE DE MENÚ DE AJUSTES
     function toggleMenuAjustes() {
-      const menu = document.getElementById('menuAjustesDropdown');
-      if (menu) menu.classList.toggle('hidden');
+      const drop = document.getElementById('menuAjustesDropdown');
+      if (drop) drop.classList.toggle('hidden');
     }
 
-    document.addEventListener('click', function(e) {
-      const menu = document.getElementById('menuAjustesDropdown');
-      const btn = e.target.closest('button[onclick*="toggleMenuAjustes"]');
-      if (menu && !menu.classList.contains('hidden') && !btn && !menu.contains(e.target)) {
-        menu.classList.add('hidden');
-      }
-    });
-
-    // FUNCIONES DE CONTROL DE MODALES DE AJUSTES (RUEDITA ⚙️)
-    function abrirModalPaleta() {
-      const modal = document.getElementById('modalPaletaColors');
-      if (modal) modal.classList.remove('hidden');
-    }
-    function cerrarModalPaleta() {
-      const modal = document.getElementById('modalPaletaColors');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function abrirModalConfigSupabase() {
-      const url = localStorage.getItem('dormys_supa_url') || '';
-      const key = localStorage.getItem('dormys_supa_key') || '';
-      document.getElementById('inpSupaUrl').value = url;
-      document.getElementById('inpSupaKey').value = key;
-
-      const modal = document.getElementById('modalConfigSupabase');
-      if (modal) modal.classList.remove('hidden');
-    }
-    function cerrarModalConfigSupabase() {
-      const modal = document.getElementById('modalConfigSupabase');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function abrirModalConfigGoogleSheets() {
-      const url = localStorage.getItem('dormys_gsheets_url') || '';
-      document.getElementById('inpGSheetUrl').value = url;
-
-      const modal = document.getElementById('modalConfigGoogleSheets');
-      if (modal) modal.classList.remove('hidden');
-    }
-    function cerrarModalConfigGoogleSheets() {
-      const modal = document.getElementById('modalConfigGoogleSheets');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function abrirModalConfigWA() {
-      const num = localStorage.getItem('dormys_whatsapp_num') || numeroWhatsApp;
-      document.getElementById('inputNumeroWA').value = num;
-
-      const modal = document.getElementById('modalConfigWA');
-      if (modal) modal.classList.remove('hidden');
-    }
-    function cerrarModalConfigWA() {
-      const modal = document.getElementById('modalConfigWA');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function guardarConfigWA() {
-      const num = document.getElementById('inputNumeroWA').value.trim();
-      if (num) {
-        numeroWhatsApp = num;
-        localStorage.setItem('dormys_whatsapp_num', num);
-      }
-      cerrarModalConfigWA();
-    }
-
-    // CARGAR/GUARDAR STORAGE LOCAL Y NUBE
-    function cargarStorage() {
-      const localWA = localStorage.getItem('dormys_whatsapp_num');
-      if (localWA) numeroWhatsApp = localWA;
-
-      const localData = localStorage.getItem('dormys_eventos_db');
-      if (localData) {
-        try { eventos = JSON.parse(localData); } catch(e) { eventos = eventosIniciales; }
-      } else {
-        eventos = eventosIniciales;
-        guardarStorage();
-      }
-
-      // Supabase credentials check
-      const sUrl = localStorage.getItem('dormys_supa_url');
-      const sKey = localStorage.getItem('dormys_supa_key');
-      if (sUrl && sKey && window.supabase) {
-        supabaseClient = window.supabase.createClient(sUrl, sKey);
-        cargarDesdeSupabase();
-      }
-    }
-
-    function guardarStorage() {
-      localStorage.setItem('dormys_eventos_db', JSON.stringify(eventos));
-      actualizarContadores();
-    }
-
-    function actualizarContadores() {
-      const prop = eventos.filter(e => e.estado === 'Propuesto').length;
-      const conf = eventos.filter(e => e.estado === 'Confirmado').length;
-      const canc = eventos.filter(e => e.estado === 'Cancelado').length;
-
-      document.getElementById('cntPropuestos').innerText = prop;
-      document.getElementById('cntConfirmados').innerText = conf;
-      document.getElementById('cntCancelados').innerText = canc;
-    }
-
-    // GESTIÓN DEL FORMULARIO DE EVENTOS (PROPONER/EDITAR)
-    function prepararFormNuevo() {
-      document.getElementById('formEvento').reset();
-      document.getElementById('eventoId').value = '';
-      document.getElementById('inpEstado').value = 'Propuesto';
-      document.getElementById('tituloFormPropuesta').innerText = 'Proponer Evento';
-      tempArchivoCargado = null;
-      document.getElementById('bloquePrevioAdjunto').classList.add('hidden');
-    }
-
-    function editarEvento(id) {
-      const ev = eventos.find(e => e.id === id);
-      if (!ev) return;
-
-      document.getElementById('eventoId').value = ev.id;
-      document.getElementById('inpNombre').value = ev.nombre;
-      document.getElementById('inpDescripcion').value = ev.descripcion;
-      document.getElementById('inpCategoria').value = ev.categoria;
-      document.getElementById('inpFecha').value = ev.fecha;
-      document.getElementById('inpHorario').value = ev.horario || '';
-      document.getElementById('inpDormy').value = ev.dormy;
-      document.getElementById('inpEstado').value = ev.estado;
-      document.getElementById('tituloFormPropuesta').innerText = 'Editar Evento';
-
-      if (ev.archivo && ev.archivo.data) {
-        tempArchivoCargado = ev.archivo;
-        document.getElementById('txtNombreAdjuntoPrevio').innerText = ev.archivo.nombre;
-        document.getElementById('bloquePrevioAdjunto').classList.remove('hidden');
-      } else {
-        tempArchivoCargado = null;
-        document.getElementById('bloquePrevioAdjunto').classList.add('hidden');
-      }
-
-      navegarA('vistaProponer');
-    }
-
-    async function guardarEvento(e) {
-      e.preventDefault();
-
-      const idExistente = document.getElementById('eventoId').value;
-      const fileInput = document.getElementById('inpArchivo');
-      let datosArchivo = tempArchivoCargado;
-
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const base64 = await convertirABase64(file);
-        datosArchivo = {
-          nombre: file.name,
-          data: base64
-        };
-      }
-
-      const nuevoEvento = {
-        id: idExistente || 'ev-' + Date.now(),
-        nombre: document.getElementById('inpNombre').value.trim(),
-        descripcion: document.getElementById('inpDescripcion').value.trim(),
-        categoria: document.getElementById('inpCategoria').value,
-        fecha: document.getElementById('inpFecha').value,
-        horario: document.getElementById('inpHorario').value.trim() || 'A convenir',
-        dormy: parseInt(document.getElementById('inpDormy').value),
-        estado: document.getElementById('inpEstado').value,
-        votos: idExistente ? (eventos.find(x => x.id === idExistente)?.votos || 0) : 0,
-        votoUsuario: idExistente ? (eventos.find(x => x.id === idExistente)?.votoUsuario || false) : false,
-        archivo: datosArchivo
-      };
-
-      if (idExistente) {
-        const idx = eventos.findIndex(item => item.id === idExistente);
-        if (idx !== -1) eventos[idx] = nuevoEvento;
-      } else {
-        eventos.unshift(nuevoEvento);
-      }
-
-      guardarStorage();
-      if (supabaseClient) guardarEnSupabase(nuevoEvento);
-
-      navegarA('vistaConsultar');
-    }
-
-    function convertirABase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-
-    function verAdjuntoFormulario() {
-      if (tempArchivoCargado && tempArchivoCargado.data) {
-        mostrarModalVisor(tempArchivoCargado.nombre, tempArchivoCargado.data);
-      }
-    }
-
-    // ELIMINAR Y CAMBIAR ESTADO
-    function eliminarEvento(id) {
-      if (confirm('¿Estás seguro de eliminar este evento?')) {
-        eventos = eventos.filter(e => e.id !== id);
-        guardarStorage();
-        if (supabaseClient) eliminarEnSupabase(id);
-        renderizarEventos();
-      }
-    }
-
-    function toggleVoto(id) {
-      const ev = eventos.find(e => e.id === id);
-      if (!ev) return;
-
-      if (ev.votoUsuario) {
-        ev.votos = Math.max(0, ev.votos - 1);
-        ev.votoUsuario = false;
-      } else {
-        ev.votos += 1;
-        ev.votoUsuario = true;
-      }
-
-      guardarStorage();
-      renderizarEventos();
-    }
-
-    // RENDERIZADO DEL LISTADO
-    function renderizarEventos() {
-      const contenedor = document.getElementById('contenedorListaEventos');
-      if (!contenedor) return;
-
-      const txt = (document.getElementById('fltTexto')?.value || '').toLowerCase();
-      const est = document.getElementById('fltEstado')?.value || 'TODOS';
-      const cat = document.getElementById('fltCategoria')?.value || 'TODAS';
-      const dormy = document.getElementById('fltDormy')?.value;
-
-      const filtrados = eventos.filter(ev => {
-        const cumpleTxt = ev.nombre.toLowerCase().includes(txt) || ev.descripcion.toLowerCase().includes(txt);
-        const cumpleEst = (est === 'TODOS') || (ev.estado === est);
-        const cumpleCat = (cat === 'TODAS') || (ev.categoria === cat);
-        const cumpleDormy = !dormy || (ev.dormy == dormy);
-        return cumpleTxt && cumpleEst && cumpleCat && cumpleDormy;
-      });
-
-      if (filtrados.length === 0) {
-        contenedor.innerHTML = `
-          <div class="col-span-full strict-card bg-stone-100 p-8 border-2 border-stone-400 text-center space-y-2">
-            <p class="text-2xl">🔍</p>
-            <p class="text-sm font-black uppercase text-stone-700">No se encontraron propuestas con esos filtros.</p>
-          </div>
-        `;
-        return;
-      }
-
-      contenedor.innerHTML = filtrados.map(ev => {
-        const colorEstado = ev.estado === 'Confirmado' ? 'bg-emerald-600 text-white' : (ev.estado === 'Cancelado' ? 'bg-red-600 text-white' : 'bg-yellow-400 text-black');
-        
-        let botonVerAdjunto = '';
-        if (ev.archivo && ev.archivo.data) {
-          botonVerAdjunto = `
-            <button 
-              onclick="verAdjunto('${ev.id}')" 
-              class="strict-btn btn-3d-yellow text-[10px] px-2 py-1 flex items-center gap-1"
-            >
-              👁️ 📎 Ver Adjunto
-            </button>
-          `;
-        }
-
-        return `
-          <div class="strict-card bg-stone-100 p-4 sm:p-5 border-4 border-stone-900 shadow-lg flex flex-col justify-between space-y-3">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between gap-2 border-b-2 border-stone-300 pb-2">
-                <span class="text-[10px] font-black uppercase tracking-widest bg-stone-300 px-2 py-0.5 border border-stone-400">
-                  ${ev.categoria}
-                </span>
-                <span class="text-[10px] font-black uppercase px-2 py-0.5 border border-black ${colorEstado}">
-                  ${ev.estado}
-                </span>
-              </div>
-
-              <h3 class="text-lg font-black text-stone-900 font-serif uppercase leading-tight">${ev.nombre}</h3>
-              <p class="text-xs text-stone-700 font-medium leading-relaxed">${ev.descripcion}</p>
-              
-              <div class="grid grid-cols-2 gap-2 pt-2 text-[11px] font-bold text-stone-800 bg-stone-200 p-2 border border-stone-300">
-                <div>📅 ${ev.fecha}</div>
-                <div>⏰ ${ev.horario || 'A convenir'}</div>
-                <div>🏠 Dormy N° ${ev.dormy}</div>
-                <div>${botonVerAdjunto || '📄 Sin adjunto'}</div>
-              </div>
-            </div>
-
-            <div class="pt-3 border-t-2 border-stone-300 flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <button 
-                  onclick="toggleVoto('${ev.id}')" 
-                  class="strict-btn ${ev.votoUsuario ? 'btn-3d-yellow' : 'btn-3d-stone'} text-xs px-2.5 py-1.5"
-                >
-                  👍 ${ev.votos}
-                </button>
-                <button 
-                  onclick="compartirPorWhatsApp('${ev.id}')" 
-                  class="strict-btn btn-3d-emerald text-xs p-2" 
-                  title="Compartir por WhatsApp"
-                >
-                  📲
-                </button>
-              </div>
-
-              <div class="flex items-center gap-1">
-                <button onclick="editarEvento('${ev.id}')" class="strict-btn btn-3d-stone text-[11px] px-2 py-1">
-                  ✏️ Editar
-                </button>
-                <button onclick="eliminarEvento('${ev.id}')" class="strict-btn btn-3d-red text-[11px] px-2 py-1">
-                  🗑️
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function verAdjunto(id) {
-      const ev = eventos.find(e => e.id === id);
-      if (ev && ev.archivo && ev.archivo.data) {
-        mostrarModalVisor(ev.archivo.nombre, ev.archivo.data);
-      }
-    }
-
-    // VISOR MODAL REPARADO
-    function cerrarModalVisor() {
-      const modal = document.getElementById('modalVisorAdjunto');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
-      const contenedor = document.getElementById('visorContenido');
-      if (contenedor) contenedor.innerHTML = '';
-    }
-
-    function mostrarModalVisor(nombre, dataUrl) {
-      if (!dataUrl) return;
-
-      const modal = document.getElementById('modalVisorAdjunto');
-      const titulo = document.getElementById('visorNombreArchivo');
-      const contenedor = document.getElementById('visorContenido');
-      const btnDescargar = document.getElementById('visorBtnDescargar');
-
-      if (!modal || !contenedor) return;
-
-      if (titulo) titulo.innerText = nombre || 'Archivo Adjunto';
-
-      if (btnDescargar) {
-        btnDescargar.onclick = function() {
-          const a = document.createElement('a');
-          a.href = dataUrl;
-          a.download = nombre || 'adjunto';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        };
-      }
-
-      const strData = String(dataUrl).toLowerCase();
-      const strNombre = String(nombre).toLowerCase();
-
-      const esImagen = strData.startsWith('data:image') || strNombre.endsWith('.png') || strNombre.endsWith('.jpg') || strNombre.endsWith('.jpeg') || strNombre.endsWith('.webp');
-      const esPDF = strData.startsWith('data:application/pdf') || strNombre.endsWith('.pdf');
-
-      contenedor.innerHTML = '';
-
-      if (esImagen) {
-        contenedor.innerHTML = `
-          <div class="w-full h-full flex items-center justify-center p-2">
-            <img 
-              src="${dataUrl}" 
-              alt="${nombre}" 
-              class="max-w-full max-h-[70vh] object-contain border-2 border-stone-700 shadow-2xl bg-stone-900"
-            />
-          </div>
-        `;
-      } else if (esPDF) {
-        contenedor.innerHTML = `
-          <div class="w-full h-[70vh] bg-stone-900 border border-stone-800">
-            <object data="${dataUrl}" type="application/pdf" class="w-full h-full min-h-[400px]">
-              <iframe src="${dataUrl}" class="w-full h-full border-0"></iframe>
-            </object>
-          </div>
-        `;
-      } else {
-        contenedor.innerHTML = `
-          <div class="text-center p-8 space-y-4 max-w-md">
-            <div class="text-5xl">📄</div>
-            <p class="text-stone-300 text-sm font-medium">
-              Este formato (<strong class="text-yellow-400">${nombre.split('.').pop().toUpperCase()}</strong>) no admite vista previa interactiva directa.
-            </p>
-            <button 
-              onclick="document.getElementById('visorBtnDescargar').click()" 
-              class="strict-btn btn-3d-yellow text-xs px-5 py-2.5 font-black uppercase"
-            >
-              ⬇️ Descargar "${nombre}"
-            </button>
-          </div>
-        `;
-      }
-
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    // CALENDARIO INTERACTIVO
-    function cambiarMesCalendario(offset) {
-      mesCalendario.setMonth(mesCalendario.getMonth() + offset);
-      renderizarCalendario();
-    }
-
-    function renderizarCalendario() {
-      const tituloMes = document.getElementById('calTituloMes');
-      const grid = document.getElementById('calDiasGrid');
-      const lista = document.getElementById('calListaMes');
-
-      if (!grid || !lista) return;
-
-      const mes = mesCalendario.getMonth();
-      const anio = mesCalendario.getFullYear();
-
-      const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      if (tituloMes) tituloMes.innerText = `${nombresMeses[mes]} ${anio}`;
-
-      const primerDia = new Date(anio, mes, 1).getDay();
-      const totalDias = new Date(anio, mes + 1, 0).getDate();
-
-      let htmlGrid = '';
-      for (let i = 0; i < primerDia; i++) {
-        htmlGrid += `<div class="p-2 bg-stone-200 border border-stone-300"></div>`;
-      }
-
-      for (let dia = 1; dia <= totalDias; dia++) {
-        const fechaStr = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-        const evsDia = eventos.filter(e => e.fecha === fechaStr);
-
-        let bgClass = "bg-stone-100";
-        if (evsDia.length > 0) bgClass = "bg-yellow-200 border-2 border-yellow-500 font-bold";
-
-        htmlGrid += `
-          <div class="p-1 sm:p-2 border border-stone-300 ${bgClass} flex flex-col justify-between min-h-[45px] sm:min-h-[60px]">
-            <span class="font-bold text-[10px] sm:text-xs text-stone-800">${dia}</span>
-            ${evsDia.map(ev => `
-              <button 
-                onclick="editarEvento('${ev.id}')" 
-                class="text-[9px] truncate bg-emerald-800 text-white p-0.5 mt-0.5 text-left border border-black"
-                title="${ev.nombre}"
-              >
-                ${ev.nombre}
-              </button>
-            `).join('')}
-          </div>
-        `;
-      }
-
-      grid.innerHTML = htmlGrid;
-
-      // Lista del mes
-      const evsMes = eventos.filter(e => {
-        const d = new Date(e.fecha + 'T00:00:00');
-        return d.getMonth() === mes && d.getFullYear() === anio;
-      });
-
-      if (evsMes.length === 0) {
-        lista.innerHTML = `<p class="text-xs text-stone-500 italic">No hay eventos registrados en este mes.</p>`;
-      } else {
-        lista.innerHTML = evsMes.map(ev => `
-          <div onclick="editarEvento('${ev.id}')" class="cursor-pointer bg-stone-200 p-2.5 border-l-4 border-emerald-700 flex items-center justify-between hover:bg-yellow-100 transition-colors">
-            <div>
-              <span class="text-xs font-black uppercase text-stone-900">${ev.nombre}</span>
-              <span class="text-[10px] text-stone-600 block">📅 ${ev.fecha} | Dormy ${ev.dormy}</span>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 bg-stone-300 border border-stone-400">
-              ${ev.estado}
-            </span>
-          </div>
-        `).join('');
-      }
-    }
-
-    // FILTRO DIRECTO DESDE PORTADA
     function filtrarPorEstadoDirecto(estado) {
       navegarA('vistaConsultar');
       const sel = document.getElementById('fltEstado');
@@ -1354,65 +957,533 @@
       }
     }
 
+    function poblarSelectsCategorias() {
+      const selInp = document.getElementById('inpCategoria');
+      const selFlt = document.getElementById('fltCategoria');
+
+      if (selInp) {
+        const valActual = selInp.value;
+        selInp.innerHTML = '<option value="">-- Seleccionar Categoría --</option>' + 
+          categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+        selInp.value = valActual;
+      }
+
+      if (selFlt) {
+        const valFlt = selFlt.value || 'TODAS';
+        selFlt.innerHTML = '<option value="TODAS">Todas las categorías</option>' + 
+          categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+        selFlt.value = valFlt;
+      }
+    }
+
+    // ABM DE CATEGORÍAS
+    function abrirModalCategorias() {
+      renderizarABMCategorias();
+      document.getElementById('modalABMCategorias').classList.remove('hidden');
+    }
+
+    function cerrarModalCategorias() {
+      document.getElementById('modalABMCategorias').classList.add('hidden');
+    }
+
+    function renderizarABMCategorias() {
+      const cont = document.getElementById('listaCatABM');
+      if (!cont) return;
+
+      cont.innerHTML = categorias.map((cat, idx) => `
+        <div class="flex items-center justify-between bg-stone-200 p-2 border border-stone-400 text-xs">
+          <span class="font-bold text-stone-800">${cat}</span>
+          <button onclick="eliminarCategoria(${idx})" class="text-red-600 font-bold hover:underline">
+            🗑️ Quitar
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function agregarCategoria() {
+      const inp = document.getElementById('inpNuevaCat');
+      const nueva = inp.value.trim();
+      if (nueva && !categorias.includes(nueva)) {
+        categorias.push(nueva);
+        localStorage.setItem('dormys_categorias', JSON.stringify(categorias));
+        poblarSelectsCategorias();
+        renderizarABMCategorias();
+        inp.value = '';
+      }
+    }
+
+    function eliminarCategoria(idx) {
+      if (categorias.length <= 1) return;
+      categorias.splice(idx, 1);
+      localStorage.setItem('dormys_categorias', JSON.stringify(categorias));
+      poblarSelectsCategorias();
+      renderizarABMCategorias();
+    }
+
+    // RENDERIZAR EVENTOS CON FONDOS CLAROS EN BOTONES ME INTERESA Y ELIMINAR
+    function renderizarEventos() {
+      const cont = document.getElementById('contenedorListaEventos');
+      if (!cont) return;
+
+      const fltTexto = (document.getElementById('fltTexto')?.value || '').toLowerCase();
+      const fltEstado = document.getElementById('fltEstado')?.value || 'TODOS';
+      const fltCategoria = document.getElementById('fltCategoria')?.value || 'TODAS';
+      const fltDormy = document.getElementById('fltDormy')?.value;
+
+      const filtrados = eventos.filter(ev => {
+        if (fltEstado !== 'TODOS' && ev.estado !== fltEstado) return false;
+        if (fltCategoria !== 'TODAS' && ev.categoria !== fltCategoria) return false;
+        if (fltDormy && Number(ev.dormy) !== Number(fltDormy)) return false;
+        if (fltTexto) {
+          const combo = `${ev.nombre} ${ev.descripcion} ${ev.categoria}`.toLowerCase();
+          if (!combo.includes(fltTexto)) return false;
+        }
+        return true;
+      });
+
+      if (filtrados.length === 0) {
+        cont.innerHTML = `<div class="col-span-full p-8 text-center bg-stone-100 border-2 border-dashed border-stone-400 text-stone-600 text-sm font-bold">No se encontraron eventos con los filtros aplicados.</div>`;
+        return;
+      }
+
+      cont.innerHTML = filtrados.map(ev => {
+        let badgeColor = 'bg-stone-300 text-stone-800';
+        if (ev.estado === 'Confirmado') badgeColor = 'bg-emerald-700 text-white';
+        if (ev.estado === 'Propuesto') badgeColor = 'bg-yellow-400 text-black';
+        if (ev.estado === 'Cancelado') badgeColor = 'bg-red-700 text-white';
+
+        return `
+          <div class="strict-card bg-stone-100 p-4 border-4 border-stone-900 shadow-lg flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 border-b border-stone-300 pb-2">
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 border border-black ${badgeColor}">
+                  ${ev.estado}
+                </span>
+                <span class="text-[11px] font-bold text-stone-600">
+                  Dormy N° ${ev.dormy}
+                </span>
+              </div>
+
+              <h3 class="text-lg font-black font-serif text-stone-900 mt-2">
+                ${ev.nombre}
+              </h3>
+              
+              <p class="text-xs text-stone-700 mt-1 line-clamp-2 font-medium">
+                ${ev.descripcion}
+              </p>
+
+              <div class="mt-3 flex flex-wrap gap-2 text-[11px] font-bold text-stone-600">
+                <span class="bg-stone-200 px-2 py-1 border border-stone-300">
+                  🏷️ ${ev.categoria}
+                </span>
+                <span class="bg-stone-200 px-2 py-1 border border-stone-300">
+                  📅 ${ev.fecha} (${ev.horario || 'A convenir'})
+                </span>
+              </div>
+            </div>
+
+            <!-- ACCIONES Y BOTONES CON FONDO CLARO EN ICONOS -->
+            <div class="pt-3 border-t border-stone-300 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1">
+                <!-- Botón Me Interesa con icono en círculo gris claro -->
+                <button 
+                  onclick="toggleVoto('${ev.id}')" 
+                  class="strict-btn btn-3d-yellow text-xs px-2.5 py-1.5 flex items-center gap-1.5"
+                  title="Me interesa esta propuesta"
+                >
+                  <span class="w-5 h-5 bg-stone-200 rounded-full inline-flex items-center justify-center text-xs shadow-inner">👍</span>
+                  <span>${ev.votos || 0}</span>
+                </button>
+
+                <!-- Compartir WhatsApp -->
+                <button 
+                  onclick="compartirPorWhatsApp('${ev.id}')" 
+                  class="strict-btn btn-3d-emerald text-xs px-2 py-1.5"
+                  title="Compartir evento por WhatsApp"
+                >
+                  📲
+                </button>
+
+                ${ev.archivo ? `
+                  <button 
+                    onclick="verAdjunto('${ev.id}')" 
+                    class="strict-btn btn-3d-stone text-xs px-2 py-1.5"
+                    title="Ver folleto o archivo adjunto"
+                  >
+                    📎
+                  </button>
+                ` : ''}
+              </div>
+
+              <div class="flex items-center gap-1">
+                <button 
+                  onclick="editarEvento('${ev.id}')" 
+                  class="strict-btn btn-3d-stone text-xs px-2 py-1.5"
+                  title="Editar propuesta"
+                >
+                  ✏️
+                </button>
+
+                <!-- Botón Eliminar con icono en círculo gris claro -->
+                <button 
+                  onclick="eliminarEvento('${ev.id}')" 
+                  class="strict-btn btn-3d-red text-xs px-2 py-1.5 flex items-center"
+                  title="Eliminar evento"
+                >
+                  <span class="w-5 h-5 bg-stone-100 rounded-full inline-flex items-center justify-center text-xs shadow-inner">🗑️</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // TOGGLE CARD FILTROS
     function toggleFiltrosMobile() {
       const card = document.getElementById('cardFiltros');
-      if (card) card.classList.toggle('hidden');
+      if (card) {
+        card.classList.toggle('hidden');
+      }
     }
 
-    // COMPARTIR WHATSAPP CON REFERENCIA DE IMAGEN
+    function toggleFiltrosAgenda() {
+      const card = document.getElementById('cardFiltrosAgenda');
+      if (card) {
+        card.classList.toggle('hidden');
+      }
+    }
+
+    // VISOR DE ADJUNTOS
+    function verAdjunto(id) {
+      const ev = eventos.find(e => e.id === id);
+      if (ev && ev.archivo) {
+        mostrarModalVisor(ev.archivo.nombre, ev.archivo.data);
+      }
+    }
+
+    function verAdjuntoFormulario() {
+      const inp = document.getElementById('inpArchivo');
+      if (inp.files && inp.files[0]) {
+        const file = inp.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          mostrarModalVisor(file.name, e.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        const id = document.getElementById('eventoId').value;
+        if (id) verAdjunto(id);
+      }
+    }
+
+    function mostrarModalVisor(nombre, data) {
+      const modal = document.getElementById('modalVisorAdjunto');
+      const titulo = document.getElementById('modalVisorTitulo');
+      const cont = document.getElementById('modalVisorContenido');
+      const btnDesc = document.getElementById('btnDescargarVisor');
+
+      if (!modal || !cont) return;
+
+      titulo.textContent = nombre || 'Archivo Adjunto';
+      btnDesc.href = data;
+      btnDesc.download = nombre || 'adjunto';
+
+      const esImagen = data.startsWith('data:image/') || /\.(jpg|jpeg|png|gif|webp)$/i.test(nombre);
+      const esPDF = data.startsWith('data:application/pdf') || /\.pdf$/i.test(nombre);
+
+      if (esImagen) {
+        cont.innerHTML = `<img src="${data}" alt="Adjunto" class="max-h-[70vh] object-contain shadow-xl border border-stone-800" />`;
+      } else if (esPDF) {
+        cont.innerHTML = `<iframe src="${data}" class="w-full h-[70vh] border-none"></iframe>`;
+      } else {
+        cont.innerHTML = `
+          <div class="text-center p-6 space-y-4">
+            <p class="text-sm font-bold text-stone-300">Este formato de archivo (${nombre}) no admite previsualización directa.</p>
+            <a href="${data}" download="${nombre}" class="strict-btn btn-3d-yellow text-xs px-4 py-2 inline-block">⬇️ Descargar Archivo</a>
+          </div>
+        `;
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function cerrarModalVisor() {
+      const modal = document.getElementById('modalVisorAdjunto');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // WHATSAPP
     function compartirPorWhatsApp(id) {
-      const ev = eventos.find(item => item.id === id);
+      const ev = eventos.find(e => e.id === id);
       if (!ev) return;
 
-      const numLimpio = numeroWhatsApp.replace(/[^\d]/g, '');
-      let detalleAdjunto = '';
-      if (ev.archivo && ev.archivo.nombre) {
-        detalleAdjunto = `\n• *Folleto/Imagen:* 📄 ${ev.archivo.nombre}`;
-      }
+      const urlApp = window.location.href.split('?')[0] + `?evento=${ev.id}`;
+      let msg = `*DORMYS - EVENTO PROPUESTO*\n\n`;
+      msg += `📌 *${ev.nombre}*\n`;
+      msg += `📝 ${ev.descripcion}\n`;
+      msg += `🏷️ Categoría: ${ev.categoria}\n`;
+      msg += `📅 Fecha: ${ev.fecha} (${ev.horario || 'A convenir'})\n`;
+      msg += `🏡 Dormy: N° ${ev.dormy}\n\n`;
+      if (ev.archivo) msg += `📎 *Incluye archivo adjunto promocional: ${ev.archivo.nombre}*\n\n`;
+      msg += `Ver e interactuar en la app: ${urlApp}`;
 
-      const texto = `📌 *PROPUESTA DE EVENTO - DORMYS*\n\n` +
-        `• *Actividad:* ${ev.nombre}\n` +
-        `• *Categoría:* ${ev.categoria}\n` +
-        `• *Descripción:* ${ev.descripcion}\n` +
-        `• *Fecha Sugerida:* ${ev.fecha}\n` +
-        `• *Horario:* ${ev.horario || 'A convenir'}\n` +
-        `• *Propuesto por Dormy:* N° ${ev.dormy}\n` +
-        `• *Estado:* ${ev.estado}` +
-        `${detalleAdjunto}\n\n` +
-        `¡Ingresá a la app de Dormys para votar o proponer!`;
-
-      if (ev.archivo && ev.archivo.data && ev.archivo.data.startsWith('data:image')) {
-        const a = document.createElement('a');
-        a.href = ev.archivo.data;
-        a.download = `Promocion_${ev.nombre.replace(/\s+/g, '_')}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-
-      window.open(`https://wa.me/${numLimpio}?text=${encodeURIComponent(texto)}`, '_blank');
+      const urlWA = `https://wa.me/${numeroWhatsApp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`;
+      window.open(urlWA, '_blank');
     }
 
-    // SUPABASE INTEG
-    async function cargarDesdeSupabase() {
-      if (!supabaseClient) return;
-      const { data, error } = await supabaseClient.from('eventos').select('*').order('created_at', { ascending: false });
-      if (!error && data) {
-        eventos = data.map(d => ({
-          id: d.id,
-          nombre: d.nombre,
-          descripcion: d.descripcion,
-          categoria: d.categoria,
-          fecha: d.fecha,
-          horario: d.horario,
-          dormy: d.dormy,
-          estado: d.estado,
-          votos: d.votos || 0,
-          archivo: d.archivo_data ? { nombre: d.archivo_nombre || 'adjunto', data: d.archivo_data } : null
-        }));
-        guardarStorage();
-        renderizarEventos();
+    // GESTIÓN DE EVENTOS
+    function prepararFormNuevo() {
+      document.getElementById('eventoId').value = '';
+      document.getElementById('formEvento').reset();
+      document.getElementById('tituloFormPropuesta').textContent = 'Proponer Evento';
+      document.getElementById('bloquePrevioAdjunto').classList.add('hidden');
+    }
+
+    function editarEvento(id) {
+      const ev = eventos.find(e => e.id === id);
+      if (!ev) return;
+
+      navegarA('vistaProponer');
+      document.getElementById('tituloFormPropuesta').textContent = 'Editar Propuesta';
+      document.getElementById('eventoId').value = ev.id;
+      document.getElementById('inpNombre').value = ev.nombre;
+      document.getElementById('inpDescripcion').value = ev.descripcion;
+      document.getElementById('inpCategoria').value = ev.categoria;
+      document.getElementById('inpFecha').value = ev.fecha;
+      document.getElementById('inpHorario').value = ev.horario || '';
+      document.getElementById('inpDormy').value = ev.dormy;
+      document.getElementById('inpEstado').value = ev.estado;
+
+      const bloqueAdj = document.getElementById('bloquePrevioAdjunto');
+      if (ev.archivo) {
+        document.getElementById('txtNombreAdjuntoPrevio').textContent = ev.archivo.nombre;
+        bloqueAdj.classList.remove('hidden');
+      } else {
+        bloqueAdj.classList.add('hidden');
       }
+    }
+
+    function guardarEvento(e) {
+      e.preventDefault();
+      const id = document.getElementById('eventoId').value || `ev-${Date.now()}`;
+      const inpFile = document.getElementById('inpArchivo');
+
+      const procesarGuardado = (archivoObj) => {
+        const evExistente = eventos.find(item => item.id === id);
+        const nuevoEv = {
+          id: id,
+          nombre: document.getElementById('inpNombre').value.trim(),
+          descripcion: document.getElementById('inpDescripcion').value.trim(),
+          categoria: document.getElementById('inpCategoria').value,
+          fecha: document.getElementById('inpFecha').value,
+          horario: document.getElementById('inpHorario').value.trim(),
+          dormy: Number(document.getElementById('inpDormy').value),
+          estado: document.getElementById('inpEstado').value,
+          votos: evExistente ? evExistente.votos : 0,
+          votoUsuario: evExistente ? evExistente.votoUsuario : false,
+          archivo: archivoObj || (evExistente ? evExistente.archivo : null)
+        };
+
+        if (evExistente) {
+          const idx = eventos.findIndex(item => item.id === id);
+          eventos[idx] = nuevoEv;
+        } else {
+          eventos.push(nuevoEv);
+        }
+
+        guardarStorage();
+        guardarEnSupabase(nuevoEv);
+        actualizarContadores();
+        renderizarEventos();
+        renderizarCalendario();
+        navegarA('vistaConsultar');
+      };
+
+      if (inpFile.files && inpFile.files[0]) {
+        const file = inpFile.files[0];
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          procesarGuardado({ nombre: file.name, data: evt.target.result });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        procesarGuardado(null);
+      }
+    }
+
+    function eliminarEvento(id) {
+      if (confirm('¿Estás seguro de eliminar este evento?')) {
+        eventos = eventos.filter(e => e.id !== id);
+        guardarStorage();
+        eliminarEnSupabase(id);
+        actualizarContadores();
+        renderizarEventos();
+        renderizarCalendario();
+      }
+    }
+
+    function toggleVoto(id) {
+      const ev = eventos.find(e => e.id === id);
+      if (!ev) return;
+      if (ev.votoUsuario) {
+        ev.votos = Math.max(0, (ev.votos || 0) - 1);
+        ev.votoUsuario = false;
+      } else {
+        ev.votos = (ev.votos || 0) + 1;
+        ev.votoUsuario = true;
+      }
+      guardarStorage();
+      guardarEnSupabase(ev);
+      renderizarEventos();
+    }
+
+    function actualizarContadores() {
+      const cntP = document.getElementById('cntPropuestos');
+      const cntC = document.getElementById('cntConfirmados');
+      const cntX = document.getElementById('cntCancelados');
+
+      if (cntP) cntP.textContent = eventos.filter(e => e.estado === 'Propuesto').length;
+      if (cntC) cntC.textContent = eventos.filter(e => e.estado === 'Confirmado').length;
+      if (cntX) cntX.textContent = eventos.filter(e => e.estado === 'Cancelado').length;
+    }
+
+    // CALENDARIO
+    function cambiarMesCalendario(delta) {
+      mesCalendario.setMonth(mesCalendario.getMonth() + delta);
+      renderizarCalendario();
+    }
+
+    function renderizarCalendario() {
+      const grid = document.getElementById('calDiasGrid');
+      const tit = document.getElementById('calTituloMes');
+      const lista = document.getElementById('calListaMes');
+
+      if (!grid || !tit || !lista) return;
+
+      const fltTexto = (document.getElementById('fltAgendaTexto')?.value || '').toLowerCase();
+      const fltDormy = document.getElementById('fltAgendaDormy')?.value;
+
+      const mesNombres = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      const anio = mesCalendario.getFullYear();
+      const mes = mesCalendario.getMonth();
+
+      tit.textContent = `${mesNombres[mes]} ${anio}`;
+
+      const primerDia = new Date(anio, mes, 1).getDay();
+      const diasEnMes = new Date(anio, mes + 1, 0).getDate();
+
+      let htmlGrid = '';
+      for (let i = 0; i < primerDia; i++) {
+        htmlGrid += `<div class="p-2 bg-stone-200 opacity-40"></div>`;
+      }
+
+      for (let d = 1; d <= diasEnMes; d++) {
+        const fechaStr = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const evsDia = eventos.filter(e => {
+          if (e.fecha !== fechaStr || e.estado !== 'Confirmado') return false;
+          if (fltDormy && Number(e.dormy) !== Number(fltDormy)) return false;
+          if (fltTexto) {
+            const combo = `${e.nombre} ${e.descripcion} ${e.categoria}`.toLowerCase();
+            if (!combo.includes(fltTexto)) return false;
+          }
+          return true;
+        });
+        const tieneEv = evsDia.length > 0;
+
+        htmlGrid += `
+          <div class="p-1.5 border border-stone-300 min-h-[50px] bg-white flex flex-col justify-between ${tieneEv ? 'bg-emerald-50 border-emerald-500 font-bold' : ''}">
+            <span class="text-[10px] text-stone-600">${d}</span>
+            ${tieneEv ? `<span class="bg-emerald-700 text-white text-[9px] px-1 py-0.5 truncate border border-black">${evsDia.length} ev</span>` : ''}
+          </div>
+        `;
+      }
+
+      grid.innerHTML = htmlGrid;
+
+      // Lista mensual
+      const evsMes = eventos.filter(e => {
+        if (e.estado !== 'Confirmado') return false;
+        const [y, m] = e.fecha.split('-');
+        if (Number(y) !== anio || Number(m) !== (mes + 1)) return false;
+        if (fltDormy && Number(e.dormy) !== Number(fltDormy)) return false;
+        if (fltTexto) {
+          const combo = `${e.nombre} ${e.descripcion} ${e.categoria}`.toLowerCase();
+          if (!combo.includes(fltTexto)) return false;
+        }
+        return true;
+      });
+
+      if (evsMes.length === 0) {
+        lista.innerHTML = `<p class="text-xs text-stone-500 italic">No hay eventos confirmados para este mes o filtro aplicado.</p>`;
+      } else {
+        lista.innerHTML = evsMes.map(e => `
+          <div onclick="editarEvento('${e.id}')" class="p-2 bg-stone-100 border border-stone-400 text-xs flex justify-between items-center cursor-pointer hover:bg-yellow-100">
+            <div>
+              <span class="font-bold text-stone-900">${e.nombre}</span>
+              <span class="block text-[10px] text-stone-600">📅 ${e.fecha} | Dormy ${e.dormy}</span>
+            </div>
+            <span class="text-emerald-700 font-bold">➔</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // PERSISTENCIA STORAGE
+    function guardarStorage() {
+      localStorage.setItem('dormys_eventos', JSON.stringify(eventos));
+    }
+
+    function cargarStorage() {
+      const local = localStorage.getItem('dormys_eventos');
+      if (local) {
+        try { eventos = JSON.parse(local); } catch(e) {}
+      }
+    }
+
+    // MODALES Y REGLAS DE APERTURA / CIERRE
+    function abrirModalPaleta() {
+      document.getElementById('modalPaletaColors').classList.remove('hidden');
+    }
+    function cerrarModalPaleta() {
+      document.getElementById('modalPaletaColors').classList.add('hidden');
+    }
+
+    function abrirModalConfigSupabase() {
+      document.getElementById('inpSupaUrl').value = localStorage.getItem('dormys_supa_url') || '';
+      document.getElementById('inpSupaKey').value = localStorage.getItem('dormys_supa_key') || '';
+      document.getElementById('modalConfigSupabase').classList.remove('hidden');
+    }
+    function cerrarModalConfigSupabase() {
+      document.getElementById('modalConfigSupabase').classList.add('hidden');
+    }
+
+    function abrirModalConfigGoogleSheets() {
+      document.getElementById('inpGSheetUrl').value = localStorage.getItem('dormys_gsheets_url') || '';
+      document.getElementById('modalConfigGoogleSheets').classList.remove('hidden');
+    }
+    function cerrarModalConfigGoogleSheets() {
+      document.getElementById('modalConfigGoogleSheets').classList.add('hidden');
+    }
+
+    function abrirModalConfigWA() {
+      document.getElementById('inputNumeroWA').value = numeroWhatsApp;
+      document.getElementById('modalConfigWA').classList.remove('hidden');
+    }
+    function cerrarModalConfigWA() {
+      document.getElementById('modalConfigWA').classList.add('hidden');
+    }
+    function guardarConfigWA() {
+      const val = document.getElementById('inputNumeroWA').value.trim();
+      if (val) {
+        numeroWhatsApp = val;
+        localStorage.setItem('dormys_wa_num', val);
+      }
+      cerrarModalConfigWA();
     }
 
     async function guardarEnSupabase(ev) {
@@ -1444,7 +1515,6 @@
         localStorage.setItem('dormys_supa_url', url);
         localStorage.setItem('dormys_supa_key', key);
         supabaseClient = window.supabase.createClient(url, key);
-        cargarDesdeSupabase();
       }
       cerrarModalConfigSupabase();
     }
@@ -1461,6 +1531,27 @@
     function aplicarTema(nombre) {
       temaActual = nombre;
       localStorage.setItem('dormys_tema', nombre);
+      const root = document.documentElement;
+
+      if (nombre === 'marino') {
+        root.style.setProperty('--color-header-bg', '#1e3a8a');
+        root.style.setProperty('--color-primary', '#1d4ed8');
+        root.style.setProperty('--color-primary-dark', '#1e3a8a');
+        root.style.setProperty('--color-accent', '#f59e0b');
+        root.style.setProperty('--color-accent-dark', '#b45309');
+      } else if (nombre === 'bordo') {
+        root.style.setProperty('--color-header-bg', '#450a0a');
+        root.style.setProperty('--color-primary', '#991b1b');
+        root.style.setProperty('--color-primary-dark', '#450a0a');
+        root.style.setProperty('--color-accent', '#fef08a');
+        root.style.setProperty('--color-accent-dark', '#854d0e');
+      } else {
+        root.style.setProperty('--color-header-bg', '#064e3b');
+        root.style.setProperty('--color-primary', '#059669');
+        root.style.setProperty('--color-primary-dark', '#064e3b');
+        root.style.setProperty('--color-accent', '#eab308');
+        root.style.setProperty('--color-accent-dark', '#854d0e');
+      }
       cerrarModalPaleta();
     }
   </script>

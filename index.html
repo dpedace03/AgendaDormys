@@ -1,349 +1,369 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full bg-stone-900">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Propuestas de Eventos - Dormys</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter & Playfair Display -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dormys - Eventos y Actividades</title>
   
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             brand: {
-              emerald: '#059669',    // Verde Esmeralda Principal
+              emerald: '#059669',
               emeraldDark: '#047857',
-              emeraldLight: '#d1fae5',// Verde Claro
-              yellow: '#facc15',       // Amarillo Accent
-              yellowDark: '#eab308',
-              blackText: '#111827',   // Texto Negro/Casi Negro para alto contraste
-              bgLight: '#f8fafc',
-              cardBg: '#ffffff'
+              yellow: '#facc15',
+              yellowHover: '#eab308',
+              lightGreen: '#a7f3d0',
+              black: '#111827',
+              darkCard: '#1f2937'
             }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            serif: ['Playfair Display', 'serif']
           }
         }
       }
     }
   </script>
 
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
   <style>
-    /* Estilos personalizados para entradas rectangulares y diseño mobile-first */
-    .strict-input {
-      border: 2px solid #059669;
-      border-radius: 0px !important;
-      background-color: #ffffff;
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #111827;
       color: #111827;
-      transition: all 0.2s ease-in-out;
     }
-    .strict-input:focus {
-      outline: none;
-      border-color: #eab308;
-      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.4);
+    h1, h2, h3, .font-serif-custom {
+      font-family: 'Playfair Display', serif;
     }
     .strict-btn {
       border-radius: 0px !important;
-      font-weight: 700;
-      letter-spacing: 0.025em;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease-in-out;
     }
-    /* Dynamic view toggling */
-    .view-section {
-      display: none;
+    .strict-input {
+      border-radius: 0px !important;
     }
-    .view-section.active-view {
-      display: block;
+    .strict-card {
+      border-radius: 0px !important;
     }
-    /* Nav Tab Active */
-    .nav-btn-active {
-      background-color: #facc15 !important;
-      color: #111827 !important;
-      border-bottom: 4px solid #047857 !important;
-    }
-    /* Scrollbar */
+    /* Estilos de scrollbar discreto */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #d1fae5;
+      background: #1f2937;
     }
     ::-webkit-scrollbar-thumb {
       background: #059669;
     }
   </style>
 </head>
-<body class="bg-brand-bgLight text-brand-blackText font-sans min-h-screen flex flex-col antialiased">
+<body class="min-h-full flex flex-col text-stone-900 bg-stone-950">
 
-  <!-- ENCABEZADO STICKY RESPONSIVO -->
-  <header class="bg-brand-emerald text-white border-b-4 border-brand-yellow shadow-lg sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
-      
-      <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
-        <div class="flex items-center gap-2">
-          <div class="w-10 h-10 bg-brand-yellow text-brand-blackText flex items-center justify-center font-serif font-bold text-xl shadow">
-            D
-          </div>
-          <div>
-            <h1 class="text-xl sm:text-2xl font-serif font-bold tracking-tight text-white leading-tight">Dormys</h1>
-            <p class="text-[10px] sm:text-xs text-brand-emeraldLight font-medium uppercase tracking-wider">Ciclo de Eventos y Actividades</p>
-          </div>
+  <!-- ENCABEZADO SUPERIOR -->
+  <header class="bg-stone-900 border-b-4 border-emerald-600 text-white sticky top-0 z-40 shadow-xl">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <button onclick="navegarA('inicio')" class="flex items-center gap-2 group text-left">
+        <div class="bg-emerald-600 text-stone-950 p-2 font-black text-xl tracking-wider">DORMYS</div>
+        <div>
+          <span class="block text-xs uppercase tracking-widest text-emerald-400 font-bold">Agenda & Propuestas</span>
+          <span class="text-sm font-semibold text-stone-300">Club de Campo</span>
         </div>
+      </button>
 
-        <!-- Acciones secundarias en móvil -->
-        <div class="flex items-center gap-1 sm:hidden text-xs">
-          <button onclick="exportarJSON()" title="Exportar respaldo" class="bg-brand-emeraldDark text-white p-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          </button>
-          <label title="Importar respaldo" class="bg-brand-emeraldDark text-white p-2 cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-            <input type="file" id="importInputMobile" accept=".json" class="hidden" onchange="importarJSON(event)">
-          </label>
-        </div>
-      </div>
-      
-      <!-- Acciones de respaldo (Escritorio) -->
-      <div class="hidden sm:flex items-center gap-2 text-xs">
-        <button onclick="exportarJSON()" title="Exportar respaldo JSON" class="strict-btn bg-brand-emeraldDark hover:bg-black text-white px-3 py-2 flex items-center gap-1 border border-brand-emeraldLight/30">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          Exportar
+      <div class="flex items-center gap-2">
+        <button 
+          onclick="navegarA('inicio')" 
+          id="navBtnInicio"
+          class="hidden strict-btn bg-stone-800 hover:bg-stone-700 text-emerald-400 font-bold text-xs px-3 py-2 border border-emerald-600/50 items-center gap-1"
+        >
+          🏠 Inicio
         </button>
-        <label title="Importar respaldo JSON" class="strict-btn bg-brand-emeraldDark hover:bg-black text-white px-3 py-2 cursor-pointer flex items-center gap-1 border border-brand-emeraldLight/30">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-          Importar
-          <input type="file" id="importInput" accept=".json" class="hidden" onchange="importarJSON(event)">
-        </label>
+        <button 
+          onclick="abrirModalConfigWA()" 
+          class="strict-btn bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs px-2.5 py-2 border border-stone-700 flex items-center gap-1"
+          title="Configurar número de WhatsApp"
+        >
+          ⚙️ <span class="hidden sm:inline">WhatsApp</span>
+        </button>
       </div>
     </div>
-
-    <!-- BOTONES PRINCIPALES DE NAVEGACIÓN (3 PANTALLAS) -->
-    <nav class="bg-brand-emeraldDark border-t border-brand-emerald">
-      <div class="max-w-7xl mx-auto px-2 sm:px-8 grid grid-cols-3 gap-1 sm:gap-2 pt-1">
-        
-        <!-- Botón 1: Proponer Evento -->
-        <button 
-          id="navBtnProponer"
-          onclick="cambiarVista('proponer')" 
-          class="nav-tab-btn strict-btn py-3 px-1 sm:px-4 text-[11px] sm:text-sm text-white bg-brand-emeraldDark hover:bg-brand-emerald text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 uppercase tracking-tight"
-        >
-          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          <span>Proponer Evento</span>
-        </button>
-
-        <!-- Botón 2: Consultar Eventos -->
-        <button 
-          id="navBtnConsultar"
-          onclick="cambiarVista('consultar')" 
-          class="nav-tab-btn strict-btn py-3 px-1 sm:px-4 text-[11px] sm:text-sm text-white bg-brand-emeraldDark hover:bg-brand-emerald text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 uppercase tracking-tight"
-        >
-          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-          <span>Consultar Eventos</span>
-        </button>
-
-        <!-- Botón 3: Eventos Confirmados / Calendario -->
-        <button 
-          id="navBtnCalendario"
-          onclick="cambiarVista('calendario')" 
-          class="nav-tab-btn strict-btn py-3 px-1 sm:px-4 text-[11px] sm:text-sm text-white bg-brand-emeraldDark hover:bg-brand-emerald text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 uppercase tracking-tight"
-        >
-          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-          <span>Confirmados / Agenda</span>
-        </button>
-
-      </div>
-    </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6">
 
-    <!-- ================= PANTALLA 1: PROPONER EVENTO ================= -->
-    <section id="vistaProponer" class="view-section">
-      <div class="max-w-2xl mx-auto bg-white p-5 sm:p-8 shadow-xl border-t-8 border-brand-emerald border-x border-b border-stone-200">
-        
-        <div class="flex items-center justify-between border-b-2 border-brand-emeraldLight pb-4 mb-6">
-          <div>
-            <h2 id="formTitulo" class="text-xl sm:text-2xl font-serif font-bold text-brand-blackText uppercase tracking-wide">
-              Proponer Nuevo Evento
-            </h2>
-            <p class="text-xs text-stone-600 mt-1">Los nuevos eventos ingresarán automáticamente con estado <span class="bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 border border-amber-300">Propuesto</span>.</p>
+    <!-- PANTALLA 1: INICIO CON 3 BOTONES ÚNICAMENTE -->
+    <section id="vistaInicio" class="space-y-6 py-4 sm:py-10">
+      <div class="text-center space-y-3">
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          Comunidad <span class="text-emerald-400 underline decoration-yellow-400 decoration-4">DORMYS</span>
+        </h1>
+        <p class="text-stone-300 text-sm sm:text-base max-w-lg mx-auto">
+          Plataforma de propuestas, eventos diarios y actividades para vecinos del Club de Campo.
+        </p>
+      </div>
+
+      <div class="max-w-md mx-auto space-y-4 pt-4">
+        <!-- BOTÓN 1: Proponer Evento -->
+        <button 
+          onclick="navegarA('proponer')" 
+          class="w-full strict-btn bg-yellow-400 hover:bg-yellow-500 text-stone-950 font-black text-lg py-5 px-6 border-b-4 border-r-4 border-yellow-700 shadow-lg flex items-center justify-between group transform active:translate-y-1"
+        >
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">📝</span>
+            <span class="uppercase tracking-wider">1. Proponer Evento</span>
           </div>
-          <span id="badgeEdicion" class="hidden text-xs bg-brand-yellow text-brand-blackText font-bold px-2 py-1 uppercase border border-amber-500">
-            Modificando
-          </span>
+          <span class="text-stone-950 font-bold group-hover:translate-x-1 transition-transform">→</span>
+        </button>
+
+        <!-- BOTÓN 2: Consultar Eventos -->
+        <button 
+          onclick="navegarA('consultar')" 
+          class="w-full strict-btn bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg py-5 px-6 border-b-4 border-r-4 border-emerald-900 shadow-lg flex items-center justify-between group transform active:translate-y-1"
+        >
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🔍</span>
+            <span class="uppercase tracking-wider">2. Consultar Eventos</span>
+          </div>
+          <span class="text-white font-bold group-hover:translate-x-1 transition-transform">→</span>
+        </button>
+
+        <!-- BOTÓN 3: Eventos Confirmados (Calendario) -->
+        <button 
+          onclick="navegarA('confirmados')" 
+          class="w-full strict-btn bg-stone-800 hover:bg-stone-700 text-yellow-400 font-black text-lg py-5 px-6 border-b-4 border-r-4 border-stone-950 border-yellow-400 shadow-lg flex items-center justify-between group transform active:translate-y-1"
+        >
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">📅</span>
+            <span class="uppercase tracking-wider">3. Eventos Confirmados</span>
+          </div>
+          <span class="text-yellow-400 font-bold group-hover:translate-x-1 transition-transform">→</span>
+        </button>
+      </div>
+
+      <!-- Resumen rápido en portada -->
+      <div class="max-w-md mx-auto grid grid-cols-3 gap-2 text-center pt-6 text-xs text-stone-400 border-t border-stone-800">
+        <div class="p-2 bg-stone-900 border border-stone-800">
+          <span id="cantPropuestos" class="block font-bold text-yellow-400 text-lg">0</span>
+          <span>Propuestos</span>
+        </div>
+        <div class="p-2 bg-stone-900 border border-stone-800">
+          <span id="cantConfirmados" class="block font-bold text-emerald-400 text-lg">0</span>
+          <span>Confirmados</span>
+        </div>
+        <div class="p-2 bg-stone-900 border border-stone-800">
+          <span id="cantCancelados" class="block font-bold text-red-400 text-lg">0</span>
+          <span>Cancelados</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: PROPONER EVENTO -->
+    <section id="vistaProponer" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <button onclick="navegarA('inicio')" class="text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:underline">
+          ← Volver al Inicio
+        </button>
+        <span class="bg-yellow-400 text-stone-950 text-xs font-bold px-2 py-1 uppercase">Nuevo Registro</span>
+      </div>
+
+      <!-- CARD CON FONDO GRIS CLARO SOBRE EL QUE RESALTAN LOS FORMULARIOS -->
+      <div class="strict-card bg-stone-100 p-5 sm:p-7 border-4 border-stone-300 shadow-2xl text-stone-900">
+        <div class="border-b-2 border-stone-300 pb-3 mb-5">
+          <h2 class="text-2xl font-black text-stone-900 uppercase tracking-tight">Proponer Evento</h2>
+          <p class="text-xs text-stone-600 font-medium">Los eventos creados se registran inicialmente con estado <strong>PROPUESTO</strong>.</p>
         </div>
 
-        <form id="eventoForm" onsubmit="guardarEvento(event)" class="space-y-4 sm:space-y-5">
-          <input type="hidden" id="eventoId" value="">
+        <form id="formularioEvento" onsubmit="guardarEvento(event)" class="space-y-4">
+          <input type="hidden" id="eventoId" value="" />
 
-          <!-- Nro Dormy -->
+          <!-- 1) Nombre de la Actividad -->
           <div>
-            <label for="dormy" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-              Nro. de Dormy (1 al 99) <span class="text-red-600">*</span>
-            </label>
-            <input 
-              type="number" 
-              id="dormy" 
-              min="1" 
-              max="99" 
-              required 
-              placeholder="Ej. 14"
-              class="w-full p-3 text-base sm:text-sm strict-input font-bold text-brand-blackText"
-            >
-            <p class="text-[11px] text-stone-500 mt-1">Número de departamento / Dormy del vecino que realiza la propuesta.</p>
-          </div>
-
-          <!-- Nombre del Evento -->
-          <div>
-            <label for="nombre" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-              Nombre de la Actividad <span class="text-red-600">*</span>
+            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+              1) Nombre de la Actividad <span class="text-red-600">*</span>
             </label>
             <input 
               type="text" 
-              id="nombre" 
-              maxlength="80" 
+              id="nombreEvento" 
               required 
-              placeholder="Ej. Torneo de Ajedrez Relámpago"
-              class="w-full p-3 text-base sm:text-sm strict-input"
-            >
+              placeholder="Ej: Torneo de Tenis Dobles"
+              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-semibold text-sm"
+            />
           </div>
 
-          <!-- Grid: Categoría y Fecha Sugerida -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Categoría -->
-            <div>
-              <label for="categoria" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-                Categoría <span class="text-red-600">*</span>
-              </label>
-              <select id="categoria" required class="w-full p-3 text-base sm:text-sm strict-input font-medium">
-                <option value="">Seleccionar categoría...</option>
-                <option value="Informativa">Informativa</option>
-                <option value="Cultural">Cultural</option>
-                <option value="Niños">Niños</option>
-                <option value="Esparcimiento">Esparcimiento</option>
-                <option value="Culinaria">Culinaria</option>
-                <option value="Jardinería">Jardinería</option>
-                <option value="Educación">Educación</option>
-              </select>
-            </div>
-
-            <!-- Fecha del Evento -->
-            <div>
-              <label for="fechaEvento" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-                Fecha Sugerida / Prevista <span class="text-red-600">*</span>
-              </label>
-              <input 
-                type="date" 
-                id="fechaEvento" 
-                required 
-                class="w-full p-3 text-base sm:text-sm strict-input font-medium"
-              >
-            </div>
-          </div>
-
-          <!-- Horario / Momento -->
+          <!-- 2) Descripción del Evento -->
           <div>
-            <label for="horario" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-              Horario Específico o Rango Horario
-            </label>
-            <input 
-              type="text" 
-              id="horario" 
-              placeholder="Ej. De 16:00 a 18:30 hs"
-              class="w-full p-3 text-base sm:text-sm strict-input"
-            >
-          </div>
-
-          <!-- Estado del Evento (Solo activo para edición o administración) -->
-          <div id="contenedorEstadoAdmin" class="bg-brand-emeraldLight/50 p-3 border border-brand-emerald">
-            <label for="estadoEvento" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-              Estado de la Propuesta
-            </label>
-            <select id="estadoEvento" class="w-full p-2.5 text-sm strict-input font-bold">
-              <option value="Propuesto">Propuesto</option>
-              <option value="Confirmado">Confirmado</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
-            <p class="text-[11px] text-stone-600 mt-1">Los eventos confirmados aparecen resaltados en la Agenda / Calendario.</p>
-          </div>
-
-          <!-- Descripción -->
-          <div>
-            <label for="descripcion" class="block text-xs font-bold text-brand-blackText uppercase mb-1">
-              Descripción del Evento <span class="text-red-600">*</span>
+            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+              2) Descripción del Evento <span class="text-red-600">*</span>
             </label>
             <textarea 
-              id="descripcion" 
-              rows="4" 
+              id="descripcionEvento" 
+              rows="3" 
               required 
-              placeholder="Detalla la temática, materiales requeridos, destinatarios y todo dato relevante..."
-              class="w-full p-3 text-base sm:text-sm strict-input"
+              placeholder="Detalla de qué trata la actividad, requerimientos o materiales necesarios..."
+              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none text-sm"
             ></textarea>
           </div>
 
-          <!-- Botones Formulario -->
-          <div class="pt-3 flex flex-col gap-2">
-            <button 
-              type="submit" 
-              id="btnGuardar"
-              class="w-full strict-btn bg-brand-emerald hover:bg-brand-emeraldDark text-white py-3.5 shadow-md uppercase text-sm tracking-wider flex items-center justify-center gap-2"
+          <!-- 3) Categoría -->
+          <div>
+            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+              3) Categoría <span class="text-red-600">*</span>
+            </label>
+            <select 
+              id="categoriaEvento" 
+              required
+              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-bold text-sm"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-              <span>Guardar Propuesta</span>
-            </button>
-            
-            <button 
-              type="button" 
-              id="btnCancelar" 
-              onclick="resetearFormulario(); cambiarVista('consultar');" 
-              class="hidden w-full strict-btn bg-stone-200 hover:bg-stone-300 text-brand-blackText py-2.5 uppercase text-xs tracking-wider"
-            >
-              Cancelar Edición
-            </button>
+              <option value="">-- Seleccionar Categoría --</option>
+              <option value="Informativa">Informativa</option>
+              <option value="Cultural">Cultural</option>
+              <option value="Niños">Niños</option>
+              <option value="Esparcimiento">Esparcimiento</option>
+              <option value="Culinaria">Culinaria</option>
+              <option value="Jardineria">Jardinería</option>
+              <option value="Educacion">Educación</option>
+            </select>
           </div>
 
+          <!-- 4) Fecha Sugerida / Prevista -->
+          <div>
+            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+              4) Fecha Sugerida / Prevista <span class="text-red-600">*</span>
+            </label>
+            <input 
+              type="date" 
+              id="fechaEvento" 
+              required
+              class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-bold text-sm"
+            />
+          </div>
+
+          <!-- RENGLÓN COMPARTIDO: 5) Horario y 6) Dormy -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- 5) Horario sugerido -->
+            <div>
+              <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+                5) Horario Sugerido
+              </label>
+              <input 
+                type="text" 
+                id="horarioEvento" 
+                placeholder="Ej: 16:30hs"
+                class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none text-sm font-semibold"
+              />
+            </div>
+
+            <!-- 6) Nro. de Dormy -->
+            <div>
+              <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+                6) Nro. de Dormy (1 al 99) <span class="text-red-600">*</span>
+              </label>
+              <input 
+                type="number" 
+                id="nroDormy" 
+                min="1" 
+                max="99" 
+                required 
+                placeholder="Dormy N°"
+                class="w-full strict-input p-3 border-2 border-stone-400 bg-white text-stone-900 focus:border-emerald-600 focus:outline-none font-bold text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- ARCHIVO ADJUNTO (Antes de Estado) -->
+          <div>
+            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+              Adjuntar Archivo <span class="text-stone-500 font-normal">(Opcional: JPG, PDF, Word, Excel)</span>
+            </label>
+            <input 
+              type="file" 
+              id="archivoAdjunto" 
+              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx"
+              class="w-full strict-input p-2 border-2 border-stone-400 bg-white text-stone-800 text-xs focus:border-emerald-600"
+            />
+            <span id="archivoAdjuntoNombre" class="hidden block mt-1 text-xs font-bold text-emerald-800 bg-emerald-100 p-2 border border-emerald-300"></span>
+          </div>
+
+          <!-- 7) Estado -->
+          <div>
+            <label class="block text-xs font-black uppercase text-stone-800 mb-1">
+              7) Estado del Evento
+            </label>
+            <select 
+              id="estadoEvento" 
+              class="w-full strict-input p-3 border-2 border-stone-400 bg-stone-200 text-stone-900 font-black text-sm focus:outline-none"
+            >
+              <option value="Propuesto" selected>Propuesto</option>
+              <option value="Confirmado">Confirmado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+
+          <!-- BOTONES DE ACCIÓN -->
+          <div class="pt-4 flex items-center justify-end gap-3 border-t border-stone-300">
+            <button 
+              type="button" 
+              onclick="cancelarEdicion()" 
+              class="strict-btn px-4 py-3 bg-stone-300 hover:bg-stone-400 text-stone-800 font-bold text-xs uppercase"
+            >
+              Limpiar
+            </button>
+            <button 
+              type="submit" 
+              class="strict-btn px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider border-b-4 border-emerald-900"
+            >
+              Guardar Evento
+            </button>
+          </div>
         </form>
       </div>
     </section>
 
-    <!-- ================= PANTALLA 2: CONSULTAR EVENTOS (LISTADO Y FILTROS) ================= -->
-    <section id="vistaConsultar" class="view-section">
-      
-      <!-- CARD DE BÚSQUEDA Y FILTROS -->
-      <div class="bg-white p-4 sm:p-6 shadow-md border-t-4 border-brand-emerald border-x border-b border-stone-200 mb-6">
-        <h3 class="text-lg font-serif font-bold text-brand-blackText mb-3 uppercase tracking-wider flex items-center gap-2">
-          <svg class="w-5 h-5 text-brand-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.447.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"></path></svg>
-          Buscar y Filtrar Eventos
+    <!-- PANTALLA 3: CONSULTAR EVENTOS (CON BUSCADOR Y FILTROS POR ESTADO) -->
+    <section id="vistaConsultar" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <button onclick="navegarA('inicio')" class="text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:underline">
+          ← Volver al Inicio
+        </button>
+        <span class="bg-emerald-600 text-white text-xs font-bold px-2 py-1 uppercase">Búsqueda Completa</span>
+      </div>
+
+      <!-- CARD DE FILTROS EN GRIS CLARO -->
+      <div class="strict-card bg-stone-100 p-4 border-4 border-stone-300 shadow-md space-y-3">
+        <h3 class="text-sm font-black uppercase tracking-wider text-stone-900 flex items-center gap-2">
+          <span>🔍 Buscar y Filtrar Eventos</span>
         </h3>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
-          
-          <!-- Buscador palabra clave -->
-          <div class="lg:col-span-5">
-            <label for="buscarTexto" class="block text-xs font-bold text-brand-blackText uppercase mb-1">Buscar por palabra</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- Búsqueda por texto -->
+          <div class="sm:col-span-1">
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Palabra Clave</label>
             <input 
               type="text" 
-              id="buscarTexto" 
-              oninput="aplicarFiltros()"
-              placeholder="Buscar título, detalle o Dormy..." 
-              class="w-full p-2.5 text-sm strict-input"
-            >
+              id="filtroBusqueda" 
+              oninput="renderizarEventos()" 
+              placeholder="Nombre, desc. o dormy..." 
+              class="w-full strict-input p-2.5 border-2 border-stone-400 bg-white text-stone-900 text-xs focus:border-emerald-600 focus:outline-none"
+            />
           </div>
 
-          <!-- Filtro por Estado (Requerido) -->
-          <div class="lg:col-span-3">
-            <label for="filterEstado" class="block text-xs font-bold text-brand-blackText uppercase mb-1">Estado del Evento</label>
-            <select id="filterEstado" onchange="aplicarFiltros()" class="w-full p-2.5 text-sm strict-input font-bold">
-              <option value="">Todos los estados</option>
+          <!-- Filtro por Estado -->
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Estado</label>
+            <select 
+              id="filtroEstado" 
+              onchange="renderizarEventos()" 
+              class="w-full strict-input p-2.5 border-2 border-stone-400 bg-white text-stone-900 text-xs font-bold focus:border-emerald-600 focus:outline-none"
+            >
+              <option value="TODOS">Todos los Estados</option>
               <option value="Propuesto">Propuesto</option>
               <option value="Confirmado">Confirmado</option>
               <option value="Cancelado">Cancelado</option>
@@ -351,149 +371,77 @@
           </div>
 
           <!-- Filtro por Categoría -->
-          <div class="lg:col-span-2">
-            <label for="filterCategoria" class="block text-xs font-bold text-brand-blackText uppercase mb-1">Categoría</label>
-            <select id="filterCategoria" onchange="aplicarFiltros()" class="w-full p-2.5 text-sm strict-input">
-              <option value="">Todas</option>
+          <div>
+            <label class="block text-[10px] font-black uppercase text-stone-700 mb-1">Categoría</label>
+            <select 
+              id="filtroCategoria" 
+              onchange="renderizarEventos()" 
+              class="w-full strict-input p-2.5 border-2 border-stone-400 bg-white text-stone-900 text-xs font-bold focus:border-emerald-600 focus:outline-none"
+            >
+              <option value="TODAS">Todas las Categorías</option>
               <option value="Informativa">Informativa</option>
               <option value="Cultural">Cultural</option>
               <option value="Niños">Niños</option>
               <option value="Esparcimiento">Esparcimiento</option>
               <option value="Culinaria">Culinaria</option>
-              <option value="Jardinería">Jardinería</option>
-              <option value="Educación">Educación</option>
+              <option value="Jardineria">Jardinería</option>
+              <option value="Educacion">Educación</option>
             </select>
           </div>
-
-          <!-- Filtro por Dormy -->
-          <div class="lg:col-span-2">
-            <label for="filterDormy" class="block text-xs font-bold text-brand-blackText uppercase mb-1">Dormy (1-99)</label>
-            <input 
-              type="number" 
-              id="filterDormy" 
-              min="1" 
-              max="99" 
-              oninput="aplicarFiltros()"
-              placeholder="1-99" 
-              class="w-full p-2.5 text-sm strict-input font-bold"
-            >
-          </div>
-
-        </div>
-
-        <!-- Barra inferior del filtro -->
-        <div class="flex justify-between items-center pt-3 mt-3 border-t border-stone-200 text-xs">
-          <span class="text-stone-700 font-medium">Resultados encontrados: <strong id="cantEventos" class="text-brand-emeraldDark text-sm">0</strong></span>
-          <button onclick="limpiarFiltros()" class="text-brand-emerald font-bold hover:underline uppercase text-[11px]">
-            Limpiar Filtros
-          </button>
         </div>
       </div>
 
-      <!-- LISTADO CONTENEDOR DE TARJETAS -->
-      <div id="contenedorEventos" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <!-- LISTADO DE EVENTOS -->
+      <div id="listaEventos" class="space-y-4">
         <!-- Generado dinámicamente -->
       </div>
-
-      <!-- ESTADO VACÍO -->
-      <div id="estadoVacio" class="hidden bg-white p-8 sm:p-12 text-center border-2 border-dashed border-stone-300">
-        <svg class="w-12 h-12 mx-auto text-brand-emerald mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-        </svg>
-        <h4 class="text-lg font-serif font-bold text-brand-blackText mb-1">No hay eventos para mostrar</h4>
-        <p class="text-xs text-stone-600 max-w-sm mx-auto mb-4">
-          No se encontraron coincidencias con los filtros aplicados.
-        </p>
-        <button onclick="cambiarVista('proponer')" class="strict-btn bg-brand-yellow text-brand-blackText px-4 py-2 text-xs uppercase">
-          Proponer un evento nuevo
-        </button>
-      </div>
-
     </section>
 
-    <!-- ================= PANTALLA 3: AGENDA / CALENDARIO ================= -->
-    <section id="vistaCalendario" class="view-section">
-      <div class="bg-white p-4 sm:p-6 shadow-md border-t-8 border-brand-emerald border-x border-b border-stone-200">
-        
-        <!-- Header del Calendario y Controles -->
-        <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b-2 border-brand-emeraldLight pb-4 mb-6">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-serif font-bold text-brand-blackText uppercase tracking-wide">
-              Calendario de Eventos
-            </h2>
-            <p class="text-xs text-stone-600 mt-1">Explora la agenda mensual y eventos confirmados para Dormys.</p>
-          </div>
+    <!-- PANTALLA 4: EVENTOS CONFIRMADOS / CALENDARIO -->
+    <section id="vistaConfirmados" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <button onclick="navegarA('inicio')" class="text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:underline">
+          ← Volver al Inicio
+        </button>
+        <span class="bg-yellow-400 text-stone-950 text-xs font-bold px-2 py-1 uppercase">Agenda Confirmada</span>
+      </div>
 
-          <!-- Selector de Mes y Filtro rápido del calendario -->
-          <div class="flex flex-wrap items-center gap-2">
-            <button onclick="cambiarMes(-1)" class="strict-btn bg-brand-emeraldLight text-brand-blackText hover:bg-brand-emerald hover:text-white px-3 py-2 text-xs">
-              &lt; Mes Ant.
-            </button>
-            <span id="calMesAño" class="font-serif font-bold text-brand-blackText px-3 text-sm min-w-[140px] text-center uppercase">
-              -
-            </span>
-            <button onclick="cambiarMes(1)" class="strict-btn bg-brand-emeraldLight text-brand-blackText hover:bg-brand-emerald hover:text-white px-3 py-2 text-xs">
-              Mes Sig. &gt;
-            </button>
+      <!-- CARD CALENDARIO GRIS CLARO -->
+      <div class="strict-card bg-stone-100 p-4 sm:p-6 border-4 border-stone-300 shadow-xl space-y-5">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b-2 border-stone-300 pb-3">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black uppercase text-stone-900">Calendario de Eventos</h2>
+            <p class="text-xs text-stone-600">Eventos programados por fecha en el Club de Campo Dormys.</p>
           </div>
+          
+          <!-- Filtro de vista del calendario -->
+          <select 
+            id="filtroEstadoCalendario" 
+            onchange="renderizarCalendario()" 
+            class="strict-input p-2 border-2 border-stone-400 bg-white text-stone-900 text-xs font-bold focus:border-emerald-600"
+          >
+            <option value="Confirmado" selected>Solo Confirmados</option>
+            <option value="Propuesto">Solo Propuestos</option>
+            <option value="TODOS">Todos los Estados</option>
+          </select>
         </div>
 
-        <!-- Filtro Integrado para el Calendario -->
-        <div class="bg-brand-emeraldLight/40 p-3 mb-6 border border-brand-emerald/30 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div>
-            <label for="calFiltroTexto" class="block font-bold text-brand-blackText uppercase mb-1">Buscar en Calendario</label>
-            <input 
-              type="text" 
-              id="calFiltroTexto" 
-              oninput="renderizarCalendario()" 
-              placeholder="Palabra o Dormy..." 
-              class="w-full p-2 strict-input text-xs"
-            >
-          </div>
-          <div>
-            <label for="calFiltroEstado" class="block font-bold text-brand-blackText uppercase mb-1">Mostrar Estado</label>
-            <select id="calFiltroEstado" onchange="renderizarCalendario()" class="w-full p-2 strict-input text-xs font-bold">
-              <option value="">Todos los eventos</option>
-              <option value="Confirmado" selected>Solo Confirmados</option>
-              <option value="Propuesto">Solo Propuestos</option>
-            </select>
-          </div>
-          <div>
-            <label for="calFiltroCategoria" class="block font-bold text-brand-blackText uppercase mb-1">Categoría</label>
-            <select id="calFiltroCategoria" onchange="renderizarCalendario()" class="w-full p-2 strict-input text-xs">
-              <option value="">Todas</option>
-              <option value="Informativa">Informativa</option>
-              <option value="Cultural">Cultural</option>
-              <option value="Niños">Niños</option>
-              <option value="Esparcimiento">Esparcimiento</option>
-              <option value="Culinaria">Culinaria</option>
-              <option value="Jardinería">Jardinería</option>
-              <option value="Educación">Educación</option>
-            </select>
-          </div>
+        <!-- CONTROLES MES/AÑO -->
+        <div class="flex items-center justify-between bg-stone-200 p-3 border border-stone-300">
+          <button onclick="cambiarMesCalendario(-1)" class="strict-btn px-3 py-1 bg-stone-900 text-white text-xs font-bold hover:bg-emerald-600">
+            ← Anterior
+          </button>
+          <span id="calMesAño" class="font-black text-sm uppercase tracking-wider text-stone-900"></span>
+          <button onclick="cambiarMesCalendario(1)" class="strict-btn px-3 py-1 bg-stone-900 text-white text-xs font-bold hover:bg-emerald-600">
+            Siguiente →
+          </button>
         </div>
 
-        <!-- Leyenda -->
-        <div class="flex flex-wrap gap-4 mb-4 text-xs font-semibold">
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 bg-emerald-500 border border-emerald-700"></span>
-            <span>Confirmado</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 bg-yellow-400 border border-yellow-600"></span>
-            <span>Propuesto</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 bg-red-400 border border-red-600"></span>
-            <span>Cancelado</span>
-          </div>
-        </div>
-
-        <!-- GRID DEL CALENDARIO -->
+        <!-- GRILLA DEL CALENDARIO -->
         <div class="overflow-x-auto">
-          <div class="min-w-[600px]">
-            <!-- Dias Semana -->
-            <div class="grid grid-cols-7 bg-brand-emerald text-white text-center font-bold text-xs py-2 uppercase border border-brand-emerald">
+          <div class="min-w-[300px]">
+            <!-- Días semana -->
+            <div class="grid grid-cols-7 gap-1 text-center font-black text-[11px] uppercase bg-stone-300 text-stone-800 py-2">
               <div>Dom</div>
               <div>Lun</div>
               <div>Mar</div>
@@ -502,674 +450,594 @@
               <div>Vie</div>
               <div>Sáb</div>
             </div>
-
-            <!-- Dias del Mes -->
-            <div id="calGrid" class="grid grid-cols-7 gap-1 bg-stone-200 border-x border-b border-stone-200 p-1">
-              <!-- Renderizado dinámico -->
+            <!-- Días mes -->
+            <div id="calDiasGrid" class="grid grid-cols-7 gap-1 bg-stone-300 pt-1">
+              <!-- JS Inyecta las celdas aquí -->
             </div>
           </div>
         </div>
 
-        <!-- Lista detallada del mes seleccionado -->
-        <div class="mt-8 pt-6 border-t border-stone-200">
-          <h3 class="text-base font-serif font-bold text-brand-blackText uppercase mb-3">
-            Eventos programados para este mes
+        <!-- EVENTOS DEL MES SELECCIONADO -->
+        <div class="pt-4 border-t border-stone-300">
+          <h3 class="text-xs font-black uppercase tracking-wider text-stone-700 mb-3">
+            Lista de Actividades en el Mes
           </h3>
-          <div id="calListaDetalle" class="space-y-3">
-            <!-- Items de la agenda -->
+          <div id="calListaMes" class="space-y-2">
+            <!-- JS inyecta lista del mes -->
           </div>
         </div>
-
       </div>
     </section>
 
   </main>
 
+  <!-- MODAL CONFIGURACIÓN NÚMERO WHATSAPP -->
+  <div id="modalConfigWA" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="strict-card bg-stone-100 max-w-sm w-full p-6 border-4 border-stone-400 shadow-2xl space-y-4">
+      <h3 class="text-lg font-black uppercase text-stone-900 border-b-2 border-stone-300 pb-2">
+        ⚙️ Configurar WhatsApp
+      </h3>
+      <p class="text-xs text-stone-600">
+        Ingresa el número de teléfono con código de país para el envío de propuestas.
+      </p>
+      <div>
+        <label class="block text-xs font-black uppercase text-stone-700 mb-1">N° WhatsApp (con código de país):</label>
+        <input 
+          type="text" 
+          id="inputWAConfig" 
+          value="+541131815778"
+          class="w-full strict-input p-3 border-2 border-stone-400 bg-white font-bold text-stone-900 text-sm"
+          placeholder="Ej: +541131815778"
+        />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="cerrarModalConfigWA()" class="strict-btn px-4 py-2 bg-stone-300 text-stone-800 font-bold text-xs">Cancelar</button>
+        <button onclick="guardarWAConfig()" class="strict-btn px-4 py-2 bg-emerald-600 text-white font-bold text-xs">Guardar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- PIE DE PÁGINA -->
-  <footer class="bg-brand-emeraldDark text-white border-t-4 border-brand-yellow mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs">
-      <p class="font-serif text-sm font-bold text-brand-yellow mb-1">Comunidad Dormys &copy; <span id="yearSpan"></span></p>
-      <p class="text-brand-emeraldLight">Plataforma colaborativa para vecinos | Propuesta y organización de eventos diarios</p>
+  <footer class="bg-stone-900 border-t border-stone-800 py-4 text-center text-xs text-stone-400 mt-auto">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>© Dormys Club de Campo - Gestión de Eventos Vecinales</p>
+      <div class="flex items-center gap-3">
+        <button onclick="exportarJSON()" class="hover:text-emerald-400">Exportar Datos</button>
+        <span>•</span>
+        <button onclick="importarJSON()" class="hover:text-emerald-400">Importar Datos</button>
+      </div>
     </div>
   </footer>
 
-  <!-- NOTIFICACIÓN TOAST MOBILE-FRIENDLY -->
-  <div id="toast" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 sm:w-auto bg-brand-blackText text-white px-5 py-3 shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50 text-xs sm:text-sm flex items-center justify-between gap-3 border-l-4 border-brand-yellow">
-    <span id="toastMsg">Notificación</span>
-    <button onclick="ocultarToast()" class="text-brand-yellow font-bold">X</button>
-  </div>
-
-  <!-- JAVASCRIPT PRINCIPAL -->
+  <!-- SISTEMA JAVASCRIPT -->
   <script>
-    // Helper de fecha formato YYYY-MM-DD local
-    function getTodayString(offsetDays = 0) {
-      const d = new Date();
-      d.setDate(d.getDate() + offsetDays);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
+    // ESTADO GLOBAL DE LA APLICACIÓN
+    let eventos = [];
+    let numeroWhatsApp = "+541131815778";
+    let fechaCalendario = new Date();
 
-    // --- DATOS INICIALES DE PRUEBA ---
-    const DATOS_INICIALES = [
+    // DATOS INICIALES DEMO
+    const eventosIniciales = [
       {
-        id: "evt-101",
+        id: "evt-1",
+        nombre: "Torneo de Tenis Dobles Relámpago",
+        descripcion: "Torneo relámpago de tenis para todas las edades. Traer raqueta. Habrá entrega de trofeos.",
+        categoria: "Esparcimiento",
+        fecha: "2026-11-15",
+        horario: "15:00 hs",
         dormy: 12,
-        nombre: "Taller de Cocina Italiana y Pasta Casera",
-        descripcion: "Aprendemos a preparar masa fresca de pasta y salsas clásicas. Traer delantal. ¡Al finalizar degustamos entre todos!",
-        categoria: "Culinaria",
-        fechaEvento: getTodayString(2),
-        horario: "12:30 a 15:00 hs",
         estado: "Confirmado",
-        votos: 18,
-        votoUsuario: false
+        votos: 8,
+        votoUsuario: false,
+        archivo: null
       },
       {
-        id: "evt-102",
+        id: "evt-2",
+        nombre: "Taller de Jardinería y Paisajismo",
+        descripcion: "Charla teórica y práctica sobre cuidado de plantas autóctonas y diseño de jardines de verano.",
+        categoria: "Jardineria",
+        fecha: "2026-11-20",
+        horario: "10:30 hs",
         dormy: 45,
-        nombre: "Taller de Huerta Orgánica y Plantas",
-        descripcion: "Charla teórica y práctica sobre siembra, compostaje casero y preparado de suelo para jardines de Dormys.",
-        categoria: "Jardinería",
-        fechaEvento: getTodayString(5),
-        horario: "11:00 hs",
+        estado: "Propuesto",
+        votos: 5,
+        votoUsuario: false,
+        archivo: null
+      },
+      {
+        id: "evt-3",
+        nombre: "Tarde de Juegos y Kermesse Infantil",
+        descripcion: "Juegos organizados, castillos inflables y merienda compartida para los niños del club.",
+        categoria: "Niños",
+        fecha: "2026-11-22",
+        horario: "16:00 hs",
+        dormy: 7,
         estado: "Confirmado",
         votos: 12,
-        votoUsuario: false
-      },
-      {
-        id: "evt-103",
-        dormy: 7,
-        nombre: "Cine Bajo las Estrellas para Niños",
-        descripcion: "Proyección al aire libre de película infantil con pochoclos y actividades recreativas.",
-        categoria: "Niños",
-        fechaEvento: getTodayString(8),
-        horario: "20:00 hs",
-        estado: "Propuesto",
-        votos: 25,
-        votoUsuario: true
-      },
-      {
-        id: "evt-104",
-        dormy: 22,
-        nombre: "Reunión Informativa: Normativas y Convivencia",
-        descripcion: "Encuentro informativo para revisar normativas de espacios comunes y responder dudas de los vecinos.",
-        categoria: "Informativa",
-        fechaEvento: getTodayString(1),
-        horario: "19:00 hs",
-        estado: "Confirmado",
-        votos: 15,
-        votoUsuario: false
-      },
-      {
-        id: "evt-105",
-        dormy: 88,
-        nombre: "Torneo Recreativo de Ping Pong",
-        descripcion: "Torneo relámpago en las mesas del quincho. Premios simbólicos e inscripción abierta a todas las edades.",
-        categoria: "Esparcimiento",
-        fechaEvento: getTodayString(12),
-        horario: "16:00 hs",
-        estado: "Propuesto",
-        votos: 9,
-        votoUsuario: false
+        votoUsuario: false,
+        archivo: null
       }
     ];
 
-    // --- ESTADO GLOBAL ---
-    let eventos = [];
-    let vistaActual = 'consultar'; // 'proponer', 'consultar', 'calendario'
-    let fechaCalendario = new Date(); // Para el mes visible en agenda
-
-    // --- INICIALIZACIÓN ---
+    // CARGA INICIAL
     window.onload = function() {
-      document.getElementById('yearSpan').textContent = new Date().getFullYear();
-      // Establecer fecha mínima por defecto en formulario (hoy)
-      document.getElementById('fechaEvento').value = getTodayString(0);
-      
-      cargarEventos();
-      cambiarVista('consultar');
+      cargarStorage();
+      actualizarContadores();
+      renderizarEventos();
+      renderizarCalendario();
     };
 
-    // --- NAVEGACIÓN ENTRE VISTAS PRINCIPALES ---
-    function cambiarVista(nombreVista) {
-      vistaActual = nombreVista;
+    // NAVEGACIÓN ENTRE VISTAS
+    function navegarA(vista) {
+      document.getElementById('vistaInicio').classList.add('hidden');
+      document.getElementById('vistaProponer').classList.add('hidden');
+      document.getElementById('vistaConsultar').classList.add('hidden');
+      document.getElementById('vistaConfirmados').classList.add('hidden');
 
-      // Ocultar todas las pantallas
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-      
-      // Quitar clase activa de botones
-      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('nav-btn-active'));
-
-      if (nombreVista === 'proponer') {
-        document.getElementById('vistaProponer').classList.add('active-view');
-        document.getElementById('navBtnProponer').classList.add('nav-btn-active');
-      } else if (nombreVista === 'consultar') {
-        document.getElementById('vistaConsultar').classList.add('active-view');
-        document.getElementById('navBtnConsultar').classList.add('nav-btn-active');
-        aplicarFiltros();
-      } else if (nombreVista === 'calendario') {
-        document.getElementById('vistaCalendario').classList.add('active-view');
-        document.getElementById('navBtnCalendario').classList.add('nav-btn-active');
-        renderizarCalendario();
+      const navBtnInicio = document.getElementById('navBtnInicio');
+      if (vista === 'inicio') {
+        navBtnInicio.classList.add('hidden');
+        navBtnInicio.classList.remove('flex');
+        document.getElementById('vistaInicio').classList.remove('hidden');
+      } else {
+        navBtnInicio.classList.remove('hidden');
+        navBtnInicio.classList.add('flex');
+        if (vista === 'proponer') document.getElementById('vistaProponer').classList.remove('hidden');
+        if (vista === 'consultar') document.getElementById('vistaConsultar').classList.remove('hidden');
+        if (vista === 'confirmados') {
+          document.getElementById('vistaConfirmados').classList.remove('hidden');
+          renderizarCalendario();
+        }
       }
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- LOCALSTORAGE ---
-    function cargarEventos() {
-      const stored = localStorage.getItem('dormys_eventos_v2');
-      if (stored) {
+    // GESTIÓN LOCAL STORAGE
+    function cargarStorage() {
+      const datosGuardados = localStorage.getItem('dormys_eventos');
+      if (datosGuardados) {
         try {
-          eventos = JSON.parse(stored);
-        } catch(e) {
-          console.error("Error al cargar localStorage:", e);
-          eventos = [...DATOS_INICIALES];
+          eventos = JSON.parse(datosGuardados);
+        } catch (e) {
+          eventos = [...eventosIniciales];
         }
       } else {
-        eventos = [...DATOS_INICIALES];
-        guardarEnLocalStorage();
+        eventos = [...eventosIniciales];
+        guardarStorage();
+      }
+
+      const waGuardado = localStorage.getItem('dormys_wa');
+      if (waGuardado) {
+        numeroWhatsApp = waGuardado;
+        document.getElementById('inputWAConfig').value = waGuardado;
       }
     }
 
-    function guardarEnLocalStorage() {
-      localStorage.setItem('dormys_eventos_v2', JSON.stringify(eventos));
+    function guardarStorage() {
+      localStorage.setItem('dormys_eventos', JSON.stringify(eventos));
+      actualizarContadores();
     }
 
-    // --- ALTA Y MODIFICACIÓN (ABM) ---
+    function actualizarContadores() {
+      const prop = eventos.filter(e => e.estado === 'Propuesto').length;
+      const conf = eventos.filter(e => e.estado === 'Confirmado').length;
+      const canc = eventos.filter(e => e.estado === 'Cancelado').length;
+
+      document.getElementById('cantPropuestos').innerText = prop;
+      document.getElementById('cantConfirmados').innerText = conf;
+      document.getElementById('cantCancelados').innerText = canc;
+    }
+
+    // MANEJO DE ARCHIVOS ADJUNTOS
+    let archivoBase64Temp = null;
+    let archivoNombreTemp = null;
+
+    document.getElementById('archivoAdjunto').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        if (file.size > 3 * 1024 * 1024) {
+          alert("El archivo es demasiado grande. Máximo permitido: 3MB.");
+          e.target.value = "";
+          return;
+        }
+        archivoNombreTemp = file.name;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          archivoBase64Temp = evt.target.result;
+          const info = document.getElementById('archivoAdjuntoNombre');
+          info.innerText = "📎 Archivo cargado: " + file.name;
+          info.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // ABM - GUARDAR / EDITAR EVENTO
     function guardarEvento(e) {
       e.preventDefault();
 
       const id = document.getElementById('eventoId').value;
-      const dormyVal = parseInt(document.getElementById('dormy').value, 10);
-      const nombreVal = document.getElementById('nombre').value.trim();
-      const categoriaVal = document.getElementById('categoria').value;
-      const fechaEventoVal = document.getElementById('fechaEvento').value;
-      const horarioVal = document.getElementById('horario').value.trim();
-      const descripcionVal = document.getElementById('descripcion').value.trim();
-      const estadoVal = document.getElementById('estadoEvento').value || 'Propuesto';
+      const nombre = document.getElementById('nombreEvento').value.trim();
+      const descripcion = document.getElementById('descripcionEvento').value.trim();
+      const categoria = document.getElementById('categoriaEvento').value;
+      const fecha = document.getElementById('fechaEvento').value;
+      const horario = document.getElementById('horarioEvento').value.trim() || 'A definir';
+      const dormy = parseInt(document.getElementById('nroDormy').value, 10);
+      const estado = document.getElementById('estadoEvento').value;
 
-      // Validaciones
-      if (isNaN(dormyVal) || dormyVal < 1 || dormyVal > 99) {
-        mostrarToast("⚠️ El nro. de Dormy debe ser un número entre 1 y 99");
-        return;
-      }
-
-      if (!nombreVal || !descripcionVal || !categoriaVal || !fechaEventoVal) {
-        mostrarToast("⚠️ Por favor completa los campos obligatorios (*)");
+      if (dormy < 1 || dormy > 99 || isNaN(dormy)) {
+        alert("El número de Dormy debe ser un valor entre 1 y 99.");
         return;
       }
 
       if (id) {
-        // MODIFICACIÓN
-        const index = eventos.findIndex(evt => evt.id === id);
+        // Modificación
+        const index = eventos.findIndex(ev => ev.id === id);
         if (index !== -1) {
-          eventos[index].dormy = dormyVal;
-          eventos[index].nombre = nombreVal;
-          eventos[index].categoria = categoriaVal;
-          eventos[index].fechaEvento = fechaEventoVal;
-          eventos[index].horario = horarioVal;
-          eventos[index].descripcion = descripcionVal;
-          eventos[index].estado = estadoVal;
-          mostrarToast("Propuesta actualizada correctamente");
+          eventos[index] = {
+            ...eventos[index],
+            nombre,
+            descripcion,
+            categoria,
+            fecha,
+            horario,
+            dormy,
+            estado,
+            archivo: archivoBase64Temp !== null ? { nombre: archivoNombreTemp, data: archivoBase64Temp } : eventos[index].archivo
+          };
         }
       } else {
-        // ALTA (Siempre ingresa como 'Propuesto' salvo que se fuerce)
-        const nuevoEvento = {
+        // Alta
+        const nuevo = {
           id: 'evt-' + Date.now(),
-          dormy: dormyVal,
-          nombre: nombreVal,
-          categoria: categoriaVal,
-          fechaEvento: fechaEventoVal,
-          horario: horarioVal,
-          descripcion: descripcionVal,
-          estado: 'Propuesto', // Requisito: Los eventos nuevos tienen estado "Propuesto"
-          votos: 1,
-          votoUsuario: true
+          nombre,
+          descripcion,
+          categoria,
+          fecha,
+          horario,
+          dormy,
+          estado: estado || 'Propuesto',
+          votos: 0,
+          votoUsuario: false,
+          archivo: archivoBase64Temp ? { nombre: archivoNombreTemp, data: archivoBase64Temp } : null
         };
-        eventos.unshift(nuevoEvento);
-        mostrarToast("¡Propuesta creada con estado 'Propuesto'!");
+        eventos.unshift(nuevo);
       }
 
-      guardarEnLocalStorage();
-      resetearFormulario();
-      cambiarVista('consultar');
+      guardarStorage();
+      cancelarEdicion();
+      renderizarEventos();
+      navegarA('consultar');
     }
 
-    // --- ELIMINAR EVENTO (BAJA ABM) ---
-    function eliminarEvento(id) {
-      const evt = eventos.find(e => e.id === id);
-      if (!evt) return;
-
-      if (confirm(`¿Eliminar la propuesta "${evt.nombre}" del Dormy ${evt.dormy}?`)) {
-        eventos = eventos.filter(e => e.id !== id);
-        guardarEnLocalStorage();
-        
-        if (vistaActual === 'consultar') aplicarFiltros();
-        if (vistaActual === 'calendario') renderizarCalendario();
-        
-        mostrarToast("Propuesta eliminada");
-      }
-    }
-
-    // --- CAMBIAR ESTADO RÁPIDO DESDE LA TARJETA ---
-    function cambiarEstadoRapido(id, nuevoEstado) {
-      const index = eventos.findIndex(e => e.id === id);
-      if (index !== -1) {
-        eventos[index].estado = nuevoEstado;
-        guardarEnLocalStorage();
-        mostrarToast(`Estado cambiado a: ${nuevoEstado}`);
-        
-        if (vistaActual === 'consultar') aplicarFiltros();
-        if (vistaActual === 'calendario') renderizarCalendario();
-      }
-    }
-
-    // --- PREPARAR FORMULARIO PARA EDICIÓN ---
     function editarEvento(id) {
-      const evt = eventos.find(e => e.id === id);
-      if (!evt) return;
+      const ev = eventos.find(e => e.id === id);
+      if (!ev) return;
 
-      document.getElementById('eventoId').value = evt.id;
-      document.getElementById('dormy').value = evt.dormy;
-      document.getElementById('nombre').value = evt.nombre;
-      document.getElementById('categoria').value = evt.categoria;
-      document.getElementById('fechaEvento').value = evt.fechaEvento || getTodayString(0);
-      document.getElementById('horario').value = evt.horario || '';
-      document.getElementById('descripcion').value = evt.descripcion;
-      document.getElementById('estadoEvento').value = evt.estado || 'Propuesto';
+      document.getElementById('eventoId').value = ev.id;
+      document.getElementById('nombreEvento').value = ev.nombre;
+      document.getElementById('descripcionEvento').value = ev.descripcion;
+      document.getElementById('categoriaEvento').value = ev.categoria;
+      document.getElementById('fechaEvento').value = ev.fecha;
+      document.getElementById('horarioEvento').value = ev.horario;
+      document.getElementById('nroDormy').value = ev.dormy;
+      document.getElementById('estadoEvento').value = ev.estado;
 
-      // Cambiar UI del formulario
-      document.getElementById('formTitulo').textContent = "Editar Propuesta";
-      document.getElementById('badgeEdicion').classList.remove('hidden');
-      document.getElementById('btnGuardar').textContent = "Guardar Cambios";
-      document.getElementById('btnCancelar').classList.remove('hidden');
+      if (ev.archivo) {
+        const info = document.getElementById('archivoAdjuntoNombre');
+        info.innerText = "📎 Archivo actual: " + ev.archivo.nombre;
+        info.classList.remove('hidden');
+      } else {
+        document.getElementById('archivoAdjuntoNombre').classList.add('hidden');
+      }
 
-      cambiarVista('proponer');
+      navegarA('proponer');
     }
 
-    function resetearFormulario() {
-      document.getElementById('eventoForm').reset();
-      document.getElementById('eventoId').value = '';
-      document.getElementById('fechaEvento').value = getTodayString(0);
-      
-      document.getElementById('formTitulo').textContent = "Proponer Nuevo Evento";
-      document.getElementById('badgeEdicion').classList.add('hidden');
-      document.getElementById('btnGuardar').innerHTML = `
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-        <span>Guardar Propuesta</span>
-      `;
-      document.getElementById('btnCancelar').classList.add('hidden');
-    }
-
-    // --- VOTOS DE INTERÉS ---
-    function meInteresa(id) {
-      const index = eventos.findIndex(e => e.id === id);
-      if (index !== -1) {
-        if (eventos[index].votoUsuario) {
-          eventos[index].votos = Math.max(0, eventos[index].votos - 1);
-          eventos[index].votoUsuario = false;
-        } else {
-          eventos[index].votos += 1;
-          eventos[index].votoUsuario = true;
-        }
-        guardarEnLocalStorage();
-        if (vistaActual === 'consultar') aplicarFiltros();
-        if (vistaActual === 'calendario') renderizarCalendario();
+    function eliminarEvento(id) {
+      if (confirm("¿Estás seguro de borrar esta propuesta de evento?")) {
+        eventos = eventos.filter(e => e.id !== id);
+        guardarStorage();
+        renderizarEventos();
+        renderizarCalendario();
       }
     }
 
-    // --- CONSULTAR & FILTRADO (PANTALLA 2) ---
-    function aplicarFiltros() {
-      const texto = document.getElementById('buscarTexto').value.toLowerCase().trim();
-      const estado = document.getElementById('filterEstado').value;
-      const cat = document.getElementById('filterCategoria').value;
-      const dormyNum = parseInt(document.getElementById('filterDormy').value, 10);
+    function cancelarEdicion() {
+      document.getElementById('formularioEvento').reset();
+      document.getElementById('eventoId').value = "";
+      document.getElementById('archivoAdjuntoNombre').classList.add('hidden');
+      archivoBase64Temp = null;
+      archivoNombreTemp = null;
+    }
 
-      const filtrados = eventos.filter(evt => {
-        const coincideTexto = !texto || 
-          evt.nombre.toLowerCase().includes(texto) || 
-          evt.descripcion.toLowerCase().includes(texto) ||
-          String(evt.dormy).includes(texto);
-          
-        const coincideEstado = !estado || evt.estado === estado;
-        const coincideCat = !cat || evt.categoria === cat;
-        const coincideDormy = isNaN(dormyNum) || evt.dormy === dormyNum;
+    function meInteresa(id) {
+      const ev = eventos.find(e => e.id === id);
+      if (!ev) return;
 
-        return coincideTexto && coincideEstado && coincideCat && coincideDormy;
+      if (ev.votoUsuario) {
+        ev.votos = Math.max(0, (ev.votos || 1) - 1);
+        ev.votoUsuario = false;
+      } else {
+        ev.votos = (ev.votos || 0) + 1;
+        ev.votoUsuario = true;
+      }
+
+      guardarStorage();
+      renderizarEventos();
+    }
+
+    // ENVIAR / COMPARTIR POR WHATSAPP CON UN SOLO CLIC EN EL ÍCONO
+    function enviarWhatsApp(id) {
+      const ev = eventos.find(e => e.id === id);
+      if (!ev) return;
+
+      const numLimpio = numeroWhatsApp.replace(/[^0-9]/g, '');
+      const mensaje = `*DORMYS CLUB DE CAMPO*%0A` +
+                      `📌 *Evento:* ${ev.nombre}%0A` +
+                      `🏷️ *Categoría:* ${ev.categoria}%0A` +
+                      `📅 *Fecha:* ${ev.fecha} - ${ev.horario}%0A` +
+                      `🏠 *Dormy N°:* ${ev.dormy}%0A` +
+                      `📊 *Estado:* ${ev.estado}%0A` +
+                      `📝 *Descripción:* ${ev.descripcion}`;
+
+      const url = `https://wa.me/${numLimpio}?text=${mensaje}`;
+      window.open(url, '_blank');
+    }
+
+    // RENDERIZAR LISTADO DE EVENTOS
+    function renderizarEventos() {
+      const contenedor = document.getElementById('listaEventos');
+      const texto = document.getElementById('filtroBusqueda').value.toLowerCase().trim();
+      const estadoFiltro = document.getElementById('filtroEstado').value;
+      const catFiltro = document.getElementById('filtroCategoria').value;
+
+      const filtrados = eventos.filter(ev => {
+        const coincideTexto = ev.nombre.toLowerCase().includes(texto) ||
+                              ev.descripcion.toLowerCase().includes(texto) ||
+                              ev.dormy.toString().includes(texto);
+        const coincideEstado = (estadoFiltro === 'TODOS') || (ev.estado === estadoFiltro);
+        const coincideCat = (catFiltro === 'TODAS') || (ev.categoria === catFiltro);
+        return coincideTexto && coincideEstado && coincideCat;
       });
 
-      renderizarListaEventos(filtrados);
-    }
-
-    function limpiarFiltros() {
-      document.getElementById('buscarTexto').value = '';
-      document.getElementById('filterEstado').value = '';
-      document.getElementById('filterCategoria').value = '';
-      document.getElementById('filterDormy').value = '';
-      aplicarFiltros();
-    }
-
-    function renderizarListaEventos(lista) {
-      const contenedor = document.getElementById('contenedorEventos');
-      const estadoVacio = document.getElementById('estadoVacio');
-      const cantSpan = document.getElementById('cantEventos');
-
-      cantSpan.textContent = lista.length;
-      contenedor.innerHTML = '';
-
-      if (lista.length === 0) {
-        estadoVacio.classList.remove('hidden');
+      if (filtrados.length === 0) {
+        contenedor.innerHTML = `
+          <div class="strict-card bg-stone-100 p-8 text-center border-4 border-stone-300">
+            <p class="text-stone-600 font-bold text-sm">No se encontraron eventos con los filtros seleccionados.</p>
+          </div>
+        `;
         return;
-      } else {
-        estadoVacio.classList.add('hidden');
       }
 
-      lista.forEach(evt => {
-        // Badges de Estado
-        let estadoBadge = '';
-        if (evt.estado === 'Confirmado') {
-          estadoBadge = `<span class="bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-0.5 uppercase border border-emerald-700">✓ Confirmado</span>`;
-        } else if (evt.estado === 'Cancelado') {
-          estadoBadge = `<span class="bg-red-500 text-white text-[11px] font-bold px-2.5 py-0.5 uppercase border border-red-700">✕ Cancelado</span>`;
-        } else {
-          estadoBadge = `<span class="bg-yellow-400 text-brand-blackText text-[11px] font-bold px-2.5 py-0.5 uppercase border border-yellow-500">⏱ Propuesto</span>`;
-        }
+      contenedor.innerHTML = filtrados.map(ev => {
+        // Badge de Estado
+        let estadoBadge = 'bg-yellow-400 text-stone-950';
+        if (ev.estado === 'Confirmado') estadoBadge = 'bg-emerald-600 text-white';
+        if (ev.estado === 'Cancelado') estadoBadge = 'bg-red-600 text-white';
 
-        // Formato fecha
-        let fechaFormateada = evt.fechaEvento;
-        if (evt.fechaEvento) {
-          const partes = evt.fechaEvento.split('-');
-          if (partes.length === 3) fechaFormateada = `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
-
-        const btnVotoClass = evt.votoUsuario 
-          ? 'bg-brand-emerald text-white border-brand-emerald' 
-          : 'bg-white text-brand-blackText border-stone-300 hover:border-brand-emerald';
-
-        const card = document.createElement('article');
-        card.className = "bg-white p-5 shadow-md hover:shadow-lg transition-shadow border-l-4 border-brand-emerald border-y border-r border-stone-200 flex flex-col justify-between";
-
-        card.innerHTML = `
-          <div>
-            <!-- Encabezado Tarjeta -->
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="bg-brand-blackText text-brand-yellow font-mono text-xs font-bold px-2 py-0.5">
-                  DORMY #${evt.dormy}
+        return `
+          <div class="strict-card bg-stone-100 border-4 border-stone-300 p-4 sm:p-5 shadow-lg hover:border-emerald-600 transition-colors">
+            
+            <!-- Encabezado de la Tarjeta -->
+            <div class="flex flex-wrap items-start justify-between gap-2 border-b-2 border-stone-300 pb-3 mb-3">
+              <div>
+                <span class="inline-block text-[10px] font-black uppercase tracking-wider px-2 py-0.5 bg-stone-300 text-stone-800 border border-stone-400 mb-1">
+                  ${ev.categoria}
                 </span>
-                <span class="text-[11px] font-bold px-2 py-0.5 bg-brand-emeraldLight text-brand-blackText border border-brand-emerald/30">
-                  ${evt.categoria}
-                </span>
+                <h3 class="text-lg sm:text-xl font-black text-stone-900 leading-snug">
+                  ${ev.nombre}
+                </h3>
               </div>
-              <div>${estadoBadge}</div>
-            </div>
 
-            <!-- Título -->
-            <h3 class="text-lg font-serif font-bold text-brand-blackText mb-1 leading-snug">
-              ${escapeHtml(evt.nombre)}
-            </h3>
-
-            <!-- Fecha y Horario -->
-            <div class="text-xs font-semibold text-brand-emeraldDark flex items-center gap-2 mb-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-              <span>${fechaFormateada} ${evt.horario ? ' • ' + escapeHtml(evt.horario) : ''}</span>
+              <div class="flex items-center gap-2">
+                <!-- Badge de Estado -->
+                <span class="strict-btn px-2.5 py-1 text-xs font-black uppercase border border-stone-900 ${estadoBadge}">
+                  ${ev.estado}
+                </span>
+                
+                <!-- ÍCONO DIRECTO DE WHATSAPP AL LADO DEL EVENTO -->
+                <button 
+                  onclick="enviarWhatsApp('${ev.id}')"
+                  class="strict-btn bg-emerald-600 hover:bg-emerald-500 text-white p-1.5 border border-emerald-950 flex items-center justify-center shadow"
+                  title="Compartir directo por WhatsApp"
+                >
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <!-- Descripción -->
-            <p class="text-stone-700 text-xs sm:text-sm leading-relaxed mb-4 whitespace-pre-line">
-              ${escapeHtml(evt.descripcion)}
+            <p class="text-xs sm:text-sm text-stone-800 mb-4 font-medium leading-relaxed">
+              ${ev.descripcion}
             </p>
-          </div>
 
-          <!-- Footer Tarjeta -->
-          <div class="pt-3 border-t border-stone-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            
-            <!-- Botón Voto / Interés -->
-            <button 
-              onclick="meInteresa('${evt.id}')"
-              class="strict-btn px-3 py-2 text-xs flex items-center justify-center gap-1.5 border ${btnVotoClass}"
-            >
-              <svg class="w-4 h-4" fill="${evt.votoUsuario ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-              </svg>
-              <span>Me interesa (${evt.votos || 0})</span>
-            </button>
+            <!-- Datos Secundarios -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-stone-200 p-2.5 border border-stone-300 text-xs text-stone-900 mb-4 font-semibold">
+              <div>
+                <span class="block text-[10px] text-stone-600 font-bold uppercase">Fecha / Hora:</span>
+                <span>📅 ${ev.fecha} (${ev.horario})</span>
+              </div>
+              <div>
+                <span class="block text-[10px] text-stone-600 font-bold uppercase">Proponente:</span>
+                <span>🏠 Dormy N° ${ev.dormy}</span>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <span class="block text-[10px] text-stone-600 font-bold uppercase">Adjunto:</span>
+                ${ev.archivo ? `
+                  <a href="${ev.archivo.data}" download="${ev.archivo.nombre}" class="text-emerald-700 underline font-bold truncate block">
+                    📎 ${ev.archivo.nombre}
+                  </a>
+                ` : '<span class="text-stone-500 italic">Sin archivo</span>'}
+              </div>
+            </div>
 
-            <!-- Acciones de Gestión ABM & Estado -->
-            <div class="flex items-center justify-between sm:justify-end gap-1.5">
-              
-              <!-- Cambiar estado desplegable rápido -->
-              <select 
-                onchange="cambiarEstadoRapido('${evt.id}', this.value)"
-                title="Cambiar estado del evento"
-                class="text-[11px] p-1.5 strict-input font-bold"
-              >
-                <option value="Propuesto" ${evt.estado === 'Propuesto' ? 'selected' : ''}>Propuesto</option>
-                <option value="Confirmado" ${evt.estado === 'Confirmado' ? 'selected' : ''}>Confirmado</option>
-                <option value="Cancelado" ${evt.estado === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
-              </select>
-
+            <!-- Botones de Acción -->
+            <div class="flex items-center justify-between gap-2 pt-2 border-t border-stone-300">
+              <!-- Me Interesa -->
               <button 
-                onclick="editarEvento('${evt.id}')" 
-                class="strict-btn bg-stone-100 hover:bg-stone-200 text-brand-blackText px-2.5 py-1.5 text-xs"
-                title="Editar propuesta"
+                onclick="meInteresa('${ev.id}')"
+                class="strict-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 border ${ev.votoUsuario ? 'bg-yellow-400 text-stone-950 border-yellow-600' : 'bg-white text-stone-800 border-stone-400 hover:bg-stone-50'}"
               >
-                Editar
+                <span>👍 Me Interesa</span>
+                <span class="bg-stone-900 text-white px-1.5 py-0.2 text-[10px] font-black">${ev.votos || 0}</span>
               </button>
-              
-              <button 
-                onclick="eliminarEvento('${evt.id}')" 
-                class="strict-btn bg-red-100 hover:bg-red-200 text-red-900 border border-red-300 px-2.5 py-1.5 text-xs"
-                title="Eliminar propuesta"
-              >
-                Borrar
-              </button>
+
+              <div class="flex items-center gap-2">
+                <button 
+                  onclick="editarEvento('${ev.id}')"
+                  class="strict-btn bg-stone-300 hover:bg-stone-400 text-stone-900 px-3 py-1.5 text-xs font-bold"
+                >
+                  ✏️ Editar
+                </button>
+                <button 
+                  onclick="eliminarEvento('${ev.id}')"
+                  class="strict-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 text-xs font-bold"
+                >
+                  🗑️ Borrar
+                </button>
+              </div>
             </div>
 
           </div>
         `;
-
-        contenedor.appendChild(card);
-      });
+      }).join('');
     }
 
-    // --- CALENDARIO / AGENDA (PANTALLA 3) ---
-    function cambiarMes(delta) {
+    // RENDERIZAR CALENDARIO
+    function cambiarMesCalendario(delta) {
       fechaCalendario.setMonth(fechaCalendario.getMonth() + delta);
       renderizarCalendario();
     }
 
     function renderizarCalendario() {
-      const year = fechaCalendario.getFullYear();
-      const month = fechaCalendario.getMonth();
-      
-      const mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      document.getElementById('calMesAño').textContent = `${mesesNombres[month]} ${year}`;
+      const filtroEst = document.getElementById('filtroEstadoCalendario').value;
+      const anio = fechaCalendario.getFullYear();
+      const mes = fechaCalendario.getMonth();
 
-      // Filtros aplicables al calendario
-      const txtFilter = document.getElementById('calFiltroTexto').value.toLowerCase().trim();
-      const estadoFilter = document.getElementById('calFiltroEstado').value;
-      const catFilter = document.getElementById('calFiltroCategoria').value;
+      const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      document.getElementById('calMesAño').innerText = `${nombresMeses[mes]} ${anio}`;
 
-      const eventosFiltradosCal = eventos.filter(evt => {
-        const matchTxt = !txtFilter || evt.nombre.toLowerCase().includes(txtFilter) || String(evt.dormy).includes(txtFilter);
-        const matchEstado = !estadoFilter || evt.estado === estadoFilter;
-        const matchCat = !catFilter || evt.categoria === catFilter;
-        return matchTxt && matchEstado && matchCat;
-      });
+      const primerDia = new Date(anio, mes, 1).getDay();
+      const totalDias = new Date(anio, mes + 1, 0).getDate();
 
-      const primerDiaMes = new Date(year, month, 1).getDay(); // 0 = Domingo
-      const diasEnMes = new Date(year, month + 1, 0).getDate();
+      const grid = document.getElementById('calDiasGrid');
+      grid.innerHTML = "";
 
-      const grid = document.getElementById('calGrid');
-      grid.innerHTML = '';
-
-      // Casillas vacías inicio de mes
-      for (let i = 0; i < primerDiaMes; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = "bg-stone-100 min-h-[70px] sm:min-h-[90px] p-1 border border-stone-200/50";
-        grid.appendChild(emptyCell);
+      // Días previos en blanco
+      for (let i = 0; i < primerDia; i++) {
+        grid.innerHTML += `<div class="bg-stone-200 h-16 sm:h-20 border border-stone-300 opacity-40"></div>`;
       }
 
-      // Días del mes
-      const hoyStr = getTodayString(0);
+      // Filtrar eventos del mes actual
+      const eventosMes = eventos.filter(e => {
+        if (!e.fecha) return false;
+        const [eAnio, eMes] = e.fecha.split('-').map(Number);
+        const coincideFecha = (eAnio === anio) && (eMes === (mes + 1));
+        const coincideEstado = (filtroEst === 'TODOS') || (e.estado === filtroEst);
+        return coincideFecha && coincideEstado;
+      });
 
-      for (let dia = 1; dia <= diasEnMes; dia++) {
-        const diaStr = String(dia).padStart(2, '0');
-        const mesStr = String(month + 1).padStart(2, '0');
-        const fechaComparar = `${year}-${mesStr}-${diaStr}`;
+      // Rellenar días
+      for (let d = 1; d <= totalDias; d++) {
+        const fechaStr = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const evsDelDia = eventosMes.filter(e => e.fecha === fechaStr);
 
-        const esHoy = fechaComparar === hoyStr;
+        let celdaHtml = `
+          <div class="bg-white h-16 sm:h-20 p-1 border border-stone-300 flex flex-col justify-between overflow-hidden">
+            <span class="text-[11px] font-black text-stone-700">${d}</span>
+            <div class="space-y-0.5">
+        `;
 
-        // Eventos de este día
-        const evtsDelDia = eventosFiltradosCal.filter(e => e.fechaEvento === fechaComparar);
+        evsDelDia.forEach(ev => {
+          let bgClass = 'bg-yellow-400 text-stone-950';
+          if (ev.estado === 'Confirmado') bgClass = 'bg-emerald-600 text-white';
+          if (ev.estado === 'Cancelado') bgClass = 'bg-red-600 text-white';
 
-        const cell = document.createElement('div');
-        cell.className = `bg-white min-h-[70px] sm:min-h-[90px] p-1 border border-stone-300 flex flex-col justify-between ${esHoy ? 'ring-2 ring-brand-yellow bg-yellow-50' : ''}`;
-
-        let evtsHTML = '';
-        evtsDelDia.forEach(e => {
-          let dotColor = 'bg-yellow-400 text-brand-blackText';
-          if (e.estado === 'Confirmado') dotColor = 'bg-emerald-600 text-white';
-          if (e.estado === 'Cancelado') dotColor = 'bg-red-500 text-white';
-
-          evtsHTML += `
-            <div 
-              onclick="editarEvento('${e.id}')"
-              title="${escapeHtml(e.nombre)} (Dormy ${e.dormy})"
-              class="${dotColor} text-[10px] font-bold p-1 mb-1 truncate cursor-pointer shadow-sm border border-black/10"
-            >
-              D#${e.dormy} ${escapeHtml(e.nombre)}
+          celdaHtml += `
+            <div title="${ev.nombre} - Dormy ${ev.dormy}" class="text-[9px] font-bold p-0.5 truncate ${bgClass}">
+              ${ev.nombre}
             </div>
           `;
         });
 
-        cell.innerHTML = `
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold ${esHoy ? 'bg-brand-yellow text-brand-blackText px-1' : 'text-stone-700'}">${dia}</span>
-            ${evtsDelDia.length > 0 ? `<span class="text-[9px] bg-stone-200 px-1 font-bold">${evtsDelDia.length}</span>` : ''}
-          </div>
-          <div class="overflow-y-auto max-h-[55px] flex-grow">
-            ${evtsHTML}
-          </div>
-        `;
-
-        grid.appendChild(cell);
+        celdaHtml += `</div></div>`;
+        grid.innerHTML += celdaHtml;
       }
 
-      renderizarListaDetalleMes(eventosFiltradosCal, year, month);
-    }
-
-    function renderizarListaDetalleMes(listaEvts, year, month) {
-      const contenedor = document.getElementById('calListaDetalle');
-      contenedor.innerHTML = '';
-
-      const mesStr = String(month + 1).padStart(2, '0');
-      const evtsMes = listaEvts.filter(e => e.fechaEvento && e.fechaEvento.startsWith(`${year}-${mesStr}`));
-
-      if (evtsMes.length === 0) {
-        contenedor.innerHTML = `<p class="text-xs text-stone-500 italic">No hay eventos registrados para las opciones seleccionadas en este mes.</p>`;
-        return;
-      }
-
-      // Ordenar por fecha
-      evtsMes.sort((a, b) => a.fechaEvento.localeCompare(b.fechaEvento));
-
-      evtsMes.forEach(e => {
-        let statusBadge = 'bg-yellow-400 text-brand-blackText';
-        if (e.estado === 'Confirmado') statusBadge = 'bg-emerald-600 text-white';
-        if (e.estado === 'Cancelado') statusBadge = 'bg-red-500 text-white';
-
-        const item = document.createElement('div');
-        item.className = "bg-white p-3 border-l-4 border-brand-emerald border-y border-r border-stone-200 flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-xs";
-        
-        const partesFecha = e.fechaEvento.split('-');
-        const fFormat = `${partesFecha[2]}/${partesFecha[1]}`;
-
-        item.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="font-bold text-sm bg-brand-emeraldLight text-brand-emeraldDark px-2 py-1 border border-brand-emerald/30">
-              ${fFormat}
-            </span>
+      // Lista resumida del mes
+      const listaMes = document.getElementById('calListaMes');
+      if (eventosMes.length === 0) {
+        listaMes.innerHTML = `<p class="text-xs text-stone-500 italic p-2 bg-white border border-stone-300">No hay eventos en este mes con el filtro seleccionado.</p>`;
+      } else {
+        listaMes.innerHTML = eventosMes.map(ev => `
+          <div class="p-2.5 bg-white border-l-4 ${ev.estado === 'Confirmado' ? 'border-emerald-600' : 'border-yellow-400'} border-y border-r border-stone-300 flex items-center justify-between text-xs">
             <div>
-              <div class="font-bold text-brand-blackText text-sm">${escapeHtml(e.nombre)} (Dormy ${e.dormy})</div>
-              <div class="text-stone-500">${e.categoria} ${e.horario ? ' • ' + escapeHtml(e.horario) : ''}</div>
+              <span class="font-black text-stone-900">${ev.fecha}</span> - <span class="font-bold text-emerald-800">${ev.nombre}</span>
+              <span class="text-stone-600 text-[10px] block">Dormy N° ${ev.dormy} • Categoría: ${ev.categoria}</span>
             </div>
+            <span class="font-bold uppercase text-[10px] px-2 py-0.5 ${ev.estado === 'Confirmado' ? 'bg-emerald-100 text-emerald-800' : 'bg-yellow-100 text-yellow-800'}">
+              ${ev.estado}
+            </span>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="${statusBadge} text-[10px] font-bold px-2 py-0.5 uppercase">${e.estado}</span>
-            <button onclick="editarEvento('${e.id}')" class="strict-btn bg-stone-100 hover:bg-stone-200 px-2 py-1">Ver/Editar</button>
-          </div>
-        `;
-        contenedor.appendChild(item);
-      });
+        `).join('');
+      }
     }
 
-    // --- RESPALDO JSON ---
+    // CONFIGURACIÓN DE WHATSAPP
+    function abrirModalConfigWA() {
+      document.getElementById('modalConfigWA').classList.remove('hidden');
+    }
+    function cerrarModalConfigWA() {
+      document.getElementById('modalConfigWA').classList.add('hidden');
+    }
+    function guardarWAConfig() {
+      const val = document.getElementById('inputWAConfig').value.trim();
+      if (val) {
+        numeroWhatsApp = val;
+        localStorage.setItem('dormys_wa', val);
+        cerrarModalConfigWA();
+        alert("Número de WhatsApp actualizado correctamente.");
+      }
+    }
+
+    // RESPALDO JSON
     function exportarJSON() {
-      const fecha = new Date().toISOString().slice(0,10);
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(eventos, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "propuestas_dormys_" + fecha + ".json");
+      downloadAnchor.setAttribute("download", "eventos_dormys.json");
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
-      mostrarToast("Respaldo exportado correctamente");
     }
 
-    function importarJSON(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        try {
-          const importados = JSON.parse(event.target.result);
-          if (Array.isArray(importados)) {
-            eventos = importados;
-            guardarEnLocalStorage();
-            if (vistaActual === 'consultar') aplicarFiltros();
-            if (vistaActual === 'calendario') renderizarCalendario();
-            mostrarToast("Propuestas importadas exitosamente");
-          } else {
-            mostrarToast("Formato de archivo inválido");
+    function importarJSON() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = event => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            if (Array.isArray(parsed)) {
+              eventos = parsed;
+              guardarStorage();
+              renderizarEventos();
+              renderizarCalendario();
+              alert("Datos importados con éxito.");
+            }
+          } catch (err) {
+            alert("El archivo subido no contiene un formato JSON válido.");
           }
-        } catch (err) {
-          mostrarToast("Error al importar el archivo JSON");
-        }
+        };
+        reader.readAsText(file);
       };
-      reader.readAsText(file);
-    }
-
-    // --- TOAST & UTILIDADES ---
-    function mostrarToast(msg) {
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMsg');
-      toastMsg.textContent = msg;
-      toast.classList.remove('opacity-0', 'pointer-events-none');
-      toast.classList.add('opacity-100');
-      
-      setTimeout(() => {
-        ocultarToast();
-      }, 3500);
-    }
-
-    function ocultarToast() {
-      const toast = document.getElementById('toast');
-      toast.classList.remove('opacity-100');
-      toast.classList.add('opacity-0', 'pointer-events-none');
-    }
-
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      input.click();
     }
   </script>
 </body>
